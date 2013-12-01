@@ -25,5 +25,10 @@ require.config({
   }
 });
  
-require(['require', 'knockout'], function(require, ko){
+require(['require', 'knockout', "models/bid"], function(require, ko, bidModule){
+	var bid = new bidModule.Bid({type : "SUIT", suit : "CLUBS", level : 2});
+    ko.applyBindings(bid);   	
+
+	var unvalidBid = new bidModule.Bid({type : "SUIT", suit : "CLUBS", level : 9});
+    ko.applyBindings(unvalidBid);   	
 });
