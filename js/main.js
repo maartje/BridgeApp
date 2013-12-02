@@ -25,33 +25,40 @@ require.config({
   }
 });
  
-require(['require', 'knockout', 'models/bid', 'models/bid-convention'], function(require, ko, bidModule, bidConventionModule){
-	var bidsystem = new bidConventionModule.BidConvention({
-		id : 1,
-		bid : {
-			type : "SUIT",
-			suit : "CLUBS", 
-			level : 1
-		},
-		convention : "12-19 punten. Vanaf een 3 kaart.",
-		children : [{
-			id : 2,
-			bid : {
-				type : "PASS",
-			},
-			convention : "",
-			children : []}
-		, { id : 3,
-			bid : {
-				type : "SUIT",
-				suit : "SPADES", 
-				level : 2
-			},
-			convention : "informatie doublet"}]
+require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidSystemModule){
+	var bidsystem = new bidSystemModule.BidSystem({
+		id : "maartje_wim",
+		bidRoot : {
+			id : "root_id",
+			children : [{
+				id : 1,
+				bid : {
+					type : "SUIT",
+					suit : "CLUBS", 
+					level : 1
+				},
+				convention : "12-19 punten. Vanaf een 3 kaart.",
+				children : [{
+					id : 2,
+					bid : {
+						type : "PASS",
+					},
+					convention : "",
+					children : []}
+				, { id : 3,
+					bid : {
+						type : "SUIT",
+						suit : "SPADES", 
+						level : 2
+					},
+					convention : "informatie doublet"}]}]}
 	});
 	
 	var s = JSON.stringify(bidsystem);
 	var js = JSON.parse(s);
-	var obj = new bidConventionModule.BidConvention(js);
+	var obj = new bidSystemModule.BidSystem(js);
+	
+	console.log(bidsystem);
+	console.log(obj);
 
 });
