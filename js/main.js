@@ -26,23 +26,32 @@ require.config({
 });
  
 require(['require', 'knockout', 'models/bid', 'models/bid-convention'], function(require, ko, bidModule, bidConventionModule){
-	var bid = new bidModule.Bid({
-		suit : "CLUBS", 
-		level : 1
-	});
-	var bidConvention1 = new bidConventionModule.BidConvention({
+	var bidsystem = new bidConventionModule.BidConvention({
 		id : 1,
-		parent : null,
-		bid : bid,
+		bid : {
+			type : "SUIT",
+			suit : "CLUBS", 
+			level : 1
+		},
 		convention : "12-19 punten. Vanaf een 3 kaart.",
-		isOpponentBid : false
+		children : [{
+			id : 2,
+			bid : {
+				type : "PASS",
+			},
+			convention : "",
+			children : []}
+		, { id : 3,
+			bid : {
+				type : "SUIT",
+				suit : "SPADES", 
+				level : 2
+			},
+			convention : "informatie doublet"}]
 	});
-	var bidConvention2 = new bidConventionModule.BidConvention({
-		id : 2,
-		parent : bidConvention1,
-		bid : new bidModule.Pass(),
-		convention : "",
-		isOpponentBid : true
-	});
+	
+	var s = JSON.stringify(bidsystem);
+	var js = JSON.parse(s);
+	var obj = new bidConventionModule.BidConvention(js);
 
 });

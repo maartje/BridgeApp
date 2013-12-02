@@ -1,15 +1,9 @@
 define(function(require, exports, module) {
 
-	var Pass = module.exports.Pass = function () {};
-
-	var Doublet = module.exports.Doublet = function () {};
-
-	var Redoublet = module.exports.Redoublet = function () {};
-
 	var Bid = module.exports.Bid = function (data) {
-		var that = this;
-		that.level = data.level;
-		that.suit = data.suit;
+		this.type = data.type;
+		this.level = data.type === "SUIT"? data.level : undefined;
+		this.suit = data.type === "SUIT"? data.suit : undefined;
 	};	
 
 	return module.exports;
