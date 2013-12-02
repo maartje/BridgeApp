@@ -1,36 +1,43 @@
 define(function(require, exports, module) {
+	var bidModule = require("models/bid");
 
 	var BidConvention = module.exports.BidConvention = function (data) {
-		var that = this;
+		this.parent = data.parent || null; //BidConvention
+		this.children = []; //Array with BidConventions
+		this.addChildren(data.children || []); 
 
-		that.addChildren = function(dataChildren){
-			for ( var i = 0; i < dataChildren.length; i++) {
-				var child = new BidConvention(dataChildren[i]);
-				child.parent = that;
-				that.children.push(child);
-			}
-		}
-		
-		that.toJSON = function() {
-		    return {
-		    	id : that.id,
-		    	bid : that.bid,
-		    	convention : that.convention,
-		    	children : that.children
-		    };
-		}
-
-
-		that.parent = data.parent || null; //BidConvention
-		that.children = []; //Array with BidConventions
-		that.addChildren(data.children || []); 
-
-		that.id = data.id; //GUID TODO: new Guid if data.id not defined
-		that.bid = data.bid; //Bid
-		that.convention = data.convention || ""; //String (TODO: Convention with description, tags, ...)
+		this.id = data.id; //GUID TODO: new Guid if data.id not defined
+		this.bid = new bidModule.Bid(data.bid); //Bid
+		this.convention = data.convention || ""; //String (TODO: Convention with description, tags, ...)
 				
 	};
 	
+	BidConvention.prototype = function(){		
+		//private members		
+		var addChildren = function(dataChildren){
+			for ( var i = 0; i < dataChildren.length; i++) {
+				var child = new BidConvention(dataChildren[i]);
+				child.parent = this;
+				this.children.push(child);
+			}
+		}
+		
+		var toJSON = function() {
+		    return {
+		    	id : this.id,
+		    	bid : this.bid,
+		    	convention : this.convention,
+		    	children : this.children
+		    };
+		}
+		
+		//public members		
+		return {
+			addChildren : addChildren,
+			toJSON : toJSON
+		}
+	}();
+
 
 	return module.exports;
 });
