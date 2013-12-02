@@ -25,10 +25,24 @@ require.config({
   }
 });
  
-require(['require', 'knockout', "models/bid"], function(require, ko, bidModule){
-	var bid = new bidModule.Bid({type : "SUIT", suit : "CLUBS", level : 2});
-    ko.applyBindings(bid);   	
+require(['require', 'knockout', 'models/bid', 'models/bid-convention'], function(require, ko, bidModule, bidConventionModule){
+	var bid = new bidModule.Bid({
+		suit : "CLUBS", 
+		level : 1
+	});
+	var bidConvention1 = new bidConventionModule.BidConvention({
+		id : 1,
+		parent : null,
+		bid : bid,
+		convention : "12-19 punten. Vanaf een 3 kaart.",
+		isOpponentBid : false
+	});
+	var bidConvention2 = new bidConventionModule.BidConvention({
+		id : 2,
+		parent : bidConvention1,
+		bid : new bidModule.Pass(),
+		convention : "",
+		isOpponentBid : true
+	});
 
-	var unvalidBid = new bidModule.Bid({type : "SUIT", suit : "CLUBS", level : 9});
-    ko.applyBindings(unvalidBid);   	
 });
