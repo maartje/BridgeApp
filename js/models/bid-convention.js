@@ -12,16 +12,20 @@ define(function(require, exports, module) {
 		this.addChildren(data.children || []); 
 	};
 	
-	BidConvention.prototype = function(){		
-		//private members		
+	BidConvention.prototype = function(){
+		//private members
 		var addChildren = function(dataChildren){
 			for ( var i = 0; i < dataChildren.length; i++) {
-				var child = new BidConvention(dataChildren[i]);
-				child.parent = this;
-				this.children.push(child);
+				addChild.call(this, dataChildren[i]);
 			}
 		}
-		
+
+		var addChild = function(dataChild){
+			var child = new BidConvention(dataChild);
+			child.parent = this;
+			this.children.push(child);
+		}
+
 		var toJSON = function() {
 		    return {
 		    	id : this.id,
