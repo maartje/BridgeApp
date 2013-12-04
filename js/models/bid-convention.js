@@ -40,13 +40,39 @@ define(function(require, exports, module) {
 		};
 		
 		var isValidBidSequenceHead = function(){
+			//helper function to check the bid types at the
+			//end of the bid sequence.
+			var hasSuffixBidTypes = function(bidTypes){
+				var getSuffixBids = function(maxLength){
+					if (maxLength === 0){
+						return [];
+					}
+					if (isRoot.call(this)){
+						return [];
+					}
+					var suffixBidsOfParent = getSuffixBids.call(this.parent, maxLength - 1);
+					suffixBidsOfParent[suffixBidsOfParent.length] = this.bid; 
+					return suffixBidsOfParent;
+				};
+
+				var bidSuffix = getSuffixBids.call(this, bidTypes.length);			
+				var bidTypeSuffix = ko.utils.arrayMap(bidSuffix, function(b){
+					return b.type;
+				});
+				return bidTypeSuffix.toString() === bidTypes.toString();
+			};
+
+			//empty bid sequence is valid
 			if (isRoot.call(this)){
-				return true; //empty sequence is valid
-			}
-			if (hasSuffixBidTypes.call(this.parent, ["PASS", "PASS", "PASS"]) && length.call(this) > 4){
-				return false; //bidding is finished
+				return true; 
 			}
 			
+			//last bid is invalid, in case the bidding is finished at the parent.
+			if (hasSuffixBidTypes.call(this.parent, ["PASS", "PASS", "PASS"]) && length.call(this) > 4){
+				return false; 
+			}
+			
+			//checks if the last bid respects the bridge bidding rules 
 			return hasSuffixBidTypes.call(this, ["SUIT", "DOUBLET"]) ||
 			       hasSuffixBidTypes.call(this, ["SUIT", "PASS", "PASS","DOUBLET"]) ||
 			       hasSuffixBidTypes.call(this, ["DOUBLET", "REDOUBLET"]) ||
@@ -63,26 +89,6 @@ define(function(require, exports, module) {
 				return this.bid;
 			}
 			return bidLevel.call(this.parent);
-		};
-
-		var hasSuffixBidTypes = function(bidTypes){
-			var bidSuffix = getSuffixBids.call(this, bidTypes.length);			
-			var bidTypeSuffix = ko.utils.arrayMap(bidSuffix, function(b){
-				return b.type;
-			});
-			return bidTypeSuffix.toString() === bidTypes.toString();
-		};
-
-		var getSuffixBids = function(maxLength){
-			if (maxLength === 0){
-				return [];
-			}
-			if (isRoot.call(this)){
-				return [];
-			}
-			var suffixBidsOfParent = getSuffixBids.call(this.parent, maxLength - 1);
-			suffixBidsOfParent[suffixBidsOfParent.length] = this.bid; 
-			return suffixBidsOfParent;
 		};
 		
 		//methods that modify the tree structure
