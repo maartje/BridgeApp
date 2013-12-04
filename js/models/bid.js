@@ -11,6 +11,7 @@ define(function(require, exports, module) {
 		case "SUIT":
 			return new BidInSuit(data);
 		default:
+			throw "unvalid bid type" + data.type;
 			break; //TODO throw exception
 		}
 	};	
@@ -40,19 +41,19 @@ define(function(require, exports, module) {
 			"HEARTS" : 3,
 			"SPADES" : 4,
 			"NOTRUMP" : 5
-		}
+		};
 
 		var gt = function(bidInSuit){
 			return this.level > bidInSuit.level ||
 			       (this.level === bidInSuit.level && suitOrdering[this.suit] > suitOrdering[bidInSuit.suit]);
-		}
+		};
 		
 		//public members		
 		return {
 			gt : gt
-		}
+		};
 	}();
-
+	
 	return module.exports;
 });
 
