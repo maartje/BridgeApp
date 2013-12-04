@@ -34,7 +34,7 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 				id : 1,
 				bid : {
 					type : "SUIT",
-					suit : "CLUBS", 
+					suit : "NOTRUMP", 
 					level : 1
 				},
 				convention : "12-19 punten. Vanaf een 3 kaart.",
@@ -47,9 +47,14 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 					children : []}
 				, { id : 3,
 					bid : {
+						type : "REDOUBLET"
+					},
+					convention : ""}
+				, { id : 4,
+					bid : {
 						type : "SUIT",
 						suit : "SPADES", 
-						level : 2
+						level : 1
 					},
 					convention : "informatie doublet"}]}]}
 	});
@@ -60,5 +65,13 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 	
 	console.log(bidsystem);
 	console.log(obj);
+	
+	var bs1 = obj.bidRoot.children[0].children[0];
+	var bs2 = obj.bidRoot.children[0].children[1];
+	var bs3 = obj.bidRoot.children[0].children[2];
+	console.log(bs1.length());
+	console.log(bs1.isValidBidSequence());
+	console.log(bs2.isValidBidSequence());
+	console.log(bs3.isValidBidSequence());
 
 });
