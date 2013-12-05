@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 		case "SUIT":
 			return new BidInSuit(data);
 		default:
-			throw "unvalid bid type" + data.type;
+			throw "unvalid bid type: " + data.type;
 			break; //TODO throw exception
 		}
 	};	
