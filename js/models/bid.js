@@ -27,7 +27,7 @@ define(function(require, exports, module) {
 	var Redoublet = function () {
 		this.type = "REDOUBLET";
 	};	
-
+	
 	var BidInSuit = function (data) {
 		this.type = "SUIT";
 		this.level = data.level;

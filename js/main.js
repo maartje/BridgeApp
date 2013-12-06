@@ -47,16 +47,16 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 					children : []}
 				, { id : 3,
 					bid : {
-						type : "REDOUBLET"
+						type : "DOUBLET"
 					},
-					convention : ""}
+					convention : "informatie doublet"}
 				, { id : 4,
 					bid : {
 						type : "SUIT",
 						suit : "SPADES", 
 						level : 1
 					},
-					convention : "informatie doublet"}]}]}
+					convention : "volgbod"}]}]}
 	});
 	
 	var s = JSON.stringify(bidsystem);

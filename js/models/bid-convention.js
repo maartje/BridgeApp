@@ -9,17 +9,18 @@ define(function(require, exports, module) {
 		this.convention = data.convention; //String (TODO: Convention with description, tags, ...)
 				
 		this.parent = data.parent; //BidConvention
-		this.children = []; //Array with BidConventions
-		this.addChildren(data.children || []); 
+		this.children = []; //Array with BidConventions		
+		this.addChildren(data.children || []); 		
 	};
 	
 	BidConvention.prototype = function(){
 		
 		//helper methods
+		
 		var isRoot = function(){
 			return !this.parent;
 		};
-		
+
 		var length = function(){
 			if(isRoot.call(this)){
 				return 0;
@@ -29,19 +30,13 @@ define(function(require, exports, module) {
 		
 		//methods for validation
 
-		var isValidChildBid = function(bid){
-			var child = createChild.call(this, {bid : bid});
-			return isValidBidSequenceHead.call(child);
+		var isValidBidSequence = function(){
+			return isRoot.call(this) ||
+			       (isValidChildBid.call(this.parent, this.bid) && isValidBidSequence.call(this.parent));
 		};
 
-		var isValidBidSequence = function(){
-			return isValidBidSequenceHead.call(this) && 
-			       (isRoot.call(this) || isValidBidSequence.call(this.parent));
-		};
-		
-		var isValidBidSequenceHead = function(){
-			//helper function to check the bid types at the
-			//end of the bid sequence.
+		var isValidChildBid = function(bid){
+			//compares the bid types at the end of the bidsequence
 			var hasSuffixBidTypes = function(bidTypes){
 				var getSuffixBids = function(maxLength){
 					if (maxLength === 0){
@@ -50,35 +45,36 @@ define(function(require, exports, module) {
 					if (isRoot.call(this)){
 						return [];
 					}
-					var suffixBidsOfParent = getSuffixBids.call(this.parent, maxLength - 1);
-					suffixBidsOfParent[suffixBidsOfParent.length] = this.bid; 
-					return suffixBidsOfParent;
+					var suffixBids = getSuffixBids.call(this.parent, maxLength - 1);
+					suffixBids[suffixBids.length] = this.bid;
+					return suffixBids;
 				};
 
-				var bidSuffix = getSuffixBids.call(this, bidTypes.length);			
+				var bidSuffix = getSuffixBids.call(this, bidTypes.length);
 				var bidTypeSuffix = ko.utils.arrayMap(bidSuffix, function(b){
 					return b.type;
 				});
 				return bidTypeSuffix.toString() === bidTypes.toString();
 			};
-
-			//empty bid sequence is valid
-			if (isRoot.call(this)){
-				return true; 
-			}
 			
-			//last bid is invalid, in case the bidding is finished at the parent.
-			if (hasSuffixBidTypes.call(this.parent, ["PASS", "PASS", "PASS"]) && length.call(this) > 4){
+			//checks the suffix of the bidsequence that would be created by adding the given next bid
+			var checkNewSuffix = function(bidTypes){
+				var lastBidType = bidTypes.pop();
+				return hasSuffixBidTypes.call(this, bidTypes) && lastBidType === bid.type;
+			};
+			
+			//The next bid is invalid in case the bidding is finished.
+			if (hasSuffixBidTypes.call(this, ["PASS", "PASS", "PASS"]) && length.call(this) >= 4){
 				return false; 
 			}
 			
 			//checks if the last bid respects the bridge bidding rules 
-			return hasSuffixBidTypes.call(this, ["SUIT", "DOUBLET"]) ||
-			       hasSuffixBidTypes.call(this, ["SUIT", "PASS", "PASS","DOUBLET"]) ||
-			       hasSuffixBidTypes.call(this, ["DOUBLET", "REDOUBLET"]) ||
-			       hasSuffixBidTypes.call(this, ["DOUBLET", "PASS", "PASS", "REDOUBLET"]) ||
-			       hasSuffixBidTypes.call(this, ["PASS"]) ||
-			       (hasSuffixBidTypes.call(this, ["SUIT"]) && (!bidLevel.call(this.parent) || bidLevel.call(this).gt(bidLevel.call(this.parent))));
+			return checkNewSuffix.call(this, ["SUIT", "DOUBLET"]) ||
+			       checkNewSuffix.call(this, ["SUIT", "PASS", "PASS","DOUBLET"]) ||
+			       checkNewSuffix.call(this, ["DOUBLET", "REDOUBLET"]) ||
+			       checkNewSuffix.call(this, ["DOUBLET", "PASS", "PASS", "REDOUBLET"]) ||
+			       checkNewSuffix.call(this, ["PASS"]) ||
+			       (checkNewSuffix.call(this, ["SUIT"]) && (!bidLevel.call(this) || bid.gt(bidLevel.call(this))));
 		};
 		
 		var bidLevel = function(){
@@ -101,8 +97,11 @@ define(function(require, exports, module) {
 		};
 
 		var createChild = function(dataChild){
+			if(!isValidChildBid.call(this, bidModule.createBid(dataChild.bid))){
+				throw "unvalid bid: " + JSON.stringify(dataChild.bid);
+			}
+			dataChild.parent = this;
 			var child = new BidConvention(dataChild);
-			child.parent = this;
 			this.children.push(child);
 			return child;
 		};
@@ -121,11 +120,10 @@ define(function(require, exports, module) {
 		
 		//public members		
 		return {
-			addChildren : addChildren,
 			createChild : createChild,
+			addChildren : addChildren,
 			toJSON : toJSON,
-			length : length,
-			isValidBidSequence : isValidBidSequence
+			isValidChildBid : isValidChildBid
 		};
 	}();
 

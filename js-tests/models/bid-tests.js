@@ -8,7 +8,7 @@ define(function(require) {
 			// ...
 		});
 
-		suite('Construction of bid objects', function() {
+		suite('Construction of Bid objects', function() {
 			test('#createBid({type : "PASS"}): creates a bid with type "PASS"',
 				function() {
 					// arrange
