@@ -43,9 +43,17 @@ define(function(require, exports, module) {
 			"NOTRUMP" : 5
 		};
 
+		var eq = function(bidInSuit){
+			return this.level === bidInSuit.level && this.suit === bidInSuit.suit;
+		};
+
 		var gt = function(bidInSuit){
 			return this.level > bidInSuit.level ||
 			       (this.level === bidInSuit.level && suitOrdering[this.suit] > suitOrdering[bidInSuit.suit]);
+		};
+		
+		var lt = function(bidInSuit){
+			return !gt.call(this, bidInSuit) && !eq.call(this, bidInSuit);
 		};
 		
 		//public members		

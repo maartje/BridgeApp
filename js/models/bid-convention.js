@@ -35,7 +35,7 @@ define(function(require, exports, module) {
 			       (isValidChildBid.call(this.parent, this.bid) && isValidBidSequence.call(this.parent));
 		};
 
-		var isValidChildBid = function(bid){
+		var isValidChildBid = function(bidData){
 			//compares the bid types at the end of the bidsequence
 			var hasSuffixBidTypes = function(bidTypes){
 				var getSuffixBids = function(maxLength){
@@ -60,9 +60,11 @@ define(function(require, exports, module) {
 			//checks the suffix of the bidsequence that would be created by adding the given next bid
 			var checkNewSuffix = function(bidTypes){
 				var lastBidType = bidTypes.pop();
-				return hasSuffixBidTypes.call(this, bidTypes) && lastBidType === bid.type;
+				return hasSuffixBidTypes.call(this, bidTypes) && lastBidType === bidData.type;
 			};
-			
+			console.log(this);
+			console.log(hasSuffixBidTypes.call(this, ["PASS", "PASS", "PASS"]));
+			console.log(length.call(this));
 			//The next bid is invalid in case the bidding is finished.
 			if (hasSuffixBidTypes.call(this, ["PASS", "PASS", "PASS"]) && length.call(this) >= 4){
 				return false; 
@@ -74,7 +76,7 @@ define(function(require, exports, module) {
 			       checkNewSuffix.call(this, ["DOUBLET", "REDOUBLET"]) ||
 			       checkNewSuffix.call(this, ["DOUBLET", "PASS", "PASS", "REDOUBLET"]) ||
 			       checkNewSuffix.call(this, ["PASS"]) ||
-			       (checkNewSuffix.call(this, ["SUIT"]) && (!bidLevel.call(this) || bid.gt(bidLevel.call(this))));
+			       (checkNewSuffix.call(this, ["SUIT"]) && (!bidLevel.call(this) || bidLevel.call(this).lt(bidData)));
 		};
 		
 		var bidLevel = function(){
@@ -97,9 +99,9 @@ define(function(require, exports, module) {
 		};
 
 		var createChild = function(dataChild){
-			if(!isValidChildBid.call(this, bidModule.createBid(dataChild.bid))){
-				throw "unvalid bid: " + JSON.stringify(dataChild.bid);
-			}
+			//if(!isValidChildBid.call(this, bidModule.createBid(dataChild.bid))){
+			//	throw "unvalid bid: " + JSON.stringify(dataChild.bid);
+			//}
 			dataChild.parent = this;
 			var child = new BidConvention(dataChild);
 			this.children.push(child);

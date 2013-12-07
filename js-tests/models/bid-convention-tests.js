@@ -43,7 +43,7 @@ define(function(require) {
 							suit : "SPADES", 
 							level : 1
 						},
-						convention : "5+ schoppen, vanaf 5 punten."}]}]}
+						convention : "5+ schoppen, vanaf 5 punten."}]}]};
 			var bcRoot = new bcModule.BidConvention(bcData);
 			var bcChild0 = bcRoot.children[0];
 			var bcChild01 = bcChild0.children[1];
@@ -75,6 +75,200 @@ define(function(require) {
 					assert.strictEqual(bcChild01.convention, bcChild01Convention);
 					assert.deepEqual(bcChild01.bid, bidModule.createBid(bcChild01Bid));
 				});
+		});
+		suite('Validation of BidConvention objects', function() {
+			
+			var constructBidSequence = function(bidArray){
+				var bcRoot = new bcModule.BidConvention({});
+				var bcNode = bcRoot;
+				while (bidArray.length > 0){
+					var nextBid = bidArray.shift();
+					bcNode = bcNode.createChild({bid : nextBid});
+				}
+				return bcNode;
+			};
+
+			suite('Validation of BidConvention objects: Bidding Finished', function() {
+				test('#isValidChildBid(bid): "[PASS, PASS, PASS, PASS, ***]" is not valid.',
+					function() {			
+						// arrange
+						var pass_pass_pass_pass = constructBidSequence([
+						    {type : "PASS"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"}
+					    ]);
+						var suitBid = {type : "SUIT", level : 2, suit : "SPADES"};
+						var pass = {type : "PASS"}
+						var dbl = {type : "DOUBLET"}
+						var redbl = {type : "REDOUBLET"}
+						
+						// assert
+						assert.isFalse(pass_pass_pass_pass.isValidChildBid(suitBid));
+						assert.isFalse(pass_pass_pass_pass.isValidChildBid(pass));
+						assert.isFalse(pass_pass_pass_pass.isValidChildBid(dbl));
+						assert.isFalse(pass_pass_pass_pass.isValidChildBid(redbl));
+	
+				});
+				test('#isValidChildBid(bid): "[SUIT, PASS, PASS, PASS, ***]" is not valid.',
+					function() {			
+						// arrange
+						var _1nt_pass_pass_pass = constructBidSequence([
+		    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"}
+					    ]);
+						var suitBid = {type : "SUIT", level : 2, suit : "SPADES"};
+						var pass = {type : "PASS"}
+						var dbl = {type : "DOUBLET"}
+						var redbl = {type : "REDOUBLET"}
+						
+						// assert
+						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(suitBid));
+						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(pass));
+						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(dbl));
+						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(redbl));	
+				});
+				test('#isValidChildBid(bid): "[DBL, PASS, PASS, PASS, ***]" is not valid.',
+					function() {			
+						// arrange
+						var _1nt_dbl_pass_pass_pass = constructBidSequence([
+		    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"}
+					    ]);
+						var suitBid = {type : "SUIT", level : 2, suit : "SPADES"};
+						var pass = {type : "PASS"}
+						var dbl = {type : "DOUBLET"}
+						var redbl = {type : "REDOUBLET"}
+						
+						// assert
+						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(suitBid));
+						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(pass));
+						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(dbl));
+						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(redbl));	
+				});
+				test('#isValidChildBid(bid): "[REDBL, PASS, PASS, PASS, ***]" is not valid.',
+					function() {			
+						// arrange
+						var _1nt_dbl_redbl_pass_pass_pass = constructBidSequence([
+		    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "REDOUBLET"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"},
+		    			    {type : "PASS"}
+					    ]);
+						var suitBid = {type : "SUIT", level : 2, suit : "SPADES"};
+						var pass = {type : "PASS"}
+						var dbl = {type : "DOUBLET"}
+						var redbl = {type : "REDOUBLET"}
+						
+						// assert
+						assert.isFalse(_1nt_dbl_redbl_pass_pass_pass.isValidChildBid(suitBid));
+						assert.isFalse(_1nt_dbl_redbl_pass_pass_pass.isValidChildBid(pass));
+						assert.isFalse(_1nt_dbl_redbl_pass_pass_pass.isValidChildBid(dbl));
+						assert.isFalse(_1nt_dbl_redbl_pass_pass_pass.isValidChildBid(redbl));	
+				});
+			});
+			suite('Validation of BidConvention objects: DOUBLET', function() {
+				test('#isValidChildBid(bid): "[SUIT, DBL]" is valid.',
+					function() {			
+						// arrange
+						var _1nt = constructBidSequence([
+		       			    {type : "SUIT", level : 1, suit : "NOTRUMP"}
+		   			    ]);
+						
+						// assert
+						assert.isTrue(_1nt.isValidChildBid({type : "DOUBLET"}));
+				});
+				test('#isValidChildBid(bid): "[DBL,  DBL]" and "[REDBL, DBL]" are invalid.',
+					function() {			
+						// arrange
+						var _1nt_dbl = constructBidSequence([
+	 	    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"}
+		   			    ]);
+						var _1nt_dbl_redbl = constructBidSequence([
+		    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "REDOUBLET"}
+					    ]);
+							
+						// assert
+						assert.isFalse(_1nt_dbl.isValidChildBid({type : "DOUBLET"}));
+						assert.isFalse(_1nt_dbl_redbl.isValidChildBid({type : "DOUBLET"}));
+				});
+	
+				test('#isValidChildBid(bid): and "[SUIT, PASS, DBL]", "[DBL, PASS, DBL]" and "[REDBL, PASS, DBL]" are invalid.',
+					function() {			
+						// arrange
+						var _1nt_pass = constructBidSequence([
+	  		    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+	  	    			    {type : "PASS"}
+	  	   			    ]);
+						var _1nt_dbl_pass = constructBidSequence([
+			    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "PASS"}
+		   			    ]);
+						var _1nt_dbl_redbl_pass = constructBidSequence([
+		    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "REDOUBLET"},
+		    			    {type : "PASS"}
+					    ]);
+							
+						// assert
+						assert.isFalse(_1nt_pass.isValidChildBid({type : "DOUBLET"}));
+						assert.isFalse(_1nt_dbl_pass.isValidChildBid({type : "DOUBLET"}));
+						assert.isFalse(_1nt_dbl_redbl_pass.isValidChildBid({type : "DOUBLET"}));
+				});
+				
+				test('#isValidChildBid(bid): and "[SUIT, PASS, PASS, DBL]".',
+					function() {			
+						// arrange
+						var _1nt_pass_pass = constructBidSequence([
+		       			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+		       			    {type : "PASS"},
+		       			    {type : "PASS"}
+		   			    ]);
+							
+						// assert
+						assert.isTrue(_1nt_pass_pass.isValidChildBid({type : "DOUBLET"}));
+				});
+	
+				test('#isValidChildBid(bid): and "[PASS, PASS, PASS, DBL]", "[DBL, PASS, PASS, DBL]" and "[REDBL, PASS, PASS, DBL]" are invalid.',
+						function() {			
+							// arrange
+							var pass_pass_pass = constructBidSequence([
+	   	  	    			    {type : "PASS"},
+		  	    			    {type : "PASS"},
+		  	    			    {type : "PASS"}
+		  	   			    ]);
+							var _1nt_dbl_pass_pass = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"},
+		  	    			    {type : "PASS"}
+			   			    ]);
+							var _1nt_dbl_redbl_pass_pass = constructBidSequence([
+			    			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "REDOUBLET"},
+			    			    {type : "PASS"},
+		  	    			    {type : "PASS"}
+						    ]);
+								
+							// assert
+							assert.isFalse(pass_pass_pass.isValidChildBid({type : "DOUBLET"}));
+							assert.isFalse(_1nt_dbl_pass_pass.isValidChildBid({type : "DOUBLET"}));
+							assert.isFalse(_1nt_dbl_redbl_pass_pass.isValidChildBid({type : "DOUBLET"}));
+				});
+			});
 		});
 	});
 });
