@@ -9,6 +9,19 @@ define(function(require) {
 			// ...
 		});
 
+		var constructBidSequence = function(bidArray){
+			var bcRoot = new bcModule.BidConvention({});
+			return addBidSequence(bcRoot, bidArray);
+		};
+		
+		var addBidSequence = function(bcNode, bidArray){
+			while (bidArray.length > 0){
+				var nextBid = bidArray.shift();
+				bcNode = bcNode.createChild({bid : nextBid});
+			}
+			return bcNode;
+		};
+
 		suite('Construction of BidConvention objects', function() {
 			// arrange
 			var bcRootId = "root_id";
@@ -75,19 +88,103 @@ define(function(require) {
 					assert.strictEqual(bcChild01.convention, bcChild01Convention);
 					assert.deepEqual(bcChild01.bid, bidModule.createBid(bcChild01Bid));
 				});
+			test('#BidSequence(data): throws an exception in case the bidsystem contains an invalid bidsequence',
+					function() {
+						// arange
+						var invalidData = {
+							id : bcRootId,
+							children : [{
+								id : 1,
+								bid : {
+									type : "SUIT",
+									suit : "CLUBS", 
+									level : 1
+								},
+								convention : "12-19 punten. Vanaf een 3 kaart.",
+								children : [{
+									id : 2,
+									bid : {
+										type : "PASS"
+									},
+									convention : "bla",
+									children : []}
+								, { id : bcChild01Id,
+									bid : bcChild01Bid,
+									convention : bcChild01Convention}
+								, { id : 4,
+									bid : {
+										type : "SUIT",
+										suit : "SPADES", 
+										level : 1
+									},
+									convention : "5+ schoppen, vanaf 5 punten.",
+									children : [{
+										id : 10,
+										bid : {type : "REDOUBLET"}
+									}]}]}]};
+						// assert
+						assert.throw(function(){new bcModule.BidConvention(invalidData);}, 'unvalid bid: {"type":"REDOUBLET"}');
+					});
+			test('#BidSequence(data): throws an exception in case the bidsequence does not contain a root',
+					function() {
+						// arange
+						var invalidData = {
+								id : 1,
+								bid : {
+									type : "SUIT",
+									suit : "CLUBS", 
+									level : 1
+								},
+								convention : "12-19 punten. Vanaf een 3 kaart.",
+								children : [{
+									id : 2,
+									bid : {
+										type : "SUIT",
+										suit : "CLUBS", 
+										level : 2
+									},
+									convention : "bla",
+									children : []}]};
+						// assert
+						assert.throw(function(){new bcModule.BidConvention(invalidData);}, 'A newly created bid system must contain a root node for which the bid is "undefined"');
+					});
+			test('#BidSequence(data): throws an exception in case the bidsequence contains an invalid bid',
+					function() {
+						// arange
+						var invalidData = {
+							id : bcRootId,
+							children : [{
+								id : 1,
+								bid : {
+									type : "SUIT",
+									suit : "CLUBS", 
+									level : 1
+								},
+								convention : "12-19 punten. Vanaf een 3 kaart.",
+								children : [{
+									id : 2,
+									bid : {
+										type : "PASS"
+									},
+									convention : "bla",
+									children : []}
+								, { id : bcChild01Id,
+									bid : bcChild01Bid,
+									convention : bcChild01Convention}
+								, { id : 4,
+									bid : {
+										type : "XXXSUIT",
+										suit : "SPADES", 
+										level : 1
+									},
+									convention : "5+ schoppen, vanaf 5 punten.",
+									children : []}]}]};
+						// assert
+						assert.throw(function(){new bcModule.BidConvention(invalidData);}, 'unvalid bid: {"type":"XXXSUIT","suit":"SPADES","level":1}');
+					});
+
 		});
 		suite('Validation of BidConvention objects', function() {
-			
-			var constructBidSequence = function(bidArray){
-				var bcRoot = new bcModule.BidConvention({});
-				var bcNode = bcRoot;
-				while (bidArray.length > 0){
-					var nextBid = bidArray.shift();
-					bcNode = bcNode.createChild({bid : nextBid});
-				}
-				return bcNode;
-			};
-
 			suite('Validation of BidConvention objects: Bidding Finished', function() {
 				test('#isValidChildBid(bid): "[PASS, PASS, PASS, PASS, ***]" is not valid.',
 					function() {			

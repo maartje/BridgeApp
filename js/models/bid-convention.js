@@ -10,7 +10,11 @@ define(function(require, exports, module) {
 				
 		this.parent = data.parent; //BidConvention
 		this.children = []; //Array with BidConventions		
-		this.addChildren(data.children || []); 		
+		this.addChildren(data.children || []); 
+		
+		if(!this.parent && this.bid){
+			throw 'A newly created bid system must contain a root node for which the bid is "undefined"';
+		}
 	};
 	
 	BidConvention.prototype = function(){
@@ -29,9 +33,9 @@ define(function(require, exports, module) {
 		};
 		
 		//methods for validation
-
+		
 		var isValidBidSequence = function(){
-			return isRoot.call(this) ||
+			return (isRoot.call(this) && !this.bid) ||
 			       (isValidChildBid.call(this.parent, this.bid) && isValidBidSequence.call(this.parent));
 		};
 
@@ -97,9 +101,9 @@ define(function(require, exports, module) {
 		};
 
 		var createChild = function(dataChild){
-			//if(!isValidChildBid.call(this, bidModule.createBid(dataChild.bid))){
-			//	throw "unvalid bid: " + JSON.stringify(dataChild.bid);
-			//}
+			if(!isValidChildBid.call(this, dataChild.bid)){
+				throw "unvalid bid: " + JSON.stringify(dataChild.bid);
+			}
 			dataChild.parent = this;
 			var child = new BidConvention(dataChild);
 			this.children.push(child);
