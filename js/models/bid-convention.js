@@ -62,9 +62,7 @@ define(function(require, exports, module) {
 				var lastBidType = bidTypes.pop();
 				return hasSuffixBidTypes.call(this, bidTypes) && lastBidType === bidData.type;
 			};
-			console.log(this);
-			console.log(hasSuffixBidTypes.call(this, ["PASS", "PASS", "PASS"]));
-			console.log(length.call(this));
+
 			//The next bid is invalid in case the bidding is finished.
 			if (hasSuffixBidTypes.call(this, ["PASS", "PASS", "PASS"]) && length.call(this) >= 4){
 				return false; 

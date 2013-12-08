@@ -110,7 +110,7 @@ define(function(require) {
 						assert.isFalse(pass_pass_pass_pass.isValidChildBid(redbl));
 	
 				});
-				test('#isValidChildBid(bid): "[SUIT, PASS, PASS, PASS, ***]" is not valid.',
+				test('#isValidChildBid(bid): "[..., SUIT, PASS, PASS, PASS, ***]" is not valid.',
 					function() {			
 						// arrange
 						var _1nt_pass_pass_pass = constructBidSequence([
@@ -130,7 +130,7 @@ define(function(require) {
 						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(dbl));
 						assert.isFalse(_1nt_pass_pass_pass.isValidChildBid(redbl));	
 				});
-				test('#isValidChildBid(bid): "[DBL, PASS, PASS, PASS, ***]" is not valid.',
+				test('#isValidChildBid(bid): "[..., DBL, PASS, PASS, PASS, ***]" is not valid.',
 					function() {			
 						// arrange
 						var _1nt_dbl_pass_pass_pass = constructBidSequence([
@@ -151,7 +151,7 @@ define(function(require) {
 						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(dbl));
 						assert.isFalse(_1nt_dbl_pass_pass_pass.isValidChildBid(redbl));	
 				});
-				test('#isValidChildBid(bid): "[REDBL, PASS, PASS, PASS, ***]" is not valid.',
+				test('#isValidChildBid(bid): "[..., REDBL, PASS, PASS, PASS, ***]" is not valid.',
 					function() {			
 						// arrange
 						var _1nt_dbl_redbl_pass_pass_pass = constructBidSequence([
@@ -174,8 +174,147 @@ define(function(require) {
 						assert.isFalse(_1nt_dbl_redbl_pass_pass_pass.isValidChildBid(redbl));	
 				});
 			});
+			suite('Validation of BidConvention objects: PASS', function() {
+				test('#isValidChildBid(bid): "[PASS]" is valid.',
+						function() {			
+							// arrange
+							var root = constructBidSequence([
+						    ]);
+							
+							// assert
+							assert.isTrue(root.isValidChildBid({type : "PASS"}));
+					});
+				test('#isValidChildBid(bid): "[..., PASS, PASS]" is valid.',
+						function() {			
+							// arrange
+							var pass = constructBidSequence([
+							   {type : "PASS"}
+						    ]);
+							
+							// assert
+							assert.isTrue(pass.isValidChildBid({type : "PASS"}));
+					});
+				test('#isValidChildBid(bid): "[..., DBL, PASS]" is valid.',
+						function() {			
+							// arrange
+							var _1nt_dbl = constructBidSequence([
+     		       			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+     		       			    {type : "DOUBLET"}
+						    ]);
+							
+							// assert
+							assert.isTrue(_1nt_dbl.isValidChildBid({type : "PASS"}));
+					});
+				test('#isValidChildBid(bid): "[..., REDOUBLET, PASS]" is valid.',
+						function() {			
+							// arrange
+							var _1nt_dbl_redbl = constructBidSequence([
+     		       			    {type : "SUIT", level : 1, suit : "NOTRUMP"},
+     		       			    {type : "DOUBLET"},
+     		       			    {type : "REDOUBLET"}
+						    ]);
+							
+							// assert
+							assert.isTrue(_1nt_dbl_redbl.isValidChildBid({type : "PASS"}));
+					});
+				test('#isValidChildBid(bid): "[..., SUIT, PASS]" is valid.',
+						function() {			
+							// arrange
+							var _1nt = constructBidSequence([
+     		       			    {type : "SUIT", level : 1, suit : "NOTRUMP"}
+						    ]);
+							
+							// assert
+							assert.isTrue(_1nt.isValidChildBid({type : "PASS"}));
+					});				
+			});
+			suite('Validation of BidConvention objects: SUIT', function() {
+				test('#isValidChildBid(bid): "[SUIT]" is valid.',
+						function() {			
+							// arrange
+							var root = constructBidSequence([
+						    ]);
+							
+							// assert
+							assert.isTrue(root.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+					});
+				test('#isValidChildBid(bid): "[..., PASS, SUIT]" is valid iff SUIT increases the bid level.',
+						function() {			
+							// arrange
+							var pass = constructBidSequence([
+							   {type : "PASS"}
+						    ]);
+							var _2s_pass = constructBidSequence([
+                              {type : "SUIT", level : 2, suit : "SPADES"},
+                              {type : "PASS"}
+  						    ]);
+							
+							// assert
+							assert.isTrue(pass.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+							assert.isTrue(_2s_pass.isValidChildBid({type : "SUIT", level : 3, suit : "CLUBS"}));
+							assert.isTrue(_2s_pass.isValidChildBid({type : "SUIT", level : 2, suit : "NOTRUMP"}));
+							assert.isFalse(_2s_pass.isValidChildBid({type : "SUIT", level : 2, suit : "SPADES"}));
+							assert.isFalse(_2s_pass.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+							assert.isFalse(_2s_pass.isValidChildBid({type : "SUIT", level : 2, suit : "CLUBS"}));
+					});
+				test('#isValidChildBid(bid): "[..., DBL, SUIT]" is valid iff SUIT increases the bid level.',
+						function() {			
+							// arrange
+							var _2s_dbl = constructBidSequence([
+                                 {type : "SUIT", level : 2, suit : "SPADES"},
+                                 {type : "DOUBLET"}
+     						]);
+   							
+   							// assert
+   							assert.isTrue(_2s_dbl.isValidChildBid({type : "SUIT", level : 3, suit : "CLUBS"}));
+   							assert.isTrue(_2s_dbl.isValidChildBid({type : "SUIT", level : 2, suit : "NOTRUMP"}));
+   							assert.isFalse(_2s_dbl.isValidChildBid({type : "SUIT", level : 2, suit : "SPADES"}));
+   							assert.isFalse(_2s_dbl.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+   							assert.isFalse(_2s_dbl.isValidChildBid({type : "SUIT", level : 2, suit : "CLUBS"}));
+					});
+				test('#isValidChildBid(bid): "[..., REDBL, SUIT]" is valid iff SUIT increases the bid level.',
+						function() {			
+							// arrange
+							var _2s_dbl_redbl = constructBidSequence([
+                                 {type : "SUIT", level : 2, suit : "SPADES"},
+                                 {type : "DOUBLET"},
+                                 {type : "REDOUBLET"}
+     						]);
+   							
+   							// assert
+   							assert.isTrue(_2s_dbl_redbl.isValidChildBid({type : "SUIT", level : 3, suit : "CLUBS"}));
+   							assert.isTrue(_2s_dbl_redbl.isValidChildBid({type : "SUIT", level : 2, suit : "NOTRUMP"}));
+   							assert.isFalse(_2s_dbl_redbl.isValidChildBid({type : "SUIT", level : 2, suit : "SPADES"}));
+   							assert.isFalse(_2s_dbl_redbl.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+   							assert.isFalse(_2s_dbl_redbl.isValidChildBid({type : "SUIT", level : 2, suit : "CLUBS"}));
+					});
+				test('#isValidChildBid(bid): "[..., SUIT, SUIT]" is valid iff the last SUIT increases the bid level.',
+						function() {			
+							// arrange
+							var _1s__2s = constructBidSequence([
+                                 {type : "SUIT", level : 1, suit : "SPADES"},
+                                 {type : "SUIT", level : 2, suit : "SPADES"}
+     						]);
+   							
+   							// assert
+   							assert.isTrue(_1s__2s.isValidChildBid({type : "SUIT", level : 3, suit : "CLUBS"}));
+   							assert.isTrue(_1s__2s.isValidChildBid({type : "SUIT", level : 2, suit : "NOTRUMP"}));
+   							assert.isFalse(_1s__2s.isValidChildBid({type : "SUIT", level : 2, suit : "SPADES"}));
+   							assert.isFalse(_1s__2s.isValidChildBid({type : "SUIT", level : 1, suit : "NOTRUMP"}));
+   							assert.isFalse(_1s__2s.isValidChildBid({type : "SUIT", level : 2, suit : "CLUBS"}));
+					});
+			});
+
 			suite('Validation of BidConvention objects: REDOUBLET', function() {
-				test('#isValidChildBid(bid): "[SUIT, REDBL]" and "[REDBL, REDBL]" are invalid.',
+				test('#isValidChildBid(bid): "[REDBL]" is invalid.',
+						function() {			
+							// arrange
+							var root = constructBidSequence([]);
+							
+							// assert
+							assert.isFalse(root.isValidChildBid({type : "REDOUBLET"}));
+					});
+				test('#isValidChildBid(bid): "[..., SUIT, REDBL]" and "[..., REDBL, REDBL]" are invalid.',
 					function() {			
 						// arrange
 						var _1nt = constructBidSequence([
@@ -191,7 +330,7 @@ define(function(require) {
 						assert.isFalse(_1nt.isValidChildBid({type : "REDOUBLET"}));
 						assert.isFalse(_1nt_dbl_redbl.isValidChildBid({type : "REDOUBLET"}));
 				});
-				test('#isValidChildBid(bid): "[DBL,  REDBL]" is valid.',
+				test('#isValidChildBid(bid): "[..., DBL,  REDBL]" is valid.',
 					function() {			
 						// arrange
 						var _1nt_dbl = constructBidSequence([
@@ -203,7 +342,7 @@ define(function(require) {
 						assert.isTrue(_1nt_dbl.isValidChildBid({type : "REDOUBLET"}));
 				});
 	
-				test('#isValidChildBid(bid): and "[SUIT, PASS, REDBL]", "[DBL, PASS, REDBL]" and "[REDBL, PASS, REDBL]" are invalid.',
+				test('#isValidChildBid(bid): and "[..., SUIT, PASS, REDBL]", "[..., DBL, PASS, REDBL]" and "[..., REDBL, PASS, REDBL]" are invalid.',
 					function() {			
 						// arrange
 						var _1nt_pass = constructBidSequence([
@@ -228,7 +367,7 @@ define(function(require) {
 						assert.isFalse(_1nt_dbl_redbl_pass.isValidChildBid({type : "REDOUBLET"}));
 				});
 				
-				test('#isValidChildBid(bid): "[DBL, PASS, PASS, REDBL]" is valid.',
+				test('#isValidChildBid(bid): "[..., DBL, PASS, PASS, REDBL]" is valid.',
 					function() {			
 						// arrange
 						var _1nt_dbl_pass_pass = constructBidSequence([
@@ -242,7 +381,7 @@ define(function(require) {
 						assert.isTrue(_1nt_dbl_pass_pass.isValidChildBid({type : "REDOUBLET"}));
 				});
 	
-				test('#isValidChildBid(bid): and "[PASS, PASS, PASS, REDBL]", "[DBL, PASS, PASS, REDBL]" and "[REDBL, PASS, PASS, REDBL]" are invalid.',
+				test('#isValidChildBid(bid): and "[..., PASS, PASS, PASS, REDBL]", "[..., DBL, PASS, PASS, REDBL]" and "[..., REDBL, PASS, PASS, REDBL]" are invalid.',
 						function() {			
 							// arrange
 							var pass_pass_pass = constructBidSequence([
@@ -270,7 +409,15 @@ define(function(require) {
 				});
 			});
 			suite('Validation of BidConvention objects: DOUBLET', function() {
-				test('#isValidChildBid(bid): "[SUIT, DBL]" is valid.',
+				test('#isValidChildBid(bid): "[DBL]" is invalid.',
+						function() {			
+							// arrange
+							var root = constructBidSequence([]);
+							
+							// assert
+							assert.isFalse(root.isValidChildBid({type : "DOUBLET"}));
+					});
+				test('#isValidChildBid(bid): "[..., SUIT, DBL]" is valid.',
 					function() {			
 						// arrange
 						var _1nt = constructBidSequence([
@@ -280,7 +427,7 @@ define(function(require) {
 						// assert
 						assert.isTrue(_1nt.isValidChildBid({type : "DOUBLET"}));
 				});
-				test('#isValidChildBid(bid): "[DBL,  DBL]" and "[REDBL, DBL]" are invalid.',
+				test('#isValidChildBid(bid): "[..., DBL,  DBL]" and "[..., REDBL, DBL]" are invalid.',
 					function() {			
 						// arrange
 						var _1nt_dbl = constructBidSequence([
@@ -298,7 +445,7 @@ define(function(require) {
 						assert.isFalse(_1nt_dbl_redbl.isValidChildBid({type : "DOUBLET"}));
 				});
 	
-				test('#isValidChildBid(bid): and "[SUIT, PASS, DBL]", "[DBL, PASS, DBL]" and "[REDBL, PASS, DBL]" are invalid.',
+				test('#isValidChildBid(bid): and "[..., SUIT, PASS, DBL]", "[..., DBL, PASS, DBL]" and "[..., REDBL, PASS, DBL]" are invalid.',
 					function() {			
 						// arrange
 						var _1nt_pass = constructBidSequence([
@@ -323,7 +470,7 @@ define(function(require) {
 						assert.isFalse(_1nt_dbl_redbl_pass.isValidChildBid({type : "DOUBLET"}));
 				});
 				
-				test('#isValidChildBid(bid): "[SUIT, PASS, PASS, DBL]" is valid.',
+				test('#isValidChildBid(bid): "[..., SUIT, PASS, PASS, DBL]" is valid.',
 					function() {			
 						// arrange
 						var _1nt_pass_pass = constructBidSequence([
@@ -336,7 +483,7 @@ define(function(require) {
 						assert.isTrue(_1nt_pass_pass.isValidChildBid({type : "DOUBLET"}));
 				});
 	
-				test('#isValidChildBid(bid): and "[PASS, PASS, PASS, DBL]", "[DBL, PASS, PASS, DBL]" and "[REDBL, PASS, PASS, DBL]" are invalid.',
+				test('#isValidChildBid(bid): and "[..., PASS, PASS, PASS, DBL]", "[..., DBL, PASS, PASS, DBL]" and "[..., REDBL, PASS, PASS, DBL]" are invalid.',
 						function() {			
 							// arrange
 							var pass_pass_pass = constructBidSequence([

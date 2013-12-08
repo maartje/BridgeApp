@@ -58,7 +58,9 @@ define(function(require, exports, module) {
 		
 		//public members		
 		return {
-			gt : gt
+			gt : gt,
+			lt : lt,
+			eq : eq
 		};
 	}();
 	
