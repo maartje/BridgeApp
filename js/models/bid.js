@@ -32,6 +32,13 @@ define(function(require, exports, module) {
 		this.type = "SUIT";
 		this.level = data.level;
 		this.suit = data.suit;
+		if(this.level < 1 || 7 < this.level || typeof this.level !== 'number' || this.level % 1 !== 0){
+			throw "invalid bid level: " + this.level;
+		}
+		var regex = new RegExp("^(CLUBS|DIAMONDS|HEARTS|SPADES|NOTRUMP)$");
+		if(!regex.test(this.suit)){
+			throw "invalid suit: " + this.suit;			
+		}
 	};	
 
 	BidInSuit.prototype = function(){
