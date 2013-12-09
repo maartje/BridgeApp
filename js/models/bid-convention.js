@@ -102,6 +102,7 @@ define(function(require, exports, module) {
 		var createChild = function(dataChild){
 			if(!isValidChildBid.call(this, dataChild.bid)){
 				throw "unvalid bid: " + JSON.stringify(dataChild.bid);
+				//TODO: "unvalid bidsequence: 2c - 2r - 1s"
 			}
 			dataChild.parent = this;
 			var child = new BidConvention(dataChild);

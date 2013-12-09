@@ -608,6 +608,126 @@ define(function(require) {
 							assert.isFalse(_1nt_dbl_redbl_pass_pass.isValidChildBid({type : "DOUBLET"}));
 				});
 			});
+			suite('Serialization of bidsystem structure', function() {
+				test('#toJSON: "BidConvention -> js -> BidConvention" is identity.',
+					function() {			
+						// arrange
+						var jsBefore = {
+							id : 0,
+							children : [{
+								id : 1,
+								bid : {
+									type : "SUIT",
+									suit : "CLUBS", 
+									level : 1
+								},
+								convention : "12-19 punten. Vanaf een 3 kaart.",
+								children : [{
+									id : 2,
+									bid : {
+										type : "PASS"
+									},
+									convention : "bla",
+									children : []}
+								, { id : 4,
+									bid : {
+										type : "SUIT",
+										suit : "SPADES", 
+										level : 1
+									},
+									convention : "5+ schoppen, vanaf 5 punten."}]}]};
+						var bcRootBefore = new bcModule.BidConvention(jsBefore);
+						var jsAfter = bcRootBefore.toJSON();
+						var bcRootAfter = new bcModule.BidConvention(jsAfter);
+													
+						// assert
+						assert.deepEqual(bcRootBefore, bcRootAfter);
+					});
+			});			
+			suite('Manipulation of bidsystem structure', function() {
+				test('#createChild(childData): Creates a child convention from the given child data.',
+						function() {			
+							// arrange
+							var _1nt_dbl_pass = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"}
+			   			    ]);
+							
+							//act
+							var _2c_child = _1nt_dbl_pass.createChild({
+								id : 10,
+								bid : {type : "SUIT", suit: "CLUBS", level: 2},
+								convention : "5+ clubs",
+								children : [{
+									id : 11,
+									bid : {type : "SUIT", suit: "CLUBS", level: 3},
+									convention : "onzin",
+									children : []									
+								}]
+							});
+								
+							// assert
+							assert.strictEqual(_1nt_dbl_pass.children[0], _2c_child);
+							assert.strictEqual(_2c_child.id, 10);
+							assert.strictEqual(_2c_child.bid.suit, "CLUBS");
+							assert.strictEqual(_2c_child.convention, "5+ clubs");
+							assert.strictEqual(_2c_child.children[0].id, 11);});
+				test('#createChild(childData): throws an exception in case the created child sequence is invalid.',
+						function() {			
+							// arrange
+							var _1nt_dbl_pass = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"}
+			   			    ]);
+							
+							//act + assert
+							assert.throw(function(){
+								_1nt_dbl_pass.createChild({
+									id : 10,
+									bid : {type : "SUIT", suit: "CLUBS", level: 1},
+									convention : "5+ clubs",
+									children : [{
+										id : 11,
+										bid : {type : "SUIT", suit: "CLUBS", level: 3},
+										convention : "onzin",
+										children : []									
+									}]
+								});
+							}, 'unvalid bid: {"type":"SUIT","suit":"CLUBS","level":1}');});
+				test('#addChildren(childData): Creates multiple child conventions from the given child data.',
+						function() {			
+							// arrange
+							var _1nt_dbl_pass = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"}
+			   			    ]);
+							
+							//act
+							_1nt_dbl_pass.parent.addChildren([
+							    {
+									id : 10,
+									bid : {type : "SUIT", suit: "CLUBS", level: 2},
+									convention : "5+ clubs",
+									children : [{
+										id : 11,
+										bid : {type : "SUIT", suit: "CLUBS", level: 3},
+										convention : "onzin",
+										children : []}]},
+							    {
+									id : 20,
+									bid : {type : "SUIT", suit: "SPADES", level: 2},
+									convention : "5+ spades",
+									children : []},
+							]);
+								
+							// assert
+							assert.lengthOf(_1nt_dbl_pass.parent.children, 3);
+				});
+								
+			});
 		});
 	});
 });
