@@ -26,52 +26,38 @@ require.config({
 });
  
 require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidSystemModule){
-	var bidsystem = new bidSystemModule.BidSystem({
-		id : "maartje_wim",
-		bidRoot : {
-			id : "root_id",
-			children : [{
-				id : 1,
-				bid : {
-					type : "SUIT",
-					suit : "NOTRUMP", 
-					level : 1
-				},
-				convention : "12-19 punten. Vanaf een 3 kaart.",
+	var bidSystemData = {
+			id : "maartje_wim",
+			bidRoot : {
+				id : "root_id",
 				children : [{
-					id : 2,
-					bid : {
-						type : "PASS",
-					},
-					convention : "",
-					children : []}
-				, { id : 3,
-					bid : {
-						type : "DOUBLET"
-					},
-					convention : "informatie doublet"}
-				, { id : 4,
+					id : 1,
 					bid : {
 						type : "SUIT",
-						suit : "SPADES", 
+						suit : "NOTRUMP", 
 						level : 1
 					},
-					convention : "volgbod"}]}]}
-	});
-	
-	var s = JSON.stringify(bidsystem);
-	var js = JSON.parse(s);
-	var obj = new bidSystemModule.BidSystem(js);
-	
-	console.log(bidsystem);
-	console.log(obj);
-	
-	var bs1 = obj.bidRoot.children[0].children[0];
-	var bs2 = obj.bidRoot.children[0].children[1];
-	var bs3 = obj.bidRoot.children[0].children[2];
-	console.log(bs1.length());
-	console.log(bs1.isValidBidSequence());
-	console.log(bs2.isValidBidSequence());
-	console.log(bs3.isValidBidSequence());
-
+					convention : "12-19 punten. Vanaf een 3 kaart.",
+					children : [{
+						id : 2,
+						bid : {
+							type : "PASS",
+						},
+						convention : "",
+						children : []}
+					, { id : 3,
+						bid : {
+							type : "DOUBLET"
+						},
+						convention : "informatie doublet"}
+					, { id : 4,
+						bid : {
+							type : "SUIT",
+							suit : "SPADES", 
+							level : 2
+						},
+						convention : "volgbod"}]}]}};
+	var bidSystem = new bidSystemModule.BidSystem(bidSystemData);
+	localStorage.clear();
+	bidSystemModule.save(bidSystem);
 });
