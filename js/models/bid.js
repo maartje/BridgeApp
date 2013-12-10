@@ -15,21 +15,47 @@ define(function(require, exports, module) {
 			break; //TODO throw exception
 		}
 	};	
+	
+	var Bid = {
+		succeeds: function(bid) {
+			return this.ordering > bid.ordering;
+		}
+	};
+
 
 	var Pass = function () {
 		this.type = "PASS";
+		this.ordering = 0;
 	};	
+	
+	Pass.prototype = Bid;
 
 	var Doublet = function () {
 		this.type = "DOUBLET";
+		this.ordering = 1;
 	};	
+	
+	Doublet.prototype = Bid;
+
 
 	var Redoublet = function () {
 		this.type = "REDOUBLET";
+		this.ordering = 2;
 	};	
-	
+
+	Redoublet.prototype = Bid;
+
+	var suitOrdering = {
+		"CLUBS" : 1,
+		"DIAMONDS" : 2,
+		"HEARTS" : 3,
+		"SPADES" : 4,
+		"NOTRUMP" : 5
+	};
+
 	var BidInSuit = function (data) {
 		this.type = "SUIT";
+
 		this.level = data.level;
 		this.suit = data.suit;
 		if(this.level < 1 || 7 < this.level || typeof this.level !== 'number' || this.level % 1 !== 0){
@@ -39,16 +65,12 @@ define(function(require, exports, module) {
 		if(!regex.test(this.suit)){
 			throw "invalid suit: " + this.suit;			
 		}
+		
+		this.ordering = 2 + suitOrdering[this.suit] + (this.level - 1)*5;
+
 	};	
 
 	BidInSuit.prototype = function(){
-		var suitOrdering = {
-			"CLUBS" : 1,
-			"DIAMONDS" : 2,
-			"HEARTS" : 3,
-			"SPADES" : 4,
-			"NOTRUMP" : 5
-		};
 
 		var eq = function(bidInSuit){
 			return this.level === bidInSuit.level && this.suit === bidInSuit.suit;
@@ -69,7 +91,10 @@ define(function(require, exports, module) {
 			lt : lt,
 			eq : eq
 		};
-	}();
+	}();	
+	
+	//TODO: how to inherit from Bid?!
+	BidInSuit.prototype.succeeds = Bid.succeeds;
 	
 	return module.exports;
 });

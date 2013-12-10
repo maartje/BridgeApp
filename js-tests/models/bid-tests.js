@@ -133,5 +133,52 @@ define(function(require) {
 						assert.isFalse(_3clubs.eq(_2clubs));
 					});
 		});
+		suite('Ordering of Bid objects', function() {
+			test('#succeeds(bid): "Suit > Redoublet" > "Doublet" > "Pass".',
+					function() {
+						// arrange
+						var suit = bidModule.createBid({type : "SUIT", level : 2, suit : "HEARTS"})
+						var redbl = bidModule.createBid({type : "REDOUBLET"})
+						var dbl = bidModule.createBid({type : "DOUBLET"})
+						var pass = bidModule.createBid({type : "PASS"})
+
+						// assert
+						
+						//pass
+						assert.isTrue(suit.succeeds(pass));
+						assert.isFalse(pass.succeeds(suit));
+						assert.isTrue(redbl.succeeds(pass));
+						assert.isFalse(pass.succeeds(redbl));
+						assert.isTrue(dbl.succeeds(pass));
+						assert.isFalse(pass.succeeds(dbl));
+						assert.isFalse(pass.succeeds(pass));
+						
+						//dbl
+						assert.isTrue(suit.succeeds(dbl));
+						assert.isFalse(dbl.succeeds(suit));
+						assert.isTrue(redbl.succeeds(dbl));
+						assert.isFalse(dbl.succeeds(redbl));
+						assert.isFalse(dbl.succeeds(dbl));
+
+						//redbl
+						assert.isTrue(suit.succeeds(redbl));
+						assert.isFalse(redbl.succeeds(suit));
+						assert.isFalse(redbl.succeeds(redbl));
+
+						//suit
+						assert.isFalse(suit.succeeds(suit));
+
+			});
+			test('#succeeds(bid): "SUIT_1 > SUIT_2 iff SUIT_1 has a higher bidlevel than SUIT_2.',
+					function() {
+						// arrange
+						var _2h = bidModule.createBid({type : "SUIT", level : 2, suit : "HEARTS"})
+						var _2nt = bidModule.createBid({type : "SUIT", level : 2, suit : "NOTRUMP"})
+
+						// assert
+						assert.isTrue(_2nt.succeeds(_2h));
+						assert.isFalse(_2h.succeeds(_2nt));});
+		});
+
 	});
 });

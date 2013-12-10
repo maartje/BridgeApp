@@ -106,7 +106,13 @@ define(function(require, exports, module) {
 			}
 			dataChild.parent = this;
 			var child = new BidConvention(dataChild);
-			this.children.push(child);
+			
+			var index = this.children.length;
+			while(index > 0 && this.children[index-1].bid.succeeds(child.bid)){
+				index --;
+			}
+			
+			this.children.splice(index, 0, child);
 			return child;
 		};
 

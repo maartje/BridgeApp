@@ -88,9 +88,45 @@ define(function(require) {
 					assert.strictEqual(bcChild01.convention, bcChild01Convention);
 					assert.deepEqual(bcChild01.bid, bidModule.createBid(bcChild01Bid));
 				});
+			test('#BidSequence(data): puts the child conventions in proper order.',
+					function() {
+						// arrange
+						
+						var bcData = {
+								id : "root",
+								children : [
+								    {
+										id : "1h",
+										bid : {
+											type : "SUIT",
+											suit : "HEARTS", 
+											level : 1
+										}},
+								    {
+										id : "1c",
+										bid : {
+											type : "SUIT",
+											suit : "CLUBS", 
+											level : 1
+										}},
+								    {
+										id : "pass",
+										bid : {
+											type : "PASS"
+										}}
+								]};
+						var bc = new bcModule.BidConvention(bcData);
+						
+						console.log(bc);
+
+						// assert
+						assert.equal(bc.children[0].id, "pass");
+						assert.equal(bc.children[1].id, "1c");
+						assert.equal(bc.children[2].id, "1h");
+					});
 			test('#BidSequence(data): throws an exception in case the bidsystem contains an invalid bidsequence',
 					function() {
-						// arange
+						// arrange
 						var invalidData = {
 							id : bcRootId,
 							children : [{
@@ -673,6 +709,29 @@ define(function(require) {
 							assert.strictEqual(_2c_child.bid.suit, "CLUBS");
 							assert.strictEqual(_2c_child.convention, "5+ clubs");
 							assert.strictEqual(_2c_child.children[0].id, 11);});
+				test('#createChild(childData): preserves the ordering of child bids.',
+						function() {			
+							// arrange
+							var _1nt_dbl_pass_2s = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"},
+								{type : "SUIT", suit: "SPADES", level: 2}
+			   			    ]);
+							
+							//act
+							_1nt_dbl_pass_2s.parent.createChild({
+								bid : {type : "SUIT", suit: "CLUBS", level: 2}
+							});
+							_1nt_dbl_pass_2s.parent.createChild({
+								bid : {type : "SUIT", suit: "NOTRUMP", level: 2}
+							});
+								
+							// assert
+							assert.equal(_1nt_dbl_pass_2s.parent.children[0].bid.suit, "CLUBS");
+							assert.equal(_1nt_dbl_pass_2s.parent.children[1].bid.suit, "SPADES");
+							assert.equal(_1nt_dbl_pass_2s.parent.children[2].bid.suit, "NOTRUMP");
+				});
 				test('#createChild(childData): throws an exception in case the created child sequence is invalid.',
 						function() {			
 							// arrange
@@ -725,6 +784,31 @@ define(function(require) {
 								
 							// assert
 							assert.lengthOf(_1nt_dbl_pass.parent.children, 3);
+				});
+				test('#addChildren(childData): preserves the ordering of child bids.',
+						function() {			
+							// arrange
+							var _1nt_dbl_pass_2s = constructBidSequence([
+				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+			    			    {type : "DOUBLET"},
+			    			    {type : "PASS"},
+								{type : "SUIT", suit: "SPADES", level: 3}
+			   			    ]);
+							
+							//act
+							_1nt_dbl_pass_2s.parent.addChildren([
+						       {bid : {type : "SUIT", suit: "SPADES", level: 2}},
+						       {bid : {type : "SUIT", suit: "SPADES", level: 4}, convention : "a ..."},
+						       {bid : {type : "SUIT", suit: "SPADES", level: 5}},
+						       {bid : {type : "SUIT", suit: "SPADES", level: 4, convention : "b ..."}}
+							 ]);
+								
+							// assert
+							assert.equal(_1nt_dbl_pass_2s.parent.children[0].bid.level, 2);
+							assert.equal(_1nt_dbl_pass_2s.parent.children[1].bid.level, 3);
+							assert.equal(_1nt_dbl_pass_2s.parent.children[2].bid.level, 4);
+							assert.equal(_1nt_dbl_pass_2s.parent.children[3].bid.level, 4);
+							assert.equal(_1nt_dbl_pass_2s.parent.children[4].bid.level, 5);
 				});
 								
 			});
