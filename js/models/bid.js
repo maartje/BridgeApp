@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 			return new BidInSuit(data);
 		default:
 			throw "unvalid bid type: " + data.type;
-			break; //TODO throw exception
+			break;
 		}
 	};	
 	
