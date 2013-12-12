@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 		this.convention = data.convention; //String (TODO: Convention with description, tags, ...)
 				
 		this.parent = data.parent; //BidConvention
-		this.children = []; //Array with BidConventions		
+		this.children = ko.observableArray([]); //Array with BidConventions		
 		this.addChildren(data.children || []); 
 		
 		if (typeof data.isOpen != 'undefined') {
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 
 		this.jstreeStyle = ko.computed(function() {
 			var style = "";
-			if(this.children.length === 0){
+			if(this.children().length === 0){
 				style =  "jstree-leaf";
 			}
 			else if(this.isOpen()){
@@ -32,12 +32,12 @@ define(function(require, exports, module) {
 			else {
 				style = "jstree-closed";
 			}
-//			if(!this.parent || this.parent.children[this.parent.children.length - 1] === this){
+			if(!this.parent || this.parent.children()[this.parent.children().length - 1] === this){
 //				console.log("this: ", this);
 //				if(this.parent)
 //					console.log(this.parent.children);
-//				style = style + " jstree-last";
-//			}
+				style = style + " jstree-last";
+			}
 			return style;
 	    }, this);		
 	};
@@ -139,8 +139,8 @@ define(function(require, exports, module) {
 			dataChild.parent = this;
 			var child = new BidConvention(dataChild);
 			
-			var index = this.children.length;
-			while(index > 0 && this.children[index-1].bid.succeeds(child.bid)){
+			var index = this.children().length;
+			while(index > 0 && this.children()[index-1].bid.succeeds(child.bid)){
 				index --;
 			}
 			
@@ -156,7 +156,7 @@ define(function(require, exports, module) {
 		    	id : this.id,
 		    	bid : this.bid,
 		    	convention : this.convention,
-		    	children : this.children
+		    	children : this.children()
 		    };
 		};
 		

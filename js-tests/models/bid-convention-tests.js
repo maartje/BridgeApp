@@ -58,23 +58,23 @@ define(function(require) {
 						},
 						convention : "5+ schoppen, vanaf 5 punten."}]}]};
 			var bcRoot = new bcModule.BidConvention(bcData);
-			var bcChild0 = bcRoot.children[0];
-			var bcChild01 = bcChild0.children[1];
+			var bcChild0 = bcRoot.children()[0];
+			var bcChild01 = bcChild0.children()[1];
 
 			test('#BidSequence(data): creates a tree structure with parent/child relations',
 					function() {
 			
 						// assert
 						assert.isUndefined(bcRoot.parent);
-						assert.lengthOf(bcRoot.children, 1);
-						assert.strictEqual(bcRoot.children[0], bcChild0);
+						assert.lengthOf(bcRoot.children(), 1);
+						assert.strictEqual(bcRoot.children()[0], bcChild0);
 						
 						assert.strictEqual(bcChild0.parent, bcRoot);
-						assert.lengthOf(bcChild0.children, 3);
-						assert.strictEqual(bcChild0.children[1], bcChild01);
+						assert.lengthOf(bcChild0.children(), 3);
+						assert.strictEqual(bcChild0.children()[1], bcChild01);
 						
 						assert.strictEqual(bcChild01.parent, bcChild0);
-						assert.lengthOf(bcChild01.children, 0);
+						assert.lengthOf(bcChild01.children(), 0);
 					});
 
 			test('#BidSequence(data): recursively sets id, bid, and convention properties',
@@ -108,9 +108,18 @@ define(function(require) {
 			test('#BidSequence(data): "jstreeStyle" correctly sets to "jstree-leaf", "jstree-open" or "jstree-closed".',
 					function() {
 						// assert
-						assert.equal(bcChild01.jstreeStyle(), "jstree-leaf");
-						assert.equal(bcRoot.jstreeStyle(), "jstree-open");
-						assert.equal(bcChild0.jstreeStyle(), "jstree-closed");
+						assert.include(bcChild01.jstreeStyle(), "jstree-leaf");
+						assert.include(bcRoot.jstreeStyle(), "jstree-open");
+						assert.include(bcChild0.jstreeStyle(), "jstree-closed");
+					});
+			test('#BidSequence(data): "jstreeStyle" correctly sets "jstree-last".',
+					function() {
+						var bcChild02 = bcChild0.children()[2];
+						
+						// assert
+						assert.notInclude(bcChild01.jstreeStyle(), "jstree-last");
+						assert.include(bcChild02.jstreeStyle(), "jstree-last");
+						assert.include(bcRoot.jstreeStyle(), "jstree-last");
 					});
 
 			test('#BidSequence(data): puts the child conventions in proper order.',
@@ -143,9 +152,9 @@ define(function(require) {
 						var bc = new bcModule.BidConvention(bcData);
 						
 						// assert
-						assert.equal(bc.children[0].id, "pass");
-						assert.equal(bc.children[1].id, "1c");
-						assert.equal(bc.children[2].id, "1h");
+						assert.equal(bc.children()[0].id, "pass");
+						assert.equal(bc.children()[1].id, "1c");
+						assert.equal(bc.children()[2].id, "1h");
 					});
 			test('#BidSequence(data): throws an exception in case the bidsystem contains an invalid bidsequence',
 					function() {
@@ -764,11 +773,11 @@ define(function(require) {
 							});
 								
 							// assert
-							assert.strictEqual(_1nt_dbl_pass.children[0], _2c_child);
+							assert.strictEqual(_1nt_dbl_pass.children()[0], _2c_child);
 							assert.strictEqual(_2c_child.id, 10);
 							assert.strictEqual(_2c_child.bid.suit, "CLUBS");
 							assert.strictEqual(_2c_child.convention, "5+ clubs");
-							assert.strictEqual(_2c_child.children[0].id, 11);});
+							assert.strictEqual(_2c_child.children()[0].id, 11);});
 				test('#createChild(childData): preserves the ordering of child bids.',
 						function() {			
 							// arrange
@@ -788,9 +797,9 @@ define(function(require) {
 							});
 								
 							// assert
-							assert.equal(_1nt_dbl_pass_2s.parent.children[0].bid.suit, "CLUBS");
-							assert.equal(_1nt_dbl_pass_2s.parent.children[1].bid.suit, "SPADES");
-							assert.equal(_1nt_dbl_pass_2s.parent.children[2].bid.suit, "NOTRUMP");
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[0].bid.suit, "CLUBS");
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[1].bid.suit, "SPADES");
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[2].bid.suit, "NOTRUMP");
 				});
 				test('#createChild(childData): throws an exception in case the created child sequence is invalid.',
 						function() {			
@@ -843,7 +852,7 @@ define(function(require) {
 							]);
 								
 							// assert
-							assert.lengthOf(_1nt_dbl_pass.parent.children, 3);
+							assert.lengthOf(_1nt_dbl_pass.parent.children(), 3);
 				});
 				test('#addChildren(childData): preserves the ordering of child bids.',
 						function() {			
@@ -864,11 +873,11 @@ define(function(require) {
 							 ]);
 								
 							// assert
-							assert.equal(_1nt_dbl_pass_2s.parent.children[0].bid.level, 2);
-							assert.equal(_1nt_dbl_pass_2s.parent.children[1].bid.level, 3);
-							assert.equal(_1nt_dbl_pass_2s.parent.children[2].bid.level, 4);
-							assert.equal(_1nt_dbl_pass_2s.parent.children[3].bid.level, 4);
-							assert.equal(_1nt_dbl_pass_2s.parent.children[4].bid.level, 5);
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[0].bid.level, 2);
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[1].bid.level, 3);
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[2].bid.level, 4);
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[3].bid.level, 4);
+							assert.equal(_1nt_dbl_pass_2s.parent.children()[4].bid.level, 5);
 				});
 								
 			});
