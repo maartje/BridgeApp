@@ -16,7 +16,9 @@
 	<li data-bind="css: jstreeStyle">
 		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
 		<a href="#">
-			<div> XXX </div>
+			<div> 
+				<span data-bind="html : bid? bid.htmlString() : ''"></span>
+			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	</li>

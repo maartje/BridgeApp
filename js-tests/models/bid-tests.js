@@ -133,6 +133,74 @@ define(function(require) {
 						assert.isFalse(_3clubs.eq(_2clubs));
 					});
 		});
+
+		suite('HTML String representation', function() {
+			test('#htmlString(): PASS => "pass"',
+					function() {
+						// arrange
+						var pass = bidModule.createBid({type : "PASS"})
+
+						//assert
+						assert.equal(pass.htmlString(), "pass");
+					});
+			test('#htmlString(): DOUBLET => "dbl"',
+					function() {
+						// arrange
+						var dbl = bidModule.createBid({type : "DOUBLET"})
+
+						//assert
+						assert.equal(dbl.htmlString(), "dbl");
+					});
+			test('#htmlString(): REDOUBLET => "redbl"',
+					function() {
+						// arrange
+						var redbl = bidModule.createBid({type : "REDOUBLET"})
+
+						//assert
+						assert.equal(redbl.htmlString(), "redbl");
+					});
+			test('#htmlString(): 1clubs => "1<span>&clubs;</span>"',
+					function() {
+						// arrange
+						var _1clubs = bidModule.createBid({type : "SUIT", suit : "CLUBS", level : 1})
+
+						//assert
+						assert.equal(_1clubs.htmlString(), "1<span>&clubs;</span>");
+					});
+			test('#htmlString(): 2diamonds => "<span style=color:red>&diams;</span>"',
+					function() {
+						// arrange
+						var _2d = bidModule.createBid({type : "SUIT", suit : "DIAMONDS", level : 2})
+
+						//assert
+						assert.equal(_2d.htmlString(), "2<span style='color:red'>&diams;</span>");
+					});
+			test('#htmlString(): 3hearts => "3<span style=color:red>&hearts;</span>"',
+					function() {
+						// arrange
+						var _3h = bidModule.createBid({type : "SUIT", suit : "HEARTS", level : 3})
+
+						//assert
+						assert.equal(_3h.htmlString(), "3<span style='color:red'>&hearts;</span>");
+					});
+			test('#htmlString(): 4spades => "4<span>&spades;</span>"',
+					function() {
+						// arrange
+						var _4s = bidModule.createBid({type : "SUIT", suit : "SPADES", level : 4})
+
+						//assert
+						assert.equal(_4s.htmlString(), "4<span>&spades;</span>");
+					});
+			test('#htmlString(): 7notrump => "7<span>nt</span>"',
+					function() {
+						// arrange
+						var _7nt = bidModule.createBid({type : "SUIT", suit : "NOTRUMP", level : 7})
+
+						//assert
+						assert.equal(_7nt.htmlString(), "7<span>nt</span>");
+					});
+		});
+		
 		suite('Ordering of Bid objects', function() {
 			test('#succeeds(bid): "Suit > Redoublet" > "Doublet" > "Pass".',
 					function() {

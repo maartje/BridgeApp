@@ -28,14 +28,23 @@ define(function(require, exports, module) {
 		this.ordering = 0;
 	};	
 	
-	Pass.prototype = Bid;
+	Pass.prototype.succeeds = Bid.succeeds;
 
+	Pass.prototype.htmlString = function(){
+		return "pass";
+	};
+
+	
 	var Doublet = function () {
 		this.type = "DOUBLET";
 		this.ordering = 1;
 	};	
 	
-	Doublet.prototype = Bid;
+	Doublet.prototype.succeeds = Bid.succeeds;
+
+	Doublet.prototype.htmlString = function(){
+		return "dbl";
+	};
 
 
 	var Redoublet = function () {
@@ -43,7 +52,11 @@ define(function(require, exports, module) {
 		this.ordering = 2;
 	};	
 
-	Redoublet.prototype = Bid;
+	Redoublet.prototype.succeeds = Bid.succeeds;
+
+	Redoublet.prototype.htmlString = function(){
+		return "redbl";
+	};
 
 	var suitOrdering = {
 		"CLUBS" : 1,
@@ -72,6 +85,24 @@ define(function(require, exports, module) {
 
 	BidInSuit.prototype = function(){
 
+		var htmlString = function(){
+			switch (this.suit) {
+			case "CLUBS":
+				return this.level + "<span>&clubs;</span>";
+			case "DIAMONDS":
+				return this.level + "<span style='color:red'>&diams;</span>";
+			case "HEARTS":
+				return this.level + "<span style='color:red'>&hearts;</span>";
+			case "SPADES":
+				return this.level + "<span>&spades;</span>";
+			case "NOTRUMP":
+				return this.level + "<span>nt</span>";
+			default:
+				throw "invalid suit: " + this.suit;			
+				break;
+			}
+		};
+
 		var eq = function(bidInSuit){
 			return this.level === bidInSuit.level && this.suit === bidInSuit.suit;
 		};
@@ -89,7 +120,8 @@ define(function(require, exports, module) {
 		return {
 			gt : gt,
 			lt : lt,
-			eq : eq
+			eq : eq,
+			htmlString : htmlString
 		};
 	}();	
 	
