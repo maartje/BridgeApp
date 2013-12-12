@@ -64,12 +64,12 @@ define(function(require) {
 					bidSystemModule.save(bsBefore);
 					var bsAfter = bidSystemModule.load(bidSystemId);
 					
-					console.log(bsBefore);
-					console.log(bsAfter);
+//					console.log(bsBefore);
+//					console.log(bsAfter);
 
 					// assert
 					assert.isNotNull(localStorage.getItem(bidSystemId));
-					assert.deepEqual(bsBefore, bsAfter);
+					assert.equal(JSON.stringify(bsBefore), JSON.stringify(bsAfter));
 					localStorage.clear();
 			});
 		});

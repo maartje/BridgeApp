@@ -88,6 +88,31 @@ define(function(require) {
 					assert.strictEqual(bcChild01.convention, bcChild01Convention);
 					assert.deepEqual(bcChild01.bid, bidModule.createBid(bcChild01Bid));
 				});
+			test('#BidSequence(data): by default "isOpen" is set "true" for root elements, "false" otherwise.',
+					function() {
+						// assert
+						assert.isTrue(bcRoot.isOpen());
+						assert.isFalse(bcChild01.isOpen());
+					});
+			test('#BidSequence(data): "isOpen" is set to data.isOpen if defined.',
+					function() {
+						// assert
+						assert.isFalse(new bcModule.BidConvention({parent: bcRoot}).isOpen());
+						assert.isTrue(new bcModule.BidConvention({parent: bcRoot, isOpen: true}).isOpen());
+						assert.isFalse(new bcModule.BidConvention({parent: bcRoot, isOpen: false}).isOpen());
+						assert.isTrue(new bcModule.BidConvention({}).isOpen());
+						assert.isFalse(new bcModule.BidConvention({isOpen: false}).isOpen());
+						assert.isTrue(new bcModule.BidConvention({isOpen: true}).isOpen());
+					});
+
+			test('#BidSequence(data): "jstreeStyle" correctly sets to "jstree-leaf", "jstree-open" or "jstree-closed".',
+					function() {
+						// assert
+						assert.equal(bcChild01.jstreeStyle(), "jstree-leaf");
+						assert.equal(bcRoot.jstreeStyle(), "jstree-open");
+						assert.equal(bcChild0.jstreeStyle(), "jstree-closed");
+					});
+
 			test('#BidSequence(data): puts the child conventions in proper order.',
 					function() {
 						// arrange
@@ -117,8 +142,6 @@ define(function(require) {
 								]};
 						var bc = new bcModule.BidConvention(bcData);
 						
-						console.log(bc);
-
 						// assert
 						assert.equal(bc.children[0].id, "pass");
 						assert.equal(bc.children[1].id, "1c");
@@ -644,8 +667,23 @@ define(function(require) {
 							assert.isFalse(_1nt_dbl_redbl_pass_pass.isValidChildBid({type : "DOUBLET"}));
 				});
 			});
+			suite('View-model functions', function() {
+				test('#toggleOpenClose: toggles the isOpen property.',
+					function() {			
+						var _1nt_dbl_pass = constructBidSequence([
+			    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+		    			    {type : "DOUBLET"},
+		    			    {type : "PASS"}
+		   			    ]);
+						assert.isFalse(_1nt_dbl_pass.parent.isOpen());
+						_1nt_dbl_pass.parent.toggleOpenClose();
+						assert.isTrue(_1nt_dbl_pass.parent.isOpen());
+						_1nt_dbl_pass.parent.toggleOpenClose();
+						assert.isFalse(_1nt_dbl_pass.parent.isOpen());
+					});
+			});
 			suite('Serialization of bidsystem structure', function() {
-				test('#toJSON: "BidConvention -> js -> BidConvention" is identity.',
+				test('#toJSON: "BidConvention -> JSONString -> BidConvention" is identity.',
 					function() {			
 						// arrange
 						var jsBefore = {
@@ -673,13 +711,35 @@ define(function(require) {
 									},
 									convention : "5+ schoppen, vanaf 5 punten."}]}]};
 						var bcRootBefore = new bcModule.BidConvention(jsBefore);
-						var jsAfter = bcRootBefore.toJSON();
-						var bcRootAfter = new bcModule.BidConvention(jsAfter);
+						var jsAfter1 = JSON.stringify(bcRootBefore);
+						var bcRootAfter1 = new bcModule.BidConvention(JSON.parse(jsAfter1));
+						var jsAfter2 = JSON.stringify(bcRootAfter1);
+						var bcRootAfter2 = new bcModule.BidConvention(JSON.parse(jsAfter2));
 													
 						// assert
-						assert.deepEqual(bcRootBefore, bcRootAfter);
+						assert.strictEqual(jsAfter1, jsAfter2);						
 					});
-			});			
+				test('#toJSON: Serialization ignores the isOpen property.',
+						function() {			
+							// arrange
+							var jsBefore = {
+								id : 0,
+								children : []};
+							var bcRootBefore = new bcModule.BidConvention(jsBefore);
+							assert.isTrue(bcRootBefore.isOpen());
+							
+							//act
+							bcRootBefore.isOpen(false)
+							
+							var jsAfter = bcRootBefore.toJSON();
+							var jsStringAfter = JSON.stringify(bcRootBefore);
+							var bcRootAfter = new bcModule.BidConvention(JSON.parse(jsStringAfter));
+														
+							// assert
+							assert.isUndefined(jsAfter.isOpen);
+							assert.isTrue(bcRootAfter.isOpen());						
+						});
+			});
 			suite('Manipulation of bidsystem structure', function() {
 				test('#createChild(childData): Creates a child convention from the given child data.',
 						function() {			

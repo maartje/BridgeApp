@@ -61,4 +61,7 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 	bidSystem.bidRoot.createChild({id:100, bid:{type: "SUIT", suit: "HEARTS", level:1}, convention : "12-19 pntn, 5+ hearts"});
 	localStorage.clear();
 	bidSystemModule.save(bidSystem);
+	
+    ko.applyBindings(bidSystem.bidRoot);   
+
 });

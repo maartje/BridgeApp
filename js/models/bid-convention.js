@@ -14,10 +14,42 @@ define(function(require, exports, module) {
 		this.children = []; //Array with BidConventions		
 		this.addChildren(data.children || []); 
 		
+		if (typeof data.isOpen != 'undefined') {
+			this.isOpen = ko.observable(data.isOpen);
+		}
+		else {
+			this.isOpen = ko.observable(typeof this.parent == 'undefined');
+		}
+
+		this.jstreeStyle = ko.computed(function() {
+			var style = "";
+			if(this.children.length === 0){
+				style =  "jstree-leaf";
+			}
+			else if(this.isOpen()){
+				style = "jstree-open";
+			}
+			else {
+				style = "jstree-closed";
+			}
+//			if(!this.parent || this.parent.children[this.parent.children.length - 1] === this){
+//				console.log("this: ", this);
+//				if(this.parent)
+//					console.log(this.parent.children);
+//				style = style + " jstree-last";
+//			}
+			return style;
+	    }, this);		
 	};
 	
 	BidConvention.prototype = function(){
-		
+
+		//view methods
+
+		var toggleOpenClose = function(){
+			this.isOpen(!this.isOpen());
+		};
+
 		//helper methods
 		
 		var isRoot = function(){
@@ -133,7 +165,8 @@ define(function(require, exports, module) {
 			createChild : createChild,
 			addChildren : addChildren,
 			toJSON : toJSON,
-			isValidChildBid : isValidChildBid
+			isValidChildBid : isValidChildBid,
+			toggleOpenClose : toggleOpenClose
 		};
 	}();
 

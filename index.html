@@ -3,10 +3,24 @@
 <meta charset="UTF-8">
 <head>
 <title>Bied Systeem: Maartje en Wim</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/style.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
+	<div class="jstree jstree-0 jstree-focused jstree-classic">
+		<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul>
+	</div>
 
+<script id="bid-node-templ" type="text/html">
+	<li data-bind="css: jstreeStyle">
+		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
+		<a href="#">
+			<div> XXX </div>
+		</a>
+		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
+	</li>
+</script>
 
 </body>
 </html>
