@@ -33,9 +33,6 @@ define(function(require, exports, module) {
 				style = "jstree-closed";
 			}
 			if(!this.parent || this.parent.children()[this.parent.children().length - 1] === this){
-//				console.log("this: ", this);
-//				if(this.parent)
-//					console.log(this.parent.children);
 				style = style + " jstree-last";
 			}
 			return style;
@@ -125,7 +122,6 @@ define(function(require, exports, module) {
 		//methods that modify the tree structure
 
 		var remove = function(){
-			console.log(this);
 			if (isRoot.call(this)){
 				this.children.removeAll();
 			}

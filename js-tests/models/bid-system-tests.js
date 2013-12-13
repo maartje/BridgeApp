@@ -48,9 +48,75 @@ define(function(require) {
 
 					// assert
 					assert.strictEqual(bidsystem.id, "maartje_wim");
-					assert.strictEqual(bidsystem.bidRoot.id, "root_id");
-					assert.isDefined(bidsystem.bidRootOpponent);
+					assert.strictEqual(bidsystem.bidRoot().id, "root_id");
+					assert.isDefined(bidsystem.bidRootOpponent());
 			});
+			test('#BidSystem(data): by default, isDealer is set to true.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+
+						// assert
+						assert.isTrue(bidsystem.isDealer());
+				});
+			test('#BidSystem(data): isDealer is set from data if property isDealer is defined.',
+					function() {
+						// arrange
+						var bidsystem1 = new bidSystemModule.BidSystem({isDealer : true});
+						var bidsystem2 = new bidSystemModule.BidSystem({isDealer : false});
+
+						// assert
+						assert.isTrue(bidsystem1.isDealer());
+						assert.isFalse(bidsystem2.isDealer());
+				});
+		});
+		suite('Functionality BidSystem objects', function() {
+			test('#toggleIsDealer: toggles the dealer member.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						var isDealer1 = bidsystem.isDealer()
+						
+						//act
+						bidsystem.toggleIsDealer();
+						var isDealer2 = bidsystem.isDealer()
+						bidsystem.toggleIsDealer();
+						var isDealer3 = bidsystem.isDealer()
+						
+						// assert
+						assert.equal(isDealer1, !isDealer2);
+						assert.equal(isDealer1, isDealer3);
+					});
+			test('#selectedRoot: depends on isDealer.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+
+						// assert
+						bidsystem.isDealer(true);
+						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRoot());
+						bidsystem.isDealer(false);
+						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRootOpponent());
+					});
+			
+		});
+		suite('Serialization of BidSystem objects', function() {
+			test('#toJSON: the following properties are serialized: id, bidRoot, bidRootOpponent.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						
+						//act
+						var jsonString = JSON.stringify(bidsystem);
+						var json = JSON.parse(jsonString);
+						
+						// assert
+						assert.equal(json.id, bidsystem.id);
+						assert.isDefined(json.bidRoot);
+						assert.isDefined(json.bidRootOpponent);
+						assert.isUndefined(json.isDealer);
+						assert.isUndefined(json.selectedRoot);
+					});
 		});
 		suite('Local storage of BidSystem objects', function() {
 			test('#save, #load: saves and loads a bid system in and from the local storage.',
@@ -64,9 +130,6 @@ define(function(require) {
 					bidSystemModule.save(bsBefore);
 					var bsAfter = bidSystemModule.load(bidSystemId);
 					
-//					console.log(bsBefore);
-//					console.log(bsAfter);
-
 					// assert
 					assert.isNotNull(localStorage.getItem(bidSystemId));
 					assert.equal(JSON.stringify(bsBefore), JSON.stringify(bsAfter));

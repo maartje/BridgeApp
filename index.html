@@ -9,8 +9,12 @@
 </head>
 <body>
 	<div class="jstree jstree-0 jstree-focused jstree-classic">
-		<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul>
+		<!-- ko with: selectedRoot -->
+			<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul>
+	    <!-- /ko -->
 	</div>
+	<button data-bind="click: toggleIsDealer">toggle dealer</button>
+	<button data-bind="click: consoleLog">log state to console</button>
 
 <script id="bid-node-templ" type="text/html">
 	<li data-bind="css: jstreeStyle">
@@ -20,10 +24,11 @@
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
 				<button>edit</button>
 				<button>add</button>
-				<button data-bind="click: remove">delete</button>
+				<button data-bind="click: remove">*delete</button>
 				<button>cut</button>
 				<button>copy</button>
 				<button>paste</button>
+				<button>select</button>
 			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>

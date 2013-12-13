@@ -58,10 +58,11 @@ require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidS
 						},
 						convention : "volgbod"}]}]}};
 	var bidSystem = new bidSystemModule.BidSystem(bidSystemData);
-	bidSystem.bidRoot.createChild({id:100, bid:{type: "SUIT", suit: "HEARTS", level:1}, convention : "12-19 pntn, 5+ hearts"});
+	bidSystem.bidRoot().createChild({id:100, bid:{type: "SUIT", suit: "HEARTS", level:1}, convention : "12-19 pntn, 5+ hearts"});
 	localStorage.clear();
 	bidSystemModule.save(bidSystem);
 	
-    ko.applyBindings(bidSystem.bidRoot);   
+    ko.applyBindings(bidSystem);   
+    //ko.applyBindings(bidSystem.bidRoot);   
 
 });
