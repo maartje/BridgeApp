@@ -729,6 +729,48 @@ define(function(require) {
 						// assert
 						assert.strictEqual(jsAfter1, jsAfter2);						
 					});
+				test('#toJSON: the following properties are serialized: id, bid, convention, children.',
+						function() {
+							// arrange
+							var jsData = {
+								id : 0,
+								children : [{
+									id : 1,
+									bid : {
+										type : "SUIT",
+										suit : "CLUBS", 
+										level : 1
+									},
+									convention : "12-19 punten. Vanaf een 3 kaart.",
+									children : [{
+										id : 2,
+										bid : {
+											type : "PASS"
+										},
+										convention : "bla",
+										children : []}
+									, { id : 4,
+										bid : {
+											type : "SUIT",
+											suit : "SPADES", 
+											level : 1
+										},
+										convention : "5+ schoppen, vanaf 5 punten."}]}]};
+							var bcRoot = new bcModule.BidConvention(jsData);
+							
+							//act
+							var jsonString = JSON.stringify(bcRoot);
+							var json = JSON.parse(jsonString);
+							var jsonChild = json.children[0];
+														
+							// assert
+							assert.equal(json.id, bcRoot.id);
+							assert.isDefined(jsonChild.bid);
+							assert.isDefined(jsonChild.convention);
+							assert.isDefined(jsonChild.children);
+							assert.isUndefined(jsonChild.isOpen);
+							assert.isUndefined(jsonChild.jstreeStyle);
+						});
 				test('#toJSON: Serialization ignores the isOpen property.',
 						function() {			
 							// arrange
