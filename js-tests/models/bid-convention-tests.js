@@ -21,45 +21,46 @@ define(function(require) {
 			}
 			return bcNode;
 		};
-
-		suite('Construction of BidConvention objects', function() {
-			// arrange
-			var bcRootId = "root_id";
-			var bcChild01Id = 2;
-			var bcChild01Convention = "info";
-			var bcChild01Bid = {
-				type : "DOUBLET",
-			};
-			var bcData = {
-				id : bcRootId,
+		
+		var bcRootId = "root_id";
+		var bcChild01Id = 2;
+		var bcChild01Convention = "info";
+		var bcChild01Bid = {
+			type : "DOUBLET",
+		};
+		var bcData = {
+			id : bcRootId,
+			children : [{
+				id : 1,
+				bid : {
+					type : "SUIT",
+					suit : "CLUBS", 
+					level : 1
+				},
+				convention : "12-19 punten. Vanaf een 3 kaart.",
 				children : [{
-					id : 1,
+					id : 2,
+					bid : {
+						type : "PASS"
+					},
+					convention : "bla",
+					children : []}
+				, { id : bcChild01Id,
+					bid : bcChild01Bid,
+					convention : bcChild01Convention}
+				, { id : 4,
 					bid : {
 						type : "SUIT",
-						suit : "CLUBS", 
+						suit : "SPADES", 
 						level : 1
 					},
-					convention : "12-19 punten. Vanaf een 3 kaart.",
-					children : [{
-						id : 2,
-						bid : {
-							type : "PASS"
-						},
-						convention : "bla",
-						children : []}
-					, { id : bcChild01Id,
-						bid : bcChild01Bid,
-						convention : bcChild01Convention}
-					, { id : 4,
-						bid : {
-							type : "SUIT",
-							suit : "SPADES", 
-							level : 1
-						},
-						convention : "5+ schoppen, vanaf 5 punten."}]}]};
-			var bcRoot = new bcModule.BidConvention(bcData);
-			var bcChild0 = bcRoot.children()[0];
-			var bcChild01 = bcChild0.children()[1];
+					convention : "5+ schoppen, vanaf 5 punten."}]}]};
+		var bcRoot = new bcModule.BidConvention(bcData);
+		var bcChild0 = bcRoot.children()[0];
+		var bcChild01 = bcChild0.children()[1];
+
+
+		suite('Construction of BidConvention objects', function() {
 
 			test('#BidSequence(data): creates a tree structure with parent/child relations',
 					function() {
@@ -750,6 +751,42 @@ define(function(require) {
 						});
 			});
 			suite('Manipulation of bidsystem structure', function() {
+				test('#remove(): Removes the bid from the bid structure and returns the bid.',
+						function() {			
+							// arrange
+							var bid = constructBidSequence([
+  				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+  			    			    {type : "DOUBLET"},
+  			    			    {type : "PASS"}
+  			   			    ]);
+							
+							//act
+							var _1nt = bid.parent.parent;
+							var dbl_pass = bid.parent.remove();
+
+							// assert
+							assert.lengthOf(_1nt.children(), 0);
+							assert.equal(dbl_pass.parent, _1nt);
+							assert.equal(dbl_pass.bid.type, "DOUBLET");
+							assert.equal(dbl_pass.children()[0].bid.type, "PASS");
+				});
+				test('#remove(): Removes all children when applied to the root of the bid structure.',
+						function() {			
+							// arrange
+							var bid = constructBidSequence([
+  				    			{type : "SUIT", level : 1, suit : "NOTRUMP"},
+  			    			    {type : "DOUBLET"},
+  			    			    {type : "PASS"}
+  			   			    ]);
+							
+							//act
+							var root = bid.parent.parent.parent;
+							var _root = root.remove();
+
+							// assert
+							assert.lengthOf(root.children(), 0);
+							assert.equal(root, _root);
+				});
 				test('#createChild(childData): Creates a child convention from the given child data.',
 						function() {			
 							// arrange

@@ -18,6 +18,12 @@
 		<a href="#">
 			<div> 
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
+				<button>edit</button>
+				<button>add</button>
+				<button data-bind="click: remove">delete</button>
+				<button>cut</button>
+				<button>copy</button>
+				<button>paste</button>
 			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>

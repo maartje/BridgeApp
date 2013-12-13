@@ -123,7 +123,18 @@ define(function(require, exports, module) {
 		};
 		
 		//methods that modify the tree structure
-		
+
+		var remove = function(){
+			console.log(this);
+			if (isRoot.call(this)){
+				this.children.removeAll();
+			}
+			else {
+				this.parent.children.remove(this);
+			}
+			return this;
+		};
+
 		var addChildren = function(dataChildren){
 			for ( var i = 0; i < dataChildren.length; i++) {
 				createChild.call(this, dataChildren[i]);
@@ -166,7 +177,8 @@ define(function(require, exports, module) {
 			addChildren : addChildren,
 			toJSON : toJSON,
 			isValidChildBid : isValidChildBid,
-			toggleOpenClose : toggleOpenClose
+			toggleOpenClose : toggleOpenClose,
+			remove : remove
 		};
 	}();
 
