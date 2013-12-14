@@ -69,6 +69,14 @@ define(function(require) {
 						assert.isTrue(bidsystem1.isDealer());
 						assert.isFalse(bidsystem2.isDealer());
 				});
+			test('#BidSystem(data): by default, selectedConventions is set as an empty array.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 0);
+				});
 		});
 		suite('Functionality BidSystem objects', function() {
 			test('#toggleIsDealer: toggles the dealer member.',
@@ -97,6 +105,88 @@ define(function(require) {
 						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRoot());
 						bidsystem.isDealer(false);
 						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRootOpponent());
+					});
+			test('#clearSelection: clears the list of selected bid conventions.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.selectedConventions.push(bidsystem.bidRoot());
+						bidsystem.selectedConventions.push(bidsystem.bidRoot().children[0]);
+						
+						//act
+						bidsystem.clearSelection()
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 0);
+					});
+			test('#select(bc): sets the bid convention as the only selected item.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.selectedConventions.push(bidsystem.bidRoot());
+						bidsystem.selectedConventions.push(bidsystem.bidRoot().children[0]);
+						
+						//act
+						bidsystem.select(bidsystem.bidRootOpponent());
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 1);
+						assert.equal(bidsystem.selectedConventions()[0], bidsystem.bidRootOpponent());
+					});
+			test('#addToSelection(bc): adds the bid convention to the list of selected items.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.selectedConventions.push(bidsystem.bidRoot());
+						bidsystem.selectedConventions.push(bidsystem.bidRoot().children[0]);
+						
+						//act
+						bidsystem.addToSelection(bidsystem.bidRootOpponent());
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 3);
+						assert.include(bidsystem.selectedConventions(), bidsystem.bidRootOpponent());
+					});
+			test('#addToSelection(bc): only adds a bid convention once.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						
+						//act
+						bidsystem.addToSelection(bidsystem.bidRootOpponent());
+						bidsystem.addToSelection(bidsystem.bidRootOpponent());
+						bidsystem.addToSelection(bidsystem.bidRootOpponent());
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 1);
+						assert.include(bidsystem.selectedConventions(), bidsystem.bidRootOpponent());
+					});
+			test('#removeFromSelection(bc): removes a bid convention from the list of selected conventions.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.addToSelection(bidsystem.bidRootOpponent());
+						bidsystem.addToSelection(bidsystem.bidRoot());
+						
+						//act
+						bidsystem.removeFromSelection(bidsystem.bidRootOpponent());
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 1);
+						assert.notInclude(bidsystem.selectedConventions(), bidsystem.bidRootOpponent());
+					});
+			test('#removeFromSelection(bc): does nothing in case the bid convention is not in the selection.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.addToSelection(bidsystem.bidRoot());
+						
+						//act
+						bidsystem.removeFromSelection(bidsystem.bidRootOpponent());
+
+						// assert
+						assert.lengthOf(bidsystem.selectedConventions(), 1);
+						assert.include(bidsystem.selectedConventions(), bidsystem.bidRoot());
 					});
 			
 		});

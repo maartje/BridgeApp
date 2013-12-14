@@ -24,6 +24,7 @@ define(function(require, exports, module) {
 		this.bidRoot = ko.observable(new bidConventionModule.BidConvention(data.bidRoot || {}));
 		this.bidRootOpponent = ko.observable(new bidConventionModule.BidConvention(data.bidRootOpponent || {}));
 		this.isDealer = typeof data.isDealer != 'undefined'? ko.observable(data.isDealer) : ko.observable(true);
+		this.selectedConventions = typeof data.selectedConventions != 'undefined'? ko.observableArray(data.selectedConventions) : ko.observableArray([]);
 		
 		this.selectedRoot = ko.computed(function() {
 			if (this.isDealer()){
@@ -38,12 +39,32 @@ define(function(require, exports, module) {
 			console.log("         root", this.bidRoot().children());			
 			console.log("opponent root", this.bidRootOpponent().children());
 			console.log("selected root", this.selectedRoot().children());
+			console.log("selectedConventions", this.selectedConventions());
 		};
 	};	
 	
 	BidSystem.prototype = function(){
 
-		//view methods
+		//ui methods
+
+		var clearSelection = function(){
+			this.selectedConventions.removeAll();
+		};
+
+		var select = function(bidconvention){
+			this.selectedConventions.removeAll();
+			this.selectedConventions.push(bidconvention);
+		};
+
+		var addToSelection = function(bidconvention){
+			if (this.selectedConventions.indexOf(bidconvention) === -1){
+				this.selectedConventions.push(bidconvention);
+			}
+		};
+
+		var removeFromSelection = function(bidconvention){
+			this.selectedConventions.remove(bidconvention);
+		};
 
 		var toggleIsDealer = function(){
 			this.isDealer(!this.isDealer());
@@ -63,7 +84,11 @@ define(function(require, exports, module) {
 		//public members		
 		return {
 			toggleIsDealer : toggleIsDealer,
-			toJSON : toJSON
+			toJSON : toJSON,
+			clearSelection : clearSelection,
+			select : select,
+			addToSelection : addToSelection,
+			removeFromSelection : removeFromSelection
 		};
 	}();
 
