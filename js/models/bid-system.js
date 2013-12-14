@@ -47,6 +47,10 @@ define(function(require, exports, module) {
 
 		//ui methods
 
+		var isSelected = function(bidconvention){
+			return this.selectedConventions.indexOf(bidconvention) >= 0;
+		};
+
 		var clearSelection = function(){
 			this.selectedConventions.removeAll();
 		};
@@ -88,7 +92,8 @@ define(function(require, exports, module) {
 			clearSelection : clearSelection,
 			select : select,
 			addToSelection : addToSelection,
-			removeFromSelection : removeFromSelection
+			removeFromSelection : removeFromSelection,
+			isSelected : isSelected
 		};
 	}();
 

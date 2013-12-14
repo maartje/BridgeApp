@@ -188,6 +188,16 @@ define(function(require) {
 						assert.lengthOf(bidsystem.selectedConventions(), 1);
 						assert.include(bidsystem.selectedConventions(), bidsystem.bidRoot());
 					});
+			test('#isSelected(bc): returns true iff the bid convention is in the selection.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						bidsystem.addToSelection(bidsystem.bidRoot());
+						
+						// assert
+						assert.isTrue(bidsystem.isSelected(bidsystem.bidRoot()));
+						assert.isFalse(bidsystem.isSelected(bidsystem.bidRootOpponent()));
+					});
 			
 		});
 		suite('Serialization of BidSystem objects', function() {
