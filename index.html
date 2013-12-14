@@ -20,7 +20,7 @@
 	<li data-bind="css: jstreeStyle">
 		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
 		<a href="#">
-			<div data-bind="style: { color: $root.isSelected($data) ? 'red' : 'black' }"> 
+			<div data-bind="style: { 'background-color': $root.isSelected($data) ? 'blue' : 'yellow' }"> 
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
 				<button>edit</button>
 				<button>add</button>
