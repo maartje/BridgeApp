@@ -23,16 +23,9 @@ define(function(require, exports, module) {
 		this.id = data.id;
 		this.bidRoot = ko.observable(new bidConventionModule.BidConvention(data.bidRoot || {}));
 		this.bidRootOpponent = ko.observable(new bidConventionModule.BidConvention(data.bidRootOpponent || {}));
-		this.isDealer = typeof data.isDealer != 'undefined'? ko.observable(data.isDealer) : ko.observable(true);
 		this.selectedConventions = typeof data.selectedConventions != 'undefined'? ko.observableArray(data.selectedConventions) : ko.observableArray([]);
-		
-		this.selectedRoot = ko.computed(function() {
-			if (this.isDealer()){
-				return this.bidRoot();
-			}
-			return this.bidRootOpponent();
-		}, this);
-		
+		this.selectedRoot = data.isDealer === false? ko.observable(this.bidRootOpponent()) : ko.observable(this.bidRoot());
+
 		//TODO: Mag weg!
 		this.consoleLog = function(){
 			console.log(this);
@@ -71,7 +64,12 @@ define(function(require, exports, module) {
 		};
 
 		var toggleIsDealer = function(){
-			this.isDealer(!this.isDealer());
+			if (this.selectedRoot().getRoot() === this.bidRoot()){ //TODO: .getRoot
+				this.selectedRoot(this.bidRootOpponent());
+			}
+			else {
+				this.selectedRoot(this.bidRoot());
+			}
 		};
 		
 		//methods for converting data to JS object that can be serialized

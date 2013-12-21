@@ -53,6 +53,12 @@ define(function(require, exports, module) {
 			return !this.parent;
 		};
 
+		var getRoot = function(){
+			if(isRoot.call(this))
+				return this;
+			return getRoot.call(this.parent);
+		};
+
 		var length = function(){
 			if(isRoot.call(this)){
 				return 0;
@@ -174,7 +180,8 @@ define(function(require, exports, module) {
 			toJSON : toJSON,
 			isValidChildBid : isValidChildBid,
 			toggleOpenClose : toggleOpenClose,
-			remove : remove
+			remove : remove,
+			getRoot : getRoot
 		};
 	}();
 

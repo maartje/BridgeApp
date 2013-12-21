@@ -677,6 +677,13 @@ define(function(require) {
 							assert.isFalse(_1nt_dbl_redbl_pass_pass.isValidChildBid({type : "DOUBLET"}));
 				});
 			});
+			suite('Helper functions', function() {
+				test('#getRoot: returns the root bid.',
+						function() {
+							assert.equal(bcRoot.getRoot(), bcRoot);
+							assert.equal(bcChild01.getRoot(), bcRoot);
+						});				
+			});
 			suite('View-model functions', function() {
 				test('#toggleOpenClose: toggles the isOpen property.',
 					function() {			

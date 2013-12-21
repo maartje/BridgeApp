@@ -51,23 +51,23 @@ define(function(require) {
 					assert.strictEqual(bidsystem.bidRoot().id, "root_id");
 					assert.isDefined(bidsystem.bidRootOpponent());
 			});
-			test('#BidSystem(data): by default, isDealer is set to true.',
+			test('#BidSystem(data): by default, selected root is bidroot.',
 					function() {
 						// arrange
 						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
 
 						// assert
-						assert.isTrue(bidsystem.isDealer());
+						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRoot());
 				});
-			test('#BidSystem(data): isDealer is set from data if property isDealer is defined.',
+			test('#BidSystem(data): selectedRoot is set from data if property isDealer is defined.',
 					function() {
 						// arrange
 						var bidsystem1 = new bidSystemModule.BidSystem({isDealer : true});
 						var bidsystem2 = new bidSystemModule.BidSystem({isDealer : false});
 
 						// assert
-						assert.isTrue(bidsystem1.isDealer());
-						assert.isFalse(bidsystem2.isDealer());
+						assert.equal(bidsystem1.selectedRoot(), bidsystem1.bidRoot());
+						assert.equal(bidsystem2.selectedRoot(), bidsystem2.bidRootOpponent());
 				});
 			test('#BidSystem(data): by default, selectedConventions is set as an empty array.',
 					function() {
@@ -79,31 +79,21 @@ define(function(require) {
 				});
 		});
 		suite('Functionality BidSystem objects', function() {
-			test('#toggleIsDealer: toggles the dealer member.',
+			test('#toggleIsDealer: toggles the selected root.',
 					function() {
 						// arrange
 						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
-						var isDealer1 = bidsystem.isDealer()
 						
-						//act
-						bidsystem.toggleIsDealer();
-						var isDealer2 = bidsystem.isDealer()
-						bidsystem.toggleIsDealer();
-						var isDealer3 = bidsystem.isDealer()
-						
-						// assert
-						assert.equal(isDealer1, !isDealer2);
-						assert.equal(isDealer1, isDealer3);
-					});
-			test('#selectedRoot: depends on isDealer.',
-					function() {
-						// arrange
-						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
-
-						// assert
-						bidsystem.isDealer(true);
+						//act + assert
 						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRoot());
-						bidsystem.isDealer(false);
+						bidsystem.toggleIsDealer();
+						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRootOpponent());
+						bidsystem.toggleIsDealer();
+						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRoot());
+						
+						
+						bidsystem.selectedRoot(bidsystem.bidRoot().children()[0]);
+						bidsystem.toggleIsDealer();
 						assert.equal(bidsystem.selectedRoot(), bidsystem.bidRootOpponent());
 					});
 			test('#clearSelection: clears the list of selected bid conventions.',
