@@ -79,7 +79,7 @@ define(function(require) {
 				});
 		});
 		suite('Functionality BidSystem objects', function() {
-			test('#toggleIsDealer: toggles the selected root.',
+			test('#toggleIsDealer: sets the selected root to the root, switsching between bidRoot and bidRootOpponent.',
 					function() {
 						// arrange
 						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
@@ -108,6 +108,18 @@ define(function(require) {
 
 						// assert
 						assert.lengthOf(bidsystem.selectedConventions(), 0);
+					});
+			test('#setSelectedRoot(bc): sets the bid convention as the selected root.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						var expectedBC = bidsystem.bidRoot().children()[0];
+						
+						//act
+						bidsystem.setSelectedRoot(expectedBC);
+
+						// assert
+						assert.equal(bidsystem.selectedRoot(), expectedBC);
 					});
 			test('#select(bc): sets the bid convention as the only selected item.',
 					function() {

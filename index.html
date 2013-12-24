@@ -10,7 +10,9 @@
 <body>
 	<div class="jstree jstree-0 jstree-focused jstree-classic">
 		<!-- ko with: selectedRoot -->
-			<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul>
+			<div>TODO: full sequence</div>
+<!-- 			<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul> -->
+			<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	    <!-- /ko -->
 	</div>
 	<button data-bind="click: toggleIsDealer">*toggle dealer</button>
@@ -32,7 +34,7 @@
 				<button data-bind="click: $root.clearSelection.bind($root)">*clear selection</button>
 				<button data-bind="click: $root.addToSelection.bind($root)">*add to selection</button>
 				<button data-bind="click: $root.removeFromSelection.bind($root)">*remove from selection</button>
-				<button>set as tree-top</button>
+				<button data-bind="click: $root.setSelectedRoot.bind($root)">*set as tree-top</button>
 			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>

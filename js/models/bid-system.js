@@ -62,9 +62,13 @@ define(function(require, exports, module) {
 		var removeFromSelection = function(bidconvention){
 			this.selectedConventions.remove(bidconvention);
 		};
+		
+		var setSelectedRoot = function(bidconvention){
+			this.selectedRoot(bidconvention);
+		};
 
 		var toggleIsDealer = function(){
-			if (this.selectedRoot().getRoot() === this.bidRoot()){ //TODO: .getRoot
+			if (this.selectedRoot().getRoot() === this.bidRoot()){ 
 				this.selectedRoot(this.bidRootOpponent());
 			}
 			else {
@@ -91,7 +95,8 @@ define(function(require, exports, module) {
 			select : select,
 			addToSelection : addToSelection,
 			removeFromSelection : removeFromSelection,
-			isSelected : isSelected
+			isSelected : isSelected,
+			setSelectedRoot : setSelectedRoot
 		};
 	}();
 
