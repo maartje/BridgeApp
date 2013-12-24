@@ -10,13 +10,22 @@
 <body>
 	<div class="jstree jstree-0 jstree-focused jstree-classic">
 		<!-- ko with: selectedRoot -->
-			<div>TODO: full sequence</div>
-<!-- 			<ul class="jstree-no-icons" data-bind="template: { name: 'bid-node-templ' }"></ul> -->
+			<div data-bind="template: { name: 'bid-seq-templ'}">
+				TODO: full sequence
+			</div>
 			<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	    <!-- /ko -->
 	</div>
 	<button data-bind="click: toggleIsDealer">*toggle dealer</button>
 	<button data-bind="click: consoleLog">*log state to console</button>
+
+<script id="bid-seq-templ" type="text/html">
+	<!-- ko template: { name: 'bid-seq-templ', if: parent, data: parent} -->
+    <!-- /ko -->
+	<!-- ko if: bid -->
+		<span data-bind="html : bid.htmlString()"></span>
+    <!-- /ko -->
+</script>
 
 <script id="bid-node-templ" type="text/html">
 	<li data-bind="css: jstreeStyle">
