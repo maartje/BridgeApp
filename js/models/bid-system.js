@@ -64,6 +64,7 @@ define(function(require, exports, module) {
 		};
 		
 		var setSelectedRoot = function(bidconvention){
+			console.log(bidconvention);
 			this.selectedRoot(bidconvention);
 		};
 

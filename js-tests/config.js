@@ -1,7 +1,7 @@
 require.config({
   baseUrl: '../js',
   paths: {
-      jquery: ["libs/jquery-1.10.2"],
+      "jquery": ["libs/jquery-1.10.2"],
       "knockout": ["libs/knockout-2.2.1"],
       "knockout-validation": ["libs/knockout-validation"],
       "knockout_mapping" : ["libs/knockout-mapping-2.4.1"],
@@ -11,7 +11,7 @@ require.config({
   
   // inform requirejs that kendo ui depends on jquery
   shim: {
-	  "jQuery": {
+      "jQuery": {
           exports: "jQuery"
       },
       "knockout": {

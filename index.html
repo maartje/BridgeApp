@@ -21,9 +21,7 @@
 <script id="bid-seq-templ" type="text/html">
 	<!-- ko template: { name: 'bid-seq-templ', if: parent, data: parent} -->
     <!-- /ko -->
-	<!-- ko if: bid -->
-		<span data-bind="html : bid.htmlString()"></span>
-    <!-- /ko -->
+		<button data-bind="{html : bid? bid.htmlString() : '<', click: $root.setSelectedRoot.bind($root)}"></button>
 </script>
 
 <script id="bid-node-templ" type="text/html">
