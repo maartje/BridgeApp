@@ -24,7 +24,9 @@ define(function(require, exports, module) {
 		this.bidRoot = ko.observable(new bidConventionModule.BidConvention(data.bidRoot || {}));
 		this.bidRootOpponent = ko.observable(new bidConventionModule.BidConvention(data.bidRootOpponent || {}));
 		this.selectedConventions = typeof data.selectedConventions != 'undefined'? ko.observableArray(data.selectedConventions) : ko.observableArray([]);
+		this.clippedConventions = typeof data.clippedConventions != 'undefined'? ko.observableArray(data.clippedConventions) : ko.observableArray([]);
 		this.selectedRoot = data.isDealer === false? ko.observable(this.bidRootOpponent()) : ko.observable(this.bidRoot());
+		this.isCutAction = false;
 
 		//TODO: Mag weg!
 		this.consoleLog = function(){
@@ -33,6 +35,7 @@ define(function(require, exports, module) {
 			console.log("opponent root", this.bidRootOpponent().children());
 			console.log("selected root", this.selectedRoot().children());
 			console.log("selectedConventions", this.selectedConventions());
+			console.log("clippedConventions", this.clippedConventions());
 		};
 	};	
 	
@@ -46,6 +49,37 @@ define(function(require, exports, module) {
 
 		var clearSelection = function(){
 			this.selectedConventions.removeAll();
+		};
+
+		//TODO: conditions when paste action is valid for all pairs clipped/selected 
+		var paste = function(){
+			var that = this;
+			ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
+				ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
+					if (that.isCutAction) {
+						clippedBC.parent.children.remove(clippedBC);
+					}
+					selectedBC.createChild(clippedBC.toJSON());
+				});
+			});
+		};
+		
+		var copySelection = function(){
+			this.isCutAction = false;
+			clipSelection.call(this);
+		};
+
+		var cutSelection = function(){
+			this.isCutAction = true;
+			clipSelection.call(this);
+		};
+
+		var clipSelection = function(){
+			var that = this;
+			that.clippedConventions.removeAll();
+			ko.utils.arrayForEach(that.selectedConventions(), function(bc) {
+				that.clippedConventions.push(bc);
+			});
 		};
 
 		var select = function(bidconvention){
@@ -97,7 +131,10 @@ define(function(require, exports, module) {
 			addToSelection : addToSelection,
 			removeFromSelection : removeFromSelection,
 			isSelected : isSelected,
-			setSelectedRoot : setSelectedRoot
+			setSelectedRoot : setSelectedRoot,
+			copySelection : copySelection,
+			cutSelection : cutSelection,
+			paste : paste
 		};
 	}();
 

@@ -161,7 +161,6 @@ define(function(require, exports, module) {
 			return child;
 		};
 
-		
 		//methods for converting data to JS object that can be serialized
 		
 		var toJSON = function() {

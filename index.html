@@ -15,8 +15,19 @@
 			<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	    <!-- /ko -->
 	</div>
-	<button data-bind="click: toggleIsDealer">*toggle dealer</button>
-	<button data-bind="click: consoleLog">*log state to console</button>
+	<div>
+		<button data-bind="click: clearSelection">*clear selection</button>
+		<button data-bind="click: copySelection">*copy selection</button>
+		<button data-bind="click: cutSelection">*cut selection</button>
+		<button data-bind="click: paste">paste clipped to selection</button>
+		<button data-bind="">save to ls</button>
+		<button data-bind="">load from ls</button>
+	</div>
+	<div>
+		<button data-bind="click: toggleIsDealer">*toggle dealer</button>
+		<button data-bind="click: consoleLog">*log state to console</button>
+		<button>save to ls</button>
+	</div>
 
 <script id="bid-seq-templ" type="text/html">
 	<!-- ko template: { name: 'bid-seq-templ', if: parent, data: parent} -->
@@ -32,12 +43,11 @@
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
 				<button>edit</button>
 				<button>add</button>
-				<button data-bind="click: remove">*delet</button>
+				<button data-bind="click: remove">*delete</button>
 				<button>cut</button>
 				<button>copy</button>
 				<button>paste</button>
 				<button data-bind="click: $root.select.bind($root)">*select</button>
-				<button data-bind="click: $root.clearSelection.bind($root)">*clear selection</button>
 				<button data-bind="click: $root.addToSelection.bind($root)">*add to selection</button>
 				<button data-bind="click: $root.removeFromSelection.bind($root)">*remove from selection</button>
 				<button data-bind="click: $root.setSelectedRoot.bind($root)">*set as tree-top</button>
