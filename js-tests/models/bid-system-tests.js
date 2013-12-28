@@ -1,6 +1,8 @@
 define(function(require) {
 	var assert = require('chai').assert;
 	var bidSystemModule = require("models/bid-system");
+	
+	/*global suite setup test*/
 
 	suite('BidSystem', function() {
 		var bidSystemData = {
@@ -11,7 +13,7 @@ define(function(require) {
 					id : 1,
 					bid : {
 						type : "SUIT",
-						suit : "NOTRUMP", 
+						suit : "CLUBS", 
 						level : 1
 					},
 					convention : "12-19 punten. Vanaf een 3 kaart.",
@@ -33,7 +35,24 @@ define(function(require) {
 							suit : "SPADES", 
 							level : 2
 						},
-						convention : "volgbod"}]}]}
+						convention : "volgbod"}]},
+				{
+					id : 1,
+					bid : {
+						type : "SUIT",
+						suit : "HEARTS", 
+						level : 1
+					}
+				},
+				{
+					id : 1,
+					bid : {
+						type : "SUIT",
+						suit : "SPADES", 
+						level : 1
+					}
+				}
+				]}
 		};
 
 		setup(function() {
@@ -76,6 +95,22 @@ define(function(require) {
 
 						// assert
 						assert.lengthOf(bidsystem.selectedConventions(), 0);
+				});
+			test('#BidSystem(data): by default, clippedConventions is set as an empty array.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+
+						// assert
+						assert.lengthOf(bidsystem.clippedConventions(), 0);
+				});
+			test('#BidSystem(data): isCutAction is false.',
+					function() {
+						// arrange
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+
+						// assert
+						assert.isFalse(bidsystem.isCutAction);
 				});
 		});
 		suite('Functionality BidSystem objects', function() {
@@ -200,7 +235,72 @@ define(function(require) {
 						assert.isTrue(bidsystem.isSelected(bidsystem.bidRoot()));
 						assert.isFalse(bidsystem.isSelected(bidsystem.bidRootOpponent()));
 					});
-			
+			test('#copySelection + paste: implements copy > paste functionality.',
+					function() {
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						var expectedJSParent = bidsystem.bidRoot().children()[0].toJSON();
+						var expectedLength = bidsystem.bidRoot().children()[0].children().length;
+						var copied_1 = bidsystem.bidRoot().children()[0].children()[0];
+						var copied_2 = bidsystem.bidRoot().children()[0].children()[1];
+						bidsystem.addToSelection(copied_1);
+						bidsystem.addToSelection(copied_2);
+						bidsystem.isCutAction = true;
+						
+						bidsystem.copySelection();
+						assert.isFalse(bidsystem.isCutAction);
+						assert.include(bidsystem.clippedConventions(), copied_1);
+						assert.include(bidsystem.clippedConventions(), copied_2);
+						assert.lengthOf(bidsystem.clippedConventions(), bidsystem.selectedConventions().length);
+
+						var selected_1 = bidsystem.bidRoot().children()[1];
+						var selected_2 = bidsystem.bidRoot().children()[2];
+						bidsystem.select(selected_1);
+						bidsystem.addToSelection(selected_2);
+						bidsystem.paste();
+						
+						assert.lengthOf(selected_1.children(), 2)
+						assert.deepEqual(selected_1.children()[0].toJSON(), copied_1.toJSON());
+						assert.deepEqual(selected_1.children()[1].toJSON(), copied_2.toJSON());
+						assert.lengthOf(selected_2.children(), 2)
+						assert.deepEqual(selected_2.children()[0].toJSON(), copied_1.toJSON());
+						assert.deepEqual(selected_2.children()[1].toJSON(), copied_2.toJSON());
+						
+						assert.lengthOf(bidsystem.bidRoot().children()[0].children(), expectedLength); 
+						assert.deepEqual(bidsystem.bidRoot().children()[0].toJSON(), expectedJSParent); //copy keeps original
+
+					});
+			test('#cutSelection + paste: implements cut > paste functionality.',
+					function() {
+						var bidsystem = new bidSystemModule.BidSystem(bidSystemData);
+						var copied_1 = bidsystem.bidRoot().children()[0].children()[0];
+						var copied_2 = bidsystem.bidRoot().children()[0].children()[1];
+						var expectedLength = bidsystem.bidRoot().children()[0].children().length - 2;
+						bidsystem.addToSelection(copied_1);
+						bidsystem.addToSelection(copied_2);
+						bidsystem.isCutAction = false;
+						
+						bidsystem.cutSelection();
+						assert.isTrue(bidsystem.isCutAction);
+						assert.include(bidsystem.clippedConventions(), copied_1);
+						assert.include(bidsystem.clippedConventions(), copied_2);
+						assert.lengthOf(bidsystem.clippedConventions(), bidsystem.selectedConventions().length);
+
+						var selected_1 = bidsystem.bidRoot().children()[1];
+						var selected_2 = bidsystem.bidRoot().children()[2];
+						bidsystem.select(selected_1);
+						bidsystem.addToSelection(selected_2);
+						bidsystem.paste();
+						
+						assert.lengthOf(selected_1.children(), 2)
+						assert.deepEqual(selected_1.children()[0].toJSON(), copied_1.toJSON());
+						assert.deepEqual(selected_1.children()[1].toJSON(), copied_2.toJSON());
+						assert.lengthOf(selected_2.children(), 2)
+						assert.deepEqual(selected_2.children()[0].toJSON(), copied_1.toJSON());
+						assert.deepEqual(selected_2.children()[1].toJSON(), copied_2.toJSON());
+						
+						assert.lengthOf(bidsystem.bidRoot().children()[0].children(), expectedLength); //cut deletes original
+
+					});
 		});
 		suite('Serialization of BidSystem objects', function() {
 			test('#toJSON: the following properties are serialized: id, bidRoot, bidRootOpponent.',
