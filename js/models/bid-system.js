@@ -15,7 +15,11 @@ define(function(require, exports, module) {
 	 * Loads a bid system model from the local storage.
 	 */
 	var load = module.exports.load = function(bidSystemId){
-		return new BidSystem(localStorageModule.load(bidSystemId));
+	    var bidsystemJS = localStorageModule.load(bidSystemId);
+	    if(!bidsystemJS){
+	        return null;
+	    }
+		return new BidSystem(bidsystemJS);
 	}
 
 	
@@ -120,6 +124,10 @@ define(function(require, exports, module) {
 		    	bidRootOpponent : this.bidRootOpponent()
 		    };
 		};
+		
+		var saveToLocalStorage = function() {
+	        localStorageModule.save(this.id, this);
+		}
 
 		
 		//public members		
@@ -134,7 +142,8 @@ define(function(require, exports, module) {
 			setSelectedRoot : setSelectedRoot,
 			copySelection : copySelection,
 			cutSelection : cutSelection,
-			paste : paste
+			paste : paste,
+			saveToLocalStorage : saveToLocalStorage
 		};
 	}();
 

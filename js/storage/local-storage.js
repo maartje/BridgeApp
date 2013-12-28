@@ -17,6 +17,9 @@ define(function(require, exports, module) {
 	 */
 	var load = module.exports.load = function(key){
 		var jsonString = localStorage.getItem(key);
+		if (!jsonString){
+			return null;
+		}
 		return JSON.parse(jsonString);
 	}
 			 

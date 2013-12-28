@@ -337,6 +337,13 @@ define(function(require) {
 					assert.equal(JSON.stringify(bsBefore), JSON.stringify(bsAfter));
 					localStorage.clear();
 			});
+			test('#load: returns null in case the key does not exist.',
+				function() {
+					// arrange
+					localStorage.clear();
+					assert.isNull(bidSystemModule.load("non_existing_key"));
+			});
+
 		});
 	});
 });
