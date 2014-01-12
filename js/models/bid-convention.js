@@ -1,6 +1,16 @@
 define(function(require, exports, module) {
 	var bidModule = require("models/bid");
 	var ko = require("knockout");
+	
+	var collectInvalidBids = module.exports.collectInvalidBids = function(bidConventions){
+		var invalidConventions = [];
+		for (var i = 0; i < bidConventions.length; i++) {
+			invalidConventions.push.apply(invalidConventions, bidConventions[i].collectInvalidBids());
+
+		}
+		return invalidConventions;
+	};
+
 
 	var BidConvention = module.exports.BidConvention = function (data) {
 		if(!data.parent && data.bid){
@@ -12,7 +22,7 @@ define(function(require, exports, module) {
 				
 		this.parent = data.parent; //BidConvention
 		this.children = ko.observableArray([]); //Array with BidConventions		
-		this.addChildren(data.children || []); 
+		this.createChildren(data.children || []); 
 		
 		if (typeof data.isOpen != 'undefined') {
 			this.isOpen = ko.observable(data.isOpen);
@@ -67,7 +77,19 @@ define(function(require, exports, module) {
 		};
 		
 		//methods for validation
-		
+
+		var collectInvalidBids = function(){
+			if (!isRoot.call(this) && !isValidChildBid.call(this.parent, this.bid)){
+				return [this];
+			}
+			var invalidChildConventions = [];
+			for (var i = 0; i < this.children().length; i++) {
+				var child = this.children()[i];
+				invalidChildConventions.push.apply(invalidChildConventions, collectInvalidBids.call(child));
+			}
+			return invalidChildConventions;
+		};
+
 		var isValidBidSequence = function(){
 			return (isRoot.call(this) && !this.bid) ||
 			       (isValidChildBid.call(this.parent, this.bid) && isValidBidSequence.call(this.parent));
@@ -137,7 +159,7 @@ define(function(require, exports, module) {
 			return this;
 		};
 
-		var addChildren = function(dataChildren){
+		var createChildren = function(dataChildren){
 			for ( var i = 0; i < dataChildren.length; i++) {
 				createChild.call(this, dataChildren[i]);
 			}
@@ -175,12 +197,14 @@ define(function(require, exports, module) {
 		//public members		
 		return {
 			createChild : createChild,
-			addChildren : addChildren,
+			createChildren : createChildren,
 			toJSON : toJSON,
+			collectInvalidBids : collectInvalidBids,
 			isValidChildBid : isValidChildBid,
 			toggleOpenClose : toggleOpenClose,
 			remove : remove,
-			getRoot : getRoot
+			getRoot : getRoot,
+			isRoot : isRoot
 		};
 	}();
 
