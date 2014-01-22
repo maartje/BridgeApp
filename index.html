@@ -17,12 +17,19 @@
 	</div>
 	<div>
 		<button data-bind="click: clearSelection">*clear selection</button>
-		<button data-bind="click: copySelection">*copy selection</button>
+	</div>
+	<div>
+		<button data-bind="click: setSelectedRoot">*select</button>
+		<button>edit</button>
+		<button data-bind="click: $root.createNew.bind($root)">new</button>
+		<button data-bind="click: deleteSelection">*delete selection</button>
+		<button>duplicate</button>
 		<button data-bind="click: cutSelection">*cut selection</button>
+		<button data-bind="click: copySelection">*copy selection</button>
 		<button data-bind="click: paste">*paste selection</button>
 	</div>
 	<div>
-		<button data-bind="">validate paste</button>
+		<button data-bind="click: validatePaste">validate paste</button>
 	</div>
 	<div>
 		<button onclick="localStorage.clear()">*clear ls</button>
@@ -45,13 +52,9 @@
 		<a href="#">
 			<div data-bind="style: { 'background-color': $root.isSelected($data) ? 'blue' : 'yellow' }"> 
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
-				<button>edit</button>
-				<button>add</button>
-				<button data-bind="click: remove">*delete</button>
 				<button data-bind="click: $root.select.bind($root)">*select</button>
 				<button data-bind="click: $root.addToSelection.bind($root)">*add to selection</button>
 				<button data-bind="click: $root.removeFromSelection.bind($root)">*remove from selection</button>
-				<button data-bind="click: $root.setSelectedRoot.bind($root)">*set as tree-top</button>
 			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>

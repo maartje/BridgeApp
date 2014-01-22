@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
 	var bidConventionModule = require("models/bid-convention");
+	var bidModule = require("models/bid");
 	var localStorageModule = require("storage/local-storage");
 	var ko = require("knockout");
 
@@ -45,7 +46,7 @@ define(function(require, exports, module) {
 	
 	BidSystem.prototype = function(){
 
-		//ui methods
+		// methods that check or manipulate the collection of selected bids
 
 		var isSelected = function(bidconvention){
 			return this.selectedConventions.indexOf(bidconvention) >= 0;
@@ -54,19 +55,24 @@ define(function(require, exports, module) {
 		var clearSelection = function(){
 			this.selectedConventions.removeAll();
 		};
-
-		//TODO: conditions when paste action is valid for all pairs clipped/selected 
-		var paste = function(){
-			var that = this;
-			ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
-				ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
-					if (that.isCutAction) {
-						clippedBC.parent.children.remove(clippedBC);
-					}
-					selectedBC.createChild(clippedBC.toJSON());
-				});
-			});
+		
+		var select = function(bidconvention){
+			this.selectedConventions.removeAll();
+			this.selectedConventions.push(bidconvention);
 		};
+
+		var addToSelection = function(bidconvention){
+			if (this.selectedConventions.indexOf(bidconvention) === -1){
+				this.selectedConventions.push(bidconvention);
+			}
+		};
+
+		var removeFromSelection = function(bidconvention){
+			this.selectedConventions.remove(bidconvention);
+		};
+		
+
+		// methods that check or manipulate the collection of clipped bids
 		
 		var copySelection = function(){
 			this.isCutAction = false;
@@ -85,24 +91,59 @@ define(function(require, exports, module) {
 				that.clippedConventions.push(bc);
 			});
 		};
+		
 
-		var select = function(bidconvention){
-			this.selectedConventions.removeAll();
-			this.selectedConventions.push(bidconvention);
-		};
+		// methods that manipulate the tree structure
 
-		var addToSelection = function(bidconvention){
-			if (this.selectedConventions.indexOf(bidconvention) === -1){
-				this.selectedConventions.push(bidconvention);
-			}
-		};
-
-		var removeFromSelection = function(bidconvention){
-			this.selectedConventions.remove(bidconvention);
+        //TODO: test cases
+        var validatePaste = function(){
+			var that = this;
+		    var invalidConventions = [];
+		    ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
+				ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
+				    //TODO: clone
+				    clippedBC.parent = selectedBC;
+        			invalidConventions.push.apply(invalidConventions, clippedBC.collectInvalidBids());
+				});
+			});
+			//TODO: strip invalid conventions?
+			console.log(invalidConventions);
+        };
+        
+		var paste = function(){
+    		//TODO condition paste action is valid for all pairs clipped/selected 
+			var that = this;
+			ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
+				ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
+					if (that.isCutAction) {
+						clippedBC.parent.children.remove(clippedBC);
+					}
+					selectedBC.createChild(clippedBC.toJSON());
+				});
+			});
 		};
 		
-		var setSelectedRoot = function(bidconvention){
-			console.log(bidconvention);
+		var deleteSelection = function(){
+			ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
+				bc.remove();
+			});
+			clearSelection.call(this);
+		};
+
+		var createNew = function(){
+			//TODO: no bidding ended in selection
+			ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
+			    var passData = {bid : {type : "PASS"}};
+				bc.createChild(passData); //TODO: edit-mode
+			});
+		};
+
+		//methods that affect the view without affecting the data
+
+		var setSelectedRoot = function(){
+		    //TODO condition: only 1 bc in selection
+			var bidconvention = this.selectedConventions()[0];
+			this.selectedConventions([]);
 			this.selectedRoot(bidconvention);
 		};
 
@@ -114,8 +155,9 @@ define(function(require, exports, module) {
 				this.selectedRoot(this.bidRoot());
 			}
 		};
-		
-		//methods for converting data to JS object that can be serialized
+
+
+		//methods for persistence of the bid system data
 		
 		var toJSON = function() {
 		    return {
@@ -143,7 +185,10 @@ define(function(require, exports, module) {
 			copySelection : copySelection,
 			cutSelection : cutSelection,
 			paste : paste,
-			saveToLocalStorage : saveToLocalStorage
+			saveToLocalStorage : saveToLocalStorage,
+			validatePaste : validatePaste,
+			createNew : createNew,
+			deleteSelection : deleteSelection
 		};
 	}();
 
