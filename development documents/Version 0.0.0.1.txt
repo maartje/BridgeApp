@@ -1,0 +1,58 @@
+[User Story 1]
+If I open the page and there is no bridge tree stored in the local storage,
+then a default tree is saved in the local storage. The default tree contains 
+the we_root + the biddings 1c ... 1NT, plus the 1nt children 2c ... 2h, and the them_root.
+The bid 1NT has a description: 15-17 punten, sans-atout verdeling.
+
+[User Story 2]
+If I open the page, then the bridge tree is loaded from the local storage (exception thrown if known exists or if ls not defined),
+and shown to the user. The view consists of 1. ordered tree structure with open/close, bid + description, we and them nodes have different colors.
+*the root node is open, the other nodes are closed.
+
+[User Story 3]
+I can edit the description of existing bid conventions.
+The changes are propagated to the viewmodel with each keystroke,
+the changed description is made persistent (in local storage) after the
+description input element looses focus.
+
+[User Story 4]
+If I open the page, then the bridge tree is loaded from the local storage (exception thrown if known exists or if ls not defined),
+and shown to the user. The view consists of 1. tree structure with open/close, bid + description, we and them nodes have different colors.
+Remark: the root node is open, the other nodes are closed.
+
+[User Story 5]
+I can select a bidding node with a mouse click,
+the bidding node gets a new color, the same holds for all its descendant nodes.
+
+[User Story 6]
+I can open a context-menu for a selected bid convention using the right mouse button.
+The context menu contains the following items:
+Select (Ctrl + T), New (Ctrl + N), Delete (Delete).
+The functionality is not yet implemented.
+
+[User Story 7]
+I can delete a selected bid with the Context Menu item, or by using
+the delete button. In both cases a dialog appears asking wether 
+I am sure to delete the bid ... and all its subsequent biddings.
+* Delete is disabled for the root.
+
+[User Story 8]
+I can add a new bid via the context menu, or via the shortcut Ctrl + N.
+A bid-picker appears.
+Only the valid bids are enabled, the pass bid is pre-selected.
+In the bidpicker I can select the bid using a mouse click,
+or by using the arrows followed by the enter button. 
+After selecting a bid, the new child bid is added to the tree (viewmodel + local storage).
+Furthermore, the parent of the new child bid is open,
+and the new child bid is selected.
+* In case no bid is valid (not even pass), the menu item 'New' is disabled.
+
+[User Story 9]
+I can select a bid using the context menu item 'Select' or using the shortcut
+Ctrl + T. The selected bid is set as the 'root' bid sequence.
+The root bidsequence view consist of a large bar (root) + 
+bid buttons ordered in squences of 4.
+I can select the root bid to set the root as the root bidsequence.
+
+[User Story 10]
+I can select bids from the root bid sequence.
