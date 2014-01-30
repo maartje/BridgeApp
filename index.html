@@ -15,36 +15,6 @@
 			<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	    <!-- /ko -->
 	</div>
-	<div>
-		<button data-bind="click: clearSelection">*clear selection</button>
-	</div>
-	<div>
-		<button data-bind="click: deleteSelection">*delete selection</button>
-		<button data-bind="click: cutSelection">*cut selection</button>
-		<button data-bind="click: copySelection">*copy selection</button>
-		<button data-bind="click: paste">*paste to selection</button>
-	</div>
-	<div>
-		<button data-bind="click: validatePaste">validate paste</button>
-	</div>
-	<div>
-		<button>edit</button>
-		<button data-bind="click: $root.createNew.bind($root)">*new</button>
-		<!--<button>duplicate</button>-->
-	</div>
-	<div>
-		<button data-bind="click: setSelectedRoot">*select (set as root ...)</button>
-	</div>
-	<div>
-		<button onclick="localStorage.clear()">*clear ls</button>
-		<button data-bind="click: saveToLocalStorage">*save to ls</button>
-	</div>
-	<div>
-		<button data-bind="click: toggleIsDealer">*toggle dealer</button>
-	</div>
-	<div>
-		<button data-bind="click: consoleLog">*log state to console</button>
-	</div>
 
 <script id="bid-seq-templ" type="text/html">
 	<!-- ko template: { name: 'bid-seq-templ', if: parent, data: parent} -->
@@ -58,9 +28,7 @@
 		<a href="#">
 			<div data-bind="style: { 'background-color': $root.isSelected($data) ? 'blue' : 'yellow' }"> 
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
-				<button data-bind="click: $root.select.bind($root)">*select</button>
-				<button data-bind="click: $root.addToSelection.bind($root)">*add to selection</button>
-				<button data-bind="click: $root.removeFromSelection.bind($root)">*remove from selection</button>
+				<span data-bind="text : convention? convention : ''"></span>
 			</div>
 		</a>
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
