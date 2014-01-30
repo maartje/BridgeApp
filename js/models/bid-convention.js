@@ -93,7 +93,7 @@ define(function(require, exports, module) {
 		var isValidBidSequence = function(){
 			return (isRoot.call(this) && !this.bid) ||
 			       (isValidChildBid.call(this.parent, this.bid) && isValidBidSequence.call(this.parent));
-		};
+		}; 
 
 		var isValidChildBid = function(bidData){
 			//compares the bid types at the end of the bidsequence

@@ -19,17 +19,21 @@
 		<button data-bind="click: clearSelection">*clear selection</button>
 	</div>
 	<div>
-		<button data-bind="click: setSelectedRoot">*select</button>
-		<button>edit</button>
-		<button data-bind="click: $root.createNew.bind($root)">new</button>
 		<button data-bind="click: deleteSelection">*delete selection</button>
-		<button>duplicate</button>
 		<button data-bind="click: cutSelection">*cut selection</button>
 		<button data-bind="click: copySelection">*copy selection</button>
-		<button data-bind="click: paste">*paste selection</button>
+		<button data-bind="click: paste">*paste to selection</button>
 	</div>
 	<div>
 		<button data-bind="click: validatePaste">validate paste</button>
+	</div>
+	<div>
+		<button>edit</button>
+		<button data-bind="click: $root.createNew.bind($root)">*new</button>
+		<!--<button>duplicate</button>-->
+	</div>
+	<div>
+		<button data-bind="click: setSelectedRoot">*select (set as root ...)</button>
 	</div>
 	<div>
 		<button onclick="localStorage.clear()">*clear ls</button>
@@ -37,6 +41,8 @@
 	</div>
 	<div>
 		<button data-bind="click: toggleIsDealer">*toggle dealer</button>
+	</div>
+	<div>
 		<button data-bind="click: consoleLog">*log state to console</button>
 	</div>
 

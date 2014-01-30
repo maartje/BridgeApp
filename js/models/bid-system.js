@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 		};
 
 		var clearSelection = function(){
-			this.selectedConventions.removeAll();
+			this.selectedConventions.removeAll(); 
 		};
 		
 		var select = function(bidconvention){
