@@ -76,6 +76,13 @@ define(function(require, exports, module) {
 			return 1 + length.call(this.parent);
 		};
 		
+		var isOpponentBid = function(isOpponentRoot){
+			if(isRoot.call(this)){
+				return !isOpponentRoot;
+			}
+			return !isOpponentBid.call(this.parent);
+		};
+		
 		//methods for validation
 
 		var collectInvalidBids = function(){
@@ -204,7 +211,8 @@ define(function(require, exports, module) {
 			toggleOpenClose : toggleOpenClose,
 			remove : remove,
 			getRoot : getRoot,
-			isRoot : isRoot
+			isRoot : isRoot,
+			isOpponentBid : isOpponentBid
 		};
 	}();
 

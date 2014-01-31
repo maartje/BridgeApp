@@ -48,6 +48,13 @@ define(function(require, exports, module) {
 	
 	BidSystem.prototype = function(){
 
+		// methods that query the data structure for presentation purpose
+
+		var isOpponentBid = function(bidconvention){
+		    var isOpponentRoot = bidconvention.getRoot() === this.bidRootOpponent;
+		    return bidconvention.isOpponentBid(isOpponentRoot);
+		};
+
 		// methods that check or manipulate the collection of selected bids
 
 		var isSelected = function(bidconvention){
@@ -190,7 +197,8 @@ define(function(require, exports, module) {
 			saveToLocalStorage : saveToLocalStorage,
 			validatePaste : validatePaste,
 			createNew : createNew,
-			deleteSelection : deleteSelection
+			deleteSelection : deleteSelection,
+			isOpponentBid : isOpponentBid
 		};
 	}();
 
