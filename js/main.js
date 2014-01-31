@@ -25,46 +25,16 @@ require.config({
   }
 });
  
-require(['require', 'knockout', 'models/bid-system'], function(require, ko, bidSystemModule){
+require(['require', 'knockout', 'models/bid-system', 'storage/default-data'], 
+function(require, ko, bidSystemModule, defaultDataModule){
+    //	localStorage.clear();
     var bidSystemId = "maartje_wim";
     var bidSystem = bidSystemModule.load(bidSystemId);
     if (!bidSystem) {
-    	var bidSystemData = {
-    			id : bidSystemId,
-    			bidRoot : {
-    				id : "root_id",
-    				children : [{
-    					id : 1,
-    					bid : {
-    						type : "SUIT",
-    						suit : "NOTRUMP", 
-    						level : 1
-    					},
-    					convention : "12-19 punten. Vanaf een 3 kaart.",
-    					children : [{
-    						id : 2,
-    						bid : {
-    							type : "PASS",
-    						},
-    						convention : "",
-    						children : []}
-    					, { id : 3,
-    						bid : {
-    							type : "DOUBLET"
-    						},
-    						convention : "informatie doublet"}
-    					, { id : 4,
-    						bid : {
-    							type : "SUIT",
-    							suit : "SPADES", 
-    							level : 2
-    						},
-    						convention : "volgbod"}]}]}};
-    	bidSystem = new bidSystemModule.BidSystem(bidSystemData);
-    	bidSystem.bidRoot().createChild({id:100, bid:{type: "SUIT", suit: "HEARTS", level:1}, convention : "12-19 pntn, 5+ hearts"});
-    	console.log("use demo bid system");
+    	var bidSystemData = defaultDataModule.defaultBiddingSystem;
+    	bidSystemData.id = bidSystemId;
+    	bidSystemModule.save(bidSystemData);
+        bidSystem = bidSystemModule.load(bidSystemId);
     }
-//	localStorage.clear();
-	bidSystemModule.save(bidSystem);
     ko.applyBindings(bidSystem);   
 });

@@ -9,6 +9,7 @@ define(function(require, exports, module) {
 	 * The object is saved as a JSON String 
 	 */
 	var save = module.exports.save = function(bidSystem){
+	    //TODO: what if ls does not exist?
 		localStorageModule.save(bidSystem.id, bidSystem);
 	}
 	
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
 	 * Loads a bid system model from the local storage.
 	 */
 	var load = module.exports.load = function(bidSystemId){
+	    //TODO: what if ls does not exist?
 	    var bidsystemJS = localStorageModule.load(bidSystemId);
 	    if(!bidsystemJS){
 	        return null;
