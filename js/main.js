@@ -27,7 +27,7 @@ require.config({
  
 require(['require', 'knockout', 'models/bid-system', 'storage/default-data'], 
 function(require, ko, bidSystemModule, defaultDataModule){
-    //	localStorage.clear();
+    localStorage.clear();
     var bidSystemId = "maartje_wim";
     var bidSystem = bidSystemModule.load(bidSystemId);
     if (!bidSystem) {

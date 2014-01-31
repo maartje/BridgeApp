@@ -22,8 +22,7 @@
 			<div data-bind="css : $root.isOpponentBid($data)? 'is-opponent-bid' : ''"> 
 				<span data-bind="html : bid? bid.htmlString() : ''"></span>
 				<!-- ko with: convention -->
-					<span data-bind="{html : description}"></span>
-					<span contenteditable="true" data-bind="{text : description}"></span>
+					<span contenteditable="true" data-bind="{htmlValue : description}"></span>
 			    <!-- /ko -->
 			</div>
 		</a>
