@@ -1,7 +1,8 @@
 define(function(require, exports, module) {
 	var bidModule = require("models/bid");
+	var conventionModule = require("models/convention");
 	var ko = require("knockout");
-	
+
 	var collectInvalidBids = module.exports.collectInvalidBids = function(bidConventions){
 		var invalidConventions = [];
 		for (var i = 0; i < bidConventions.length; i++) {
@@ -11,14 +12,13 @@ define(function(require, exports, module) {
 		return invalidConventions;
 	};
 
-
 	var BidConvention = module.exports.BidConvention = function (data) {
 		if(!data.parent && data.bid){
 			throw 'A newly created bid system must contain a root node for which the bid is "undefined"';
 		}
 		this.id = data.id; //GUID TODO: new Guid if data.id not defined
 		this.bid = data.bid? bidModule.createBid(data.bid) : undefined; //Bid
-		this.convention = data.convention; //String (TODO: Convention with description, tags, ...)
+		this.convention = new conventionModule.Convention(data.convention || {});
 				
 		this.parent = data.parent; //BidConvention
 		this.children = ko.observableArray([]); //Array with BidConventions		

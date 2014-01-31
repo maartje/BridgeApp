@@ -29,7 +29,8 @@ define(function(require, exports, module) {
 						type : "SUIT",
 						suit : "HEARTS", 
 						level : 1
-					}
+					},
+            		convention : {description : "5 kaart <span style='color : red'>&hearts;</span>"}
 			    },
 		        {
 					bid : {
@@ -44,7 +45,7 @@ define(function(require, exports, module) {
 						suit : "NOTRUMP", 
 						level : 1
 					},
-					convention : "15-17 punten, sans-atout verdeling",
+					convention : {description : "15-17 punten, sans-atout verdeling"},
 					children : [{
 					    bid : {type : "PASS"},
     					children : [
@@ -54,7 +55,7 @@ define(function(require, exports, module) {
             						suit : "CLUBS", 
             						level : 2
             					},
-            					convention : "stayman"
+            					convention : {description : "stayman"}
             			    },
             		        {
             					bid : {
@@ -62,7 +63,7 @@ define(function(require, exports, module) {
             						suit : "DIAMONDS", 
             						level : 2
             					},
-            					convention : "jacoby"
+            					convention : {description : "5+ <span>&hearts;</span>"}
             			    },
             		        {
             					bid : {
@@ -70,7 +71,7 @@ define(function(require, exports, module) {
             						suit : "HEARTS", 
             						level : 2
             					},
-            					convention : "jacoby"
+            					convention : {description : "jacoby"}
             			    }
             			]
 					}]

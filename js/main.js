@@ -8,8 +8,8 @@ require.config({
   },
   
   shim: {
-	  'jQuery': {
-          exports: ['jQuery', '$']
+	  'jquery': {
+          exports: ['jquery', '$']
       },
       'jquery-ui': {
     	  exports: '$',
