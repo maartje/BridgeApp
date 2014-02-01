@@ -7,13 +7,18 @@ define(function(require, exports, module) {
 	    //tags
 	    //...
 	    this.description = ko.observable(data.description || "");
-	    if (typeof data.isEditable != 'undefined') {
-			this.isEditable = ko.observable(data.isEditable);
-		}
-		else {
-			this.isEditable = ko.observable(false);
-		}
-		
-		//TODO isEditable non-persistence
 	};
+	
+	Convention.prototype = function(){
+	    var toJSON = function() {
+		    return {
+		    	description : this.description()
+		    };
+		};
+		
+		return {
+		    toJSON : toJSON    
+		};
+
+	}();
 });

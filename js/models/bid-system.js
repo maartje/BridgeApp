@@ -177,6 +177,7 @@ define(function(require, exports, module) {
 		};
 		
 		var saveToLocalStorage = function() {
+		    console.log("saved!", this);
 	        localStorageModule.save(this.id, this);
 		}
 

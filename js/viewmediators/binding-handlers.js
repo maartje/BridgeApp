@@ -1,4 +1,4 @@
-define(["knockout", "jquery"], function(ko, $){
+define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, moduleUI){
 		
 	/**
 	 * Binding handler to update model values by editing the (html) content.
@@ -27,6 +27,7 @@ define(["knockout", "jquery"], function(ko, $){
 	        $(element).on("click", function() {
     	    	var htmlString = ko.utils.unwrapObservable(valueAccessor());
 	            $(element).text(htmlString);
+	            moduleUI.setCursorToEndOfContenteditable(element);
 	        });
 
 	    },

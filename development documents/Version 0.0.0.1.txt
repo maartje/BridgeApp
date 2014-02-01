@@ -16,6 +16,7 @@ I can edit the description of existing bid conventions.
 The changes are propagated to the viewmodel with each keystroke,
 the changed description is made persistent (in local storage) after the
 description input element looses focus.
+The description input element looses focus when user presses the enter key.
 
 [User Story 4]
 If I open the page, then the bridge tree is loaded from the local storage (exception thrown if known exists or if ls not defined),

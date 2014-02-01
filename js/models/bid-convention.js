@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 	var bidModule = require("models/bid");
 	var conventionModule = require("models/convention");
 	var ko = require("knockout");
+	require("viewmediators/event-bindings");
 
 	var collectInvalidBids = module.exports.collectInvalidBids = function(bidConventions){
 		var invalidConventions = [];

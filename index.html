@@ -20,9 +20,9 @@
 		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
 		<a href="#">
 			<div data-bind="css : $root.isOpponentBid($data)? 'is-opponent-bid' : ''"> 
-				<span data-bind="html : bid? bid.htmlString() : ''"></span>
+				<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
 				<!-- ko with: convention -->
-					<span contenteditable="true" data-bind="{htmlValue : description}"></span>
+					<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
 			    <!-- /ko -->
 			</div>
 		</a>
