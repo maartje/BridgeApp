@@ -39,7 +39,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
 
         var bidsystem = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
-        if (bidsystem.selectedConventions().length === 0) {
+        if (bidsystem.selectedConventions().length <= 1) {
             bidsystem.select(bidconvention);
         }
         console.log("TODO: open context menu for selected");

@@ -28,7 +28,7 @@ I can open a context-menu for a bid convention using the right mouse button.
 The context menu contains the following items:
 Select (Ctrl + T), New (Ctrl + N), Delete (Delete).
 The functionality is not yet implemented.
-* The bidconvention gets selected
+* The bidconvention gets selected in case 0 or 1 bids selected
 
 [User Story 6]
 I can delete a selected bid with the Context Menu item, or by using
