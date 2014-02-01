@@ -1,5 +1,13 @@
-.is-opponent-bid {
+.opponent-bid {
     background-color : yellow;
+}
+
+.selected {
+    background-color : orange;
+}
+
+.successor-of-selected{
+    background-color : blue;
 }
 
 .description {
@@ -10,6 +18,10 @@
 .bid {
     width : 30px;
     display : inline-block;
+}
+
+body {
+    background-color : gray;
 }
 
 span[contenteditable=true]:hover {

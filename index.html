@@ -19,7 +19,7 @@
 	<li data-bind="css: jstreeStyle">
 		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
 		<a href="#">
-			<div data-bind="css : $root.isOpponentBid($data)? 'is-opponent-bid' : ''"> 
+			<div class="bidconvention" data-bind="css : $root.bidConventionStyle($data)"> 
 				<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
 				<!-- ko with: convention -->
 					<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>

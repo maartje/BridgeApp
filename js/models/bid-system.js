@@ -49,6 +49,19 @@ define(function(require, exports, module) {
 	BidSystem.prototype = function(){
 
 		// methods that query the data structure for presentation purpose
+		var bidConventionStyle = function(bidconvention){
+		    var cssStyle = "";
+		    if (this.isOpponentBid.call(this, bidconvention)) {
+		        cssStyle += "opponent-bid ";
+		    }
+		    if (this.isSelected.call(this, bidconvention)) {
+		        cssStyle += "selected";
+		    }
+		    if (this.isSuccessorOfSelected.call(this, bidconvention)) {
+		        cssStyle += "successor-of-selected";
+		    }
+		    return cssStyle;
+		};
 
 		var isOpponentBid = function(bidconvention){
 		    var isOpponentRoot = bidconvention.getRoot() === this.bidRootOpponent;
@@ -56,6 +69,16 @@ define(function(require, exports, module) {
 		};
 
 		// methods that check or manipulate the collection of selected bids
+		
+		var isSuccessorOfSelected = function(bidconvention){
+		    if(bidconvention.isRoot()){
+		        return false;
+		    }
+		    if(this.isSelected.call(this, bidconvention.parent)){
+		        return true;
+		    }
+			return this.isSuccessorOfSelected.call(this, bidconvention.parent);
+		};
 
 		var isSelected = function(bidconvention){
 			return this.selectedConventions.indexOf(bidconvention) >= 0;
@@ -177,7 +200,6 @@ define(function(require, exports, module) {
 		};
 		
 		var saveToLocalStorage = function() {
-		    console.log("saved!", this);
 	        localStorageModule.save(this.id, this);
 		}
 
@@ -199,7 +221,9 @@ define(function(require, exports, module) {
 			validatePaste : validatePaste,
 			createNew : createNew,
 			deleteSelection : deleteSelection,
-			isOpponentBid : isOpponentBid
+			isOpponentBid : isOpponentBid,
+			bidConventionStyle : bidConventionStyle,
+			isSuccessorOfSelected : isSuccessorOfSelected
 		};
 	}();
 
