@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/style.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/main.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
@@ -19,7 +20,7 @@
 	<li data-bind="css: jstreeStyle">
 		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
 		<a href="#">
-			<div class="bidconvention" data-bind="css : $root.bidConventionStyle($data)"> 
+			<div class="bidconvention context" data-bind="css : $root.bidConventionStyle($data)"> 
 				<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
 				<!-- ko with: convention -->
 					<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
@@ -29,6 +30,15 @@
 		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 	</li>
 </script>
+
+
+
+<!--  Context menu -->
+<ul id="menu" class="jeegoocontext cm_blue">
+	<li>Select (Ctrl + T)</li>
+	<li>New (Ctrl + N)</li>
+	<li>Delete (Delete)</li>
+</ul>
 
 </body>
 </html> 

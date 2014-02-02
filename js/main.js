@@ -21,11 +21,14 @@ require.config({
       },
       'knockout-mapping': {
           deps: ['knockout']
+      },
+      "libs/jquery.jeegoocontext" : {
+          deps: ['jquery']
       }
   }
 });
  
-require(['require', 'knockout', 'models/bid-system', 'storage/default-data', 'jquery'], 
+require(['require', 'knockout', 'models/bid-system', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"], 
 function(require, ko, bidSystemModule, defaultDataModule, $){
     //localStorage.clear();
     var bidSystemId = "maartje_wim";
@@ -37,4 +40,7 @@ function(require, ko, bidSystemModule, defaultDataModule, $){
         bidSystem = bidSystemModule.load(bidSystemId);
     }
     ko.applyBindings(bidSystem);
+    
+    $('.context').jeegoocontext('menu');
+
 });

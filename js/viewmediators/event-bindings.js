@@ -19,7 +19,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
     });
 
     //click: select a bid convention
-    $(document).on('click', '.bidconvention', function(event) {
+    $(document).on('mousedown', '.bidconvention', function(event) {
         ko.contextFor(this).$root.select(ko.contextFor(this).$data);
         console.log("TODO: shift, ctrl, toggleIsSelected/addToSelection/setSelection");
         event.stopPropagation();
@@ -28,7 +28,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
     });
 
     //click: deselect a bid convention
-    $(document).on('click', 'body', function(event) {
+    $(document).on('mousedown', 'body', function(event) {
         console.log(this);
         ko.contextFor(this).$root.clearSelection();
     });
