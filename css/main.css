@@ -33,3 +33,7 @@ span[contenteditable=true]:hover {
     min-height: 1em;
 }
 
+.cm-shortcut {
+    float:right;
+    position : relative;
+}
