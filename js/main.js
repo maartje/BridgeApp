@@ -42,5 +42,5 @@ function(require, ko, bidSystemModule, defaultDataModule, $){
     ko.applyBindings(bidSystem);
     
     $('.context').jeegoocontext('menu');
-
+    
 });

@@ -10,12 +10,32 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
 
     //blur: save 'description' of bid conventions
     $(document).on('keyup', '.description', function(event) {
+        event.stopPropagation();
         var keyCode = event.keyCode || event.which;
         if (keyCode === moduleUI.keycodes.ENTER) {
-            event.stopPropagation();
             event.preventDefault();
             $(event.target).blur();
         }
+    });
+
+    $(document).on('keyup', 'body', function(event) {
+        var keyCode = event.keyCode || event.which;
+        if (keyCode === moduleUI.keycodes.DELETE) {
+            event.stopPropagation();
+            event.preventDefault();
+            var bidsystem = ko.contextFor(this).$root;
+            bidsystem.deleteSelection();
+            bidsystem.saveToLocalStorage();
+            console.log("TODO: show dialog for deleting selected bidconventions");
+        }
+    });
+    
+    $(".cm-delete").click(function(){
+        var bidsystem = ko.contextFor(this).$root;
+        bidsystem.deleteSelection();
+        bidsystem.saveToLocalStorage();
+        console.log("TODO: show dialog for deleting selected bidconventions");
+        //TODO: delete selected, or better: show DELETE dialog
     });
 
     //click: select a bid convention
@@ -42,7 +62,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
         if (bidsystem.selectedConventions().length <= 1) {
             bidsystem.select(bidconvention);
         }
-        console.log("TODO: open context menu for selected");
+        //console.log("TODO: open context menu for selected");
         return false;
     });
 });
