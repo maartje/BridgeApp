@@ -7,38 +7,48 @@
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/main.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
+<link type="text/css" rel="stylesheet" href="css/blitzer/jquery-ui-1.10.3.blitzer.css" />
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
-	<div class="jstree jstree-0 jstree-focused jstree-classic">
-		<!-- ko with: selectedRoot -->
-			<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
-	    <!-- /ko -->
+	<div id="tree-view">
+	
+		<!-- Renders bidsystem tree view  -->
+		<div class="jstree jstree-0 jstree-focused jstree-classic">
+			<!-- ko with: selectedRoot -->
+				<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
+		    <!-- /ko -->
+		</div>
+		
+		<!-- Template that recursively renders the bidconvention tree structure-->
+		<script id="bid-node-templ" type="text/html">
+			<li data-bind="css: jstreeStyle">
+				<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
+				<a href="#">
+					<div class="bidconvention context" data-bind="css : $root.bidConventionStyle($data)"> 
+						<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
+						<!-- ko with: convention -->
+							<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
+					    <!-- /ko -->
+					</div>
+				</a>
+				<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
+			</li>
+		</script>
+		
+		<!--  Context menu for bidconventions in the tree view-->
+		<ul id="menu" class="jeegoocontext cm_blue">
+			<li>Select <span class="cm-shortcut">(Ctrl + T)</span></li>
+			<li>New <span class="cm-shortcut">(Ctrl + N)</span></li>
+			<li class="cm-delete">Delete <span class="cm-shortcut">(Delete)</span></li>
+		</ul>
+		
+		<!--  Dialog to confirm deleting bidconventions -->
+		<div id="dialog-confirm-delete-bid-convention" title="Delete bid convention?" class="ui-helper-hidden">
+		  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+		    Are you sure to delete the selected bid convention and all it's child conventions?
+		  </p>
+		</div>
 	</div>
-
-<script id="bid-node-templ" type="text/html">
-	<li data-bind="css: jstreeStyle">
-		<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
-		<a href="#">
-			<div class="bidconvention context" data-bind="css : $root.bidConventionStyle($data)"> 
-				<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
-				<!-- ko with: convention -->
-					<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
-			    <!-- /ko -->
-			</div>
-		</a>
-		<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
-	</li>
-</script>
-
-
-
-<!--  Context menu -->
-<ul id="menu" class="jeegoocontext cm_blue">
-	<li>Select <span class="cm-shortcut">(Ctrl + T)</span></li>
-	<li>New <span class="cm-shortcut">(Ctrl + N)</span></li>
-	<li class="cm-delete">Delete <span class="cm-shortcut">(Delete)</span></li>
-</ul>
-
 </body>
 </html> 
