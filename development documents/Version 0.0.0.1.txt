@@ -56,3 +56,12 @@ I can select the root bid to set the root as the root bidsequence.
 
 [User Story 9]
 I can select bids from the root bid sequence.
+
+[User Story 11]
+Unit tests for version 0.0.0.1
+
+[User Story 12]
+UI tests for version 0.0.0.1
+
+[User Story 13]
+Check all event.stopPropagation, event.preventDefault and return false actions and reason if they are needed.

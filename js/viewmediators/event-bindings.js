@@ -5,7 +5,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
 
     //blur: save 'description' of bid conventions
     $(document).on('blur', '.description', function(event) {
-        ko.contextFor(this).$root.saveToLocalStorage();
+        var app = ko.contextFor(this).$root;
+        app.bidsystem.saveToLocalStorage();
     });
 
     //enter: save 'description' of bid conventions
@@ -22,7 +23,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         var keyCode = event.keyCode || event.which;
         if (keyCode === moduleUI.keycodes.DELETE && $(".selected:last").length > 0) {
             var elem = $(".selected:last").get(0);
-            deleteBidConventions(ko.contextFor(this).$root, elem);
+            var app = ko.contextFor(this).$root;
+            deleteBidConventions(app, elem);
             event.stopPropagation();
             event.preventDefault();
         }
@@ -30,10 +32,11 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     
     $(".cm-delete").click(function(){
         event.stopPropagation();
-        deleteBidConventions(ko.contextFor(this).$root, this);
+        var app = ko.contextFor(this).$root;
+        deleteBidConventions(app, this);
     });
     
-    function deleteBidConventions(bidsystem, elem) {
+    function deleteBidConventions(app, elem) {
         $("#dialog-confirm-delete-bid-convention").dialog({
             position: {
                 my: "left top",
@@ -55,8 +58,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
             buttons: {
                 "Ok": function() {
                     $(this).dialog("close");
-                    bidsystem.deleteSelection();
-                    bidsystem.saveToLocalStorage();
+                    app.deleteSelection();
+                    app.bidsystem.saveToLocalStorage();
                     console.log("ok");
                 },
                 "Cancel": function() {
@@ -69,11 +72,12 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     
     //click: select a bid convention
     $(document).on('mousedown', '.bidconvention', function(event) {
-        ko.contextFor(this).$root.select(ko.contextFor(this).$data);
+        var app = ko.contextFor(this).$root;
+        var bidconvention = ko.contextFor(this).$data;
+        app.select(bidconvention);
         console.log("TODO: shift, ctrl, toggleIsSelected/addToSelection/setSelection");
         event.stopPropagation();
         event.preventDefault();
-        return false;
     });
 
     // $("#tree-view").on('mouseup', function(event) {
@@ -82,19 +86,19 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
 
     // //click: deselect a bid convention
     // $("body").on('mouseup', function(event) {
-    //     ko.contextFor(this).$root.clearSelection();
+    //     var app = ko.contextFor(this).$root;
+    //     app.clearSelection();
     // });
 
     $(document).on('contextmenu', '.bidconvention', function(event) {
         event.stopPropagation();
         event.preventDefault();
-
-        var bidsystem = ko.contextFor(this).$root;
+        var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
-        if (bidsystem.selectedConventions().length <= 1) {
-            bidsystem.select(bidconvention);
+        if (app.selectedConventions().length <= 1) {
+            app.select(bidconvention);
         }
-        //console.log("TODO: open context menu for selected");
-        return false;
+        event.stopPropagation();
+        event.preventDefault();
     });
 });
