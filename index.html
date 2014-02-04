@@ -22,8 +22,8 @@
 		
 		<!-- Template that recursively renders the bidconvention tree structure-->
 		<script id="bid-node-templ" type="text/html">
-			<li data-bind="css: jstreeStyle">
-				<ins class="jstree-icon" data-bind="click: toggleOpenClose">&nbsp;</ins>
+			<li data-bind="css: $root.jstreeStyle($data)">
+				<ins class="jstree-icon">&nbsp;</ins>
 				<a href="#">
 					<div class="bidconvention context" data-bind="css : $root.bidConventionStyle($data)"> 
 						<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>

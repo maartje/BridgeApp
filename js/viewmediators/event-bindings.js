@@ -3,6 +3,12 @@
  */
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(ko, $, moduleUI) {
 
+    $(document).on('click', '.jstree-icon', function(event) {
+        var app = ko.contextFor(this).$root;
+        var bidconvention = ko.contextFor(this).$data;
+        app.toggleOpenClose(bidconvention);
+    });
+
     //blur: save 'description' of bid conventions
     $(document).on('blur', '.description', function(event) {
         var app = ko.contextFor(this).$root;

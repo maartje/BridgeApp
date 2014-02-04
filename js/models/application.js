@@ -1,19 +1,41 @@
 define(function(require, exports, module) {
     var bidSystemModule = require("models/bid-system");
     var ko = require("knockout");
-
+    require("viewmediators/event-bindings");
+	require("viewmediators/binding-handlers");
 
     var Application = module.exports.Application = function(data) {
         this.bidsystem = new bidSystemModule.BidSystem(data.bidsystem || {});
         this.selectedRoot = data.isDealer === false ? ko.observable(this.bidsystem.bidRootOpponent) : ko.observable(this.bidsystem.bidRoot);
         this.selectedConventions = typeof data.selectedConventions != 'undefined' ? ko.observableArray(data.selectedConventions) : ko.observableArray([]);
         this.clippedConventions = typeof data.clippedConventions != 'undefined' ? ko.observableArray(data.clippedConventions) : ko.observableArray([]);
+        this.openedConventions = typeof data.openedConventions != 'undefined' ? ko.observableArray(data.openedConventions) : ko.observableArray([]);
         this.isCutAction = false;
     };
 
     Application.prototype = function() {
 
         // methods that query the data structure for presentation (or other) purpose
+        
+        var jstreeStyle = function(bidconvention) {
+            console.log("jstree-style");
+			var style = "";
+			if(bidconvention.children().length === 0){
+				style =  "jstree-leaf";
+			}
+			else if(isOpen.call(this, bidconvention)){
+				style = "jstree-open";
+			}
+			else {
+				style = "jstree-closed";
+			}
+			var bcParent = bidconvention.parent; 
+			if(!bcParent || bcParent.children()[bcParent.children().length - 1] === this){
+				style = style + " jstree-last";
+			}
+			return style;
+	    };		
+
 
         var bidConventionStyle = function(bidconvention) {
             var cssStyle = "";
@@ -48,6 +70,13 @@ define(function(require, exports, module) {
             return this.selectedConventions.indexOf(bidconvention) >= 0;
         };
 
+        var isOpen = function(bidconvention) {
+            return this.openedConventions.indexOf(bidconvention) >= 0;
+        };
+
+        var isClipped = function(bidconvention) {
+            return this.clippedConventions.indexOf(bidconvention) >= 0;
+        };
 
         // methods that manipulate the collection of selected bids
 
@@ -143,6 +172,14 @@ define(function(require, exports, module) {
         };
 
         //methods that affect the view without affecting the data
+		var toggleOpenClose = function(bidconvention){
+            if (this.openedConventions.indexOf(bidconvention) === -1) {
+                this.openedConventions.push(bidconvention);
+            }
+            else {
+                this.openedConventions.remove(bidconvention);
+            }
+		};
 
         var setSelectedRoot = function() {
             //TODO condition: exactly 1 bc in selection
@@ -187,10 +224,12 @@ define(function(require, exports, module) {
             createNew: createNew,
             deleteSelection: deleteSelection,
             isOpponentBid: isOpponentBid,
+            jstreeStyle : jstreeStyle,
             bidConventionStyle: bidConventionStyle,
             isSuccessorOfSelected: isSuccessorOfSelected,
             saveToLocalStorage: saveToLocalStorage,
-            loadFromLocalStorage: loadFromLocalStorage
+            loadFromLocalStorage: loadFromLocalStorage,
+            toggleOpenClose : toggleOpenClose
         };
     }();
 
