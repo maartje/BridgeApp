@@ -3,10 +3,34 @@
  */
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(ko, $, moduleUI) {
 
+    $(document).on('blur', '.bidpicker', function(event) {
+        var app = ko.contextFor(this).$root;
+        app.bidpicker.visible(false);
+    });
+
+    $(document).on('click', '.bidbutton', function(event) {
+        var app = ko.contextFor(this).$root;
+        var bid = ko.contextFor(this).$data;
+        //app.createNew(bid);
+        app.bidpicker.setSelectedBid(bid);
+        app.bidsystem.saveToLocalStorage();        
+        app.bidpicker.visible(false);
+    });
+
     $(document).on('click', '.jstree-icon', function(event) {
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         app.toggleOpenClose(bidconvention);
+    });
+
+    $(document).on('click', '.bid', function(e) {
+        var app = ko.contextFor(this).$root;
+        var bc = ko.contextFor(this).$data;
+        app.bidpicker.preselectedBid(bc.bid());
+        app.bidpicker.bidConventions([bc]);
+        app.bidpicker.show(e.pageX, e.pageY);
+        //TODO: show bidpicker at click location
+        //app.bidpicker.show(x,y) => set x position, y position, isVisible
     });
 
     //blur: save 'description' of bid conventions
@@ -66,11 +90,9 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
                     $(this).dialog("close");
                     app.deleteSelection();
                     app.bidsystem.saveToLocalStorage();
-                    console.log("ok");
                 },
                 "Cancel": function() {
                     $(this).dialog("close");
-                    console.log("cancel");
                 }
             }
         });
@@ -104,7 +126,5 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         if (app.selectedConventions().length <= 1) {
             app.select(bidconvention);
         }
-        event.stopPropagation();
-        event.preventDefault();
     });
 });

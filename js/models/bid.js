@@ -19,6 +19,9 @@ define(function(require, exports, module) {
 	var Bid = {
 		succeeds: function(bid) {
 			return this.ordering > bid.ordering;
+		},
+		equals: function(bid) {
+			return this.ordering === bid.ordering;
 		}
 	};
 
@@ -29,6 +32,7 @@ define(function(require, exports, module) {
 	};	
 	
 	Pass.prototype.succeeds = Bid.succeeds;
+	Pass.prototype.equals = Bid.equals;
 
 	Pass.prototype.htmlString = function(){
 		return "pass";
@@ -41,6 +45,7 @@ define(function(require, exports, module) {
 	};	
 	
 	Doublet.prototype.succeeds = Bid.succeeds;
+	Doublet.prototype.equals = Bid.equals;
 
 	Doublet.prototype.htmlString = function(){
 		return "dbl";
@@ -53,6 +58,7 @@ define(function(require, exports, module) {
 	};	
 
 	Redoublet.prototype.succeeds = Bid.succeeds;
+	Redoublet.prototype.equals = Bid.equals;
 
 	Redoublet.prototype.htmlString = function(){
 		return "redbl";
@@ -102,6 +108,8 @@ define(function(require, exports, module) {
 				break;
 			}
 		};
+		
+		var equals = Bid.equals;
 
 		var eq = function(bidInSuit){
 			return this.level === bidInSuit.level && this.suit === bidInSuit.suit;
@@ -121,6 +129,7 @@ define(function(require, exports, module) {
 			gt : gt,
 			lt : lt,
 			eq : eq,
+			equals : equals,
 			htmlString : htmlString
 		};
 	}();	

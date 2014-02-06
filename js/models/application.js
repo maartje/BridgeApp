@@ -1,5 +1,6 @@
 define(function(require, exports, module) {
     var bidSystemModule = require("models/bid-system");
+    var bidPickerModule = require("models/bid-picker");
     var ko = require("knockout");
     require("viewmediators/event-bindings");
 	require("viewmediators/binding-handlers");
@@ -11,6 +12,7 @@ define(function(require, exports, module) {
         this.clippedConventions = typeof data.clippedConventions != 'undefined' ? ko.observableArray(data.clippedConventions) : ko.observableArray([]);
         this.openedConventions = typeof data.openedConventions != 'undefined' ? ko.observableArray(data.openedConventions) : ko.observableArray([]);
         this.isCutAction = false;
+        this.bidpicker = new bidPickerModule.BidPicker();
     };
 
     Application.prototype = function() {
@@ -18,7 +20,6 @@ define(function(require, exports, module) {
         // methods that query the data structure for presentation (or other) purpose
         
         var jstreeStyle = function(bidconvention) {
-            console.log("jstree-style");
 			var style = "";
 			if(bidconvention.children().length === 0){
 				style =  "jstree-leaf";
@@ -30,7 +31,7 @@ define(function(require, exports, module) {
 				style = "jstree-closed";
 			}
 			var bcParent = bidconvention.parent; 
-			if(!bcParent || bcParent.children()[bcParent.children().length - 1] === this){
+			if(!bcParent || bcParent.children()[bcParent.children().length - 1] === bidconvention){
 				style = style + " jstree-last";
 			}
 			return style;
@@ -90,8 +91,12 @@ define(function(require, exports, module) {
         };
 
         var addToSelection = function(bidconvention) {
-            if (this.selectedConventions.indexOf(bidconvention) === -1) {
-                this.selectedConventions.push(bidconvention);
+            addToCollection(bidconvention, this.selectedConventions);
+        };
+
+        var addToCollection = function(bidconvention, bcCollection) {
+            if (bcCollection.indexOf(bidconvention) === -1) {
+                bcCollection.push(bidconvention);
             }
         };
 
@@ -159,16 +164,15 @@ define(function(require, exports, module) {
             clearSelection.call(this);
         };
 
-        var createNew = function() {
-            //TODO: no bidding ended in selection
+        var createNew = function(bid) {
+            //TODO: throw exception when bid is not valid
+            var that = this;
+            var createdBidConventions = [];
             ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
-                var passData = {
-                    bid: {
-                        type: "PASS"
-                    }
-                };
-                bc.createChild(passData); //TODO: edit-mode
+                createdBidConventions.push(bc.createChild({bid : bid}));
+                addToCollection(bc, that.openedConventions);
             });
+            this.selectedConventions(createdBidConventions);
         };
 
         //methods that affect the view without affecting the data

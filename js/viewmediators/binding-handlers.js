@@ -16,7 +16,6 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
 	            var modelValue = valueAccessor();
 	            var elementHTML = $(element).text();
 	            modelValue(elementHTML);
-	            //console.log(elementHTML);
 	        });
 	        
 	        $(element).on("blur", function() {

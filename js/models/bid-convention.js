@@ -52,6 +52,33 @@ define(function(require, exports, module) {
         };
 
         //methods for validation
+        
+        var collectInvalidSequencesForReplacement = function(newBid, level){
+            level = level || 0;
+            if (!isValidSequenceForReplacement.call(this, newBid, level)){
+                return [this];
+            } 
+            var result = [];
+            for (var i = 0; i < this.children().length; i++) {
+                var child = this.children()[i];
+                var invalidSequencesForChild = collectInvalidSequencesForReplacement.call(child, newBid, level + 1);
+                result.push.apply(result, invalidSequencesForChild);
+            }
+            return result;
+        };
+
+        var isValidSequenceForReplacement = function(newBid, level){
+            if (level >= 4) {
+                return true; //replacement more than a bidround back can not invalidate the current bid
+            }
+            //[b4, b3, b2, b1, b0]
+            //[1c, 1s, pass, pass, dbl], 1s => pass invalidates dbl
+            var bidSuffix = getSuffixBids.call(this, 5);
+            //TODO root
+            bidSuffix[bidSuffix.length - 1 - level] = newBid;
+            var lastBid = bidSuffix.pop();
+            return verifyNextBid.call(this, bidSuffix, lastBid);
+        };
 
         var collectInvalidBids = function() {
             if (!isRoot.call(this) && !isValidChildBid.call(this.parent, this.bid())) {
@@ -71,7 +98,7 @@ define(function(require, exports, module) {
 
         //helper function that returns true iff 'bidSuffix' verifies 'nextBid'.
         //That is: if [..., bidSuffix] is valid, then [..., bidSuffix, nextBid] is also valid.
-        function verifyNextBid(bidSuffix, nextBid) {
+        var verifyNextBid = function(bidSuffix, nextBid) {
 
             var checkSuffixBidTypes = function(expectedSuffixTypes, actualTypes){
                 var _checkSuffixBidTypes = function(expectedSuffixTypes, actualTypes){
@@ -123,20 +150,21 @@ define(function(require, exports, module) {
                 (checkSuffixBidTypes(["SUIT"], bidSuffixTypes) && (!bidLevelSuffix || bidLevelSuffix.lt(nextBid)));
         };
 
+        var getSuffixBids = function(maxLength) {
+            if (maxLength === 0) {
+                return [];
+            }
+            if (isRoot.call(this)) {
+                return [];
+            }
+            var suffixBids = getSuffixBids.call(this.parent, maxLength - 1);
+            suffixBids[suffixBids.length] = this.bid();
+            return suffixBids;
+        };
+
         var isValidChildBid = function(bidData) {
-            var getSuffixBids = function(maxLength) {
-                if (maxLength === 0) {
-                    return [];
-                }
-                if (isRoot.call(this)) {
-                    return [];
-                }
-                var suffixBids = getSuffixBids.call(this.parent, maxLength - 1);
-                suffixBids[suffixBids.length] = this.bid();
-                return suffixBids;
-            };
             var bidSuffix = getSuffixBids.call(this, 4);
-            return verifyNextBid(bidSuffix, bidData);
+            return verifyNextBid.call(this, bidSuffix, bidData);
         };
 
         //methods that modify the tree structure
@@ -215,7 +243,8 @@ define(function(require, exports, module) {
             getRoot: getRoot,
             isRoot: isRoot,
             isOpponentBid: isOpponentBid,
-            updateBid : updateBid
+            updateBid : updateBid,
+            collectInvalidSequencesForReplacement : collectInvalidSequencesForReplacement
         };
     }();
 

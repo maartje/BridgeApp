@@ -24,7 +24,7 @@ body {
     background-color : gray;
 }
 
-span[contenteditable=true]:hover {
+span[contenteditable=true]:hover, .bid:hover {
     cursor: text;
 	border-width: 1px;
 	border-style: solid;
@@ -36,4 +36,11 @@ span[contenteditable=true]:hover {
 .cm-shortcut {
     float:right;
     position : relative;
+}
+
+.bidpicker {
+    position: absolute; 
+    z-index: 1; 
+    display: block; 
+    background-color: white;
 }

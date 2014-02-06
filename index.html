@@ -14,7 +14,7 @@
 	<div id="tree-view">
 	
 		<!-- Renders bidsystem tree view  -->
-		<div class="jstree jstree-0 jstree-focused jstree-classic">
+		<div class="jstree jstree-0 jstree-focused jstree-classic context">
 			<!-- ko with: selectedRoot -->
 				<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
 		    <!-- /ko -->
@@ -25,8 +25,8 @@
 			<li data-bind="css: $root.jstreeStyle($data)">
 				<ins class="jstree-icon">&nbsp;</ins>
 				<a href="#">
-					<div class="bidconvention context" data-bind="css : $root.bidConventionStyle($data)"> 
-						<span class="bid" data-bind="html : bid? bid.htmlString() : ''"></span>
+					<div class="bidconvention" data-bind="css : $root.bidConventionStyle($data)"> 
+						<span class="bid" data-bind="html : bid()? bid().htmlString() : ''"></span>
 						<!-- ko with: convention -->
 							<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
 					    <!-- /ko -->
@@ -50,5 +50,18 @@
 		  </p>
 		</div>
 	</div>
+
+	<!-- bidpicker -->
+	<!-- ko with: bidpicker -->
+		<div class="bidpicker" data-bind="{if: visible, style: { left: left() + 'px', top: top() + 'px'}}" >
+			<div data-bind="foreach: suitBids">
+				<a class="bidbutton" data-bind="{html: htmlString(), css : $parent.cssStyle($data)}"></a>
+			</div>
+			<div data-bind="foreach: specialBids">
+				<a class="bidbutton" data-bind="{html: htmlString(), css : $parent.cssStyle($data)}"></a>
+			</div>
+		</div>
+	<!-- /ko -->
+
 </body>
 </html> 

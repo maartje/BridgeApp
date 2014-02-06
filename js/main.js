@@ -29,7 +29,6 @@ require.config({
 });
 
 require(['require', 'knockout', 'models/application', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"],
-
 function(require, ko, appModule, defaultDataModule, $) {
     var bidSystemId = "maartje_wim";
     //localStorage.clear();
