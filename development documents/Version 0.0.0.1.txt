@@ -45,11 +45,10 @@ I can replace an existing bid using a bidpicker.
 # css style gives a reasonable picker view
 
 [User Story 8]
-I can add a new bid via the context menu, or via the shortcut Ctrl + N.
-A bid-picker appears.
-Only the valid bids are enabled, the pass bid is pre-selected.
+I can add a new bid (child of selected) via the context menu, or via the shortcut Ctrl + N.
+A bid-picker appears, only the valid bids are enabled, the pass bid is pre-selected(?).
 In the bidpicker I can select the bid using a mouse click,
-or by using the arrows followed by the enter button. 
+//TODO: or by using the arrows followed by the enter button. 
 After selecting a bid, the new child bid is added to the tree (viewmodel + local storage).
 Furthermore, the parent of the new child bid is open,
 and the new child bid is selected.

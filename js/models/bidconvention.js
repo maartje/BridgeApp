@@ -5,9 +5,6 @@ define(function(require, exports, module) {
 
     var Bidconvention = module.exports.Bidconvention = function(data) {
         data = data || {};
-        if (!data.parent && data.bid) {
-            throw 'A newly created bid system must contain a root node for which the bid is "undefined"';
-        }
         this.bid = ko.observable(data.bid ? bidModule.createBid(data.bid) : undefined);
         this.convention = new conventionModule.Convention(data.convention);
 

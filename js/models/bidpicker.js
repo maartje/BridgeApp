@@ -63,7 +63,7 @@ define(function(require, exports, module) {
         };
         
         var isCurrentBid = function(bid) {
-            return this.currentBid().equals(bid);
+            return this.currentBid() && this.currentBid().equals(bid);
         };
 
         var invalidatesSubsequentBidsequences = function(bid) {

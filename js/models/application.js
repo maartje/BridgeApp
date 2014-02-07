@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     var bidsystemModule = require("models/bidsystem");
     var bidpickerModule = require("models/bidpicker");
+    var bidconventionModule = require("models/bidconvention");
     var ko = require("knockout");
 	require("viewmediators/binding-handlers");
     require("viewmediators/treeview-eventbindings");
@@ -165,6 +166,18 @@ define(function(require, exports, module) {
             this.selectedConventions(createdBidConventions);
         };
 
+        var createNewDetachedChildConventions = function() {
+            var that = this;
+            var createdBidConventions = [];
+            ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
+                var newChild = new bidconventionModule.Bidconvention({parent : bc});
+                createdBidConventions.push(newChild);
+                addToCollection(bc, that.openedConventions); //TODO: only after bid button is clicked
+            });
+            this.selectedConventions(createdBidConventions); //TODO: only after bid button is clicked
+            return createdBidConventions;
+        };
+
 
         //methods that affect the view without affecting the data
         
@@ -231,6 +244,7 @@ define(function(require, exports, module) {
             pasteClippedToSelection: pasteClippedToSelection,
             deleteSelection: deleteSelection,
             addNewChildToSelection: addNewChildToSelection,
+            createNewDetachedChildConventions : createNewDetachedChildConventions,
             
             //methods for loading and saving data
             saveToLocalStorage: saveToLocalStorage,
