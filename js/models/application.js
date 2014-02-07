@@ -2,8 +2,10 @@ define(function(require, exports, module) {
     var bidsystemModule = require("models/bidsystem");
     var bidpickerModule = require("models/bidpicker");
     var ko = require("knockout");
-    require("viewmediators/event-bindings");
 	require("viewmediators/binding-handlers");
+    require("viewmediators/treeview-eventbindings");
+    require("viewmediators/context-menu-eventbindings");
+    require("viewmediators/bidpicker-eventbindings");
 
     var Application = module.exports.Application = function(data) {
         this.bidsystem = new bidsystemModule.Bidsystem(data.bidsystem || {});
