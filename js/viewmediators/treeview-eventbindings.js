@@ -15,8 +15,10 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         app.bidpicker.currentBid(bidconvention.bid());
         app.bidpicker.bidconventions([bidconvention]);
         app.bidpicker.show(e.pageX, e.pageY);
-        //TODO: show bidpicker at click location
-        //app.bidpicker.show(x,y) => set x position, y position, isVisible
+        $(document).one('click', function() {
+            app.bidpicker.hide();
+        });
+        event.stopPropagation();
     });
 
     //blur: save 'description' of bid conventions

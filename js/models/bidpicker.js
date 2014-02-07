@@ -95,6 +95,9 @@ define(function(require, exports, module) {
             this.visible(true);
         };
 
+        var hide = function() {
+            this.visible(false);
+        };
 
         var replaceBid = function(bid) {
             var that = this;
@@ -107,7 +110,9 @@ define(function(require, exports, module) {
         return {
             cssBidButton: cssBidButton,
             show: show,
-            replaceBid: replaceBid
+            hide : hide,
+            replaceBid: replaceBid,
+            isCurrentBid : isCurrentBid
         };
     }();
 

@@ -37,12 +37,12 @@ I am sure to delete the bid ... and all its subsequent biddings.
 * Delete is disabled for the root.
 
 [User Story 7]
-I can edit an existing bid using a bidpicker.
+I can replace an existing bid using a bidpicker.
 #- bidpicker becomes visible at the mouse location when bid is clicked
 #- bidbutton click replaces the old bid in model, model is saved to ls, bidpicker disappears, replaced bid still selected
 # bidpicker shows the current bid as preselected, valid replacement is checked, succeeding bids are checked
-//TODO bidpicker blur makes the bidpicker invisible 
-- css style gives a reasonable picker view
+# bidpicker 'blur' makes the bidpicker invisible 
+# css style gives a reasonable picker view
 
 [User Story 8]
 I can add a new bid via the context menu, or via the shortcut Ctrl + N.
