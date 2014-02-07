@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-	var createBid = module.exports.createBid = function (data) {
+	var createBid = module.exports.createBid = function(data) {
 		switch (data.type) {
 		case "PASS":
 			return new Pass();
@@ -12,10 +12,9 @@ define(function(require, exports, module) {
 			return new BidInSuit(data);
 		default:
 			throw "unvalid bid type: " + data.type;
-			break;
 		}
-	};	
-	
+	};
+
 	var Bid = {
 		succeeds: function(bid) {
 			return this.ordering > bid.ordering;
@@ -26,72 +25,72 @@ define(function(require, exports, module) {
 	};
 
 
-	var Pass = function () {
+	var Pass = function() {
 		this.type = "PASS";
 		this.ordering = 0;
-	};	
-	
+	};
+
 	Pass.prototype.succeeds = Bid.succeeds;
+
 	Pass.prototype.equals = Bid.equals;
 
-	Pass.prototype.htmlString = function(){
+	Pass.prototype.htmlString = function() {
 		return "pass";
 	};
 
-	
-	var Doublet = function () {
+
+	var Doublet = function() {
 		this.type = "DOUBLET";
 		this.ordering = 1;
-	};	
-	
+	};
+
 	Doublet.prototype.succeeds = Bid.succeeds;
+
 	Doublet.prototype.equals = Bid.equals;
 
-	Doublet.prototype.htmlString = function(){
+	Doublet.prototype.htmlString = function() {
 		return "dbl";
 	};
 
 
-	var Redoublet = function () {
+	var Redoublet = function() {
 		this.type = "REDOUBLET";
 		this.ordering = 2;
-	};	
+	};
 
 	Redoublet.prototype.succeeds = Bid.succeeds;
+
 	Redoublet.prototype.equals = Bid.equals;
 
-	Redoublet.prototype.htmlString = function(){
+	Redoublet.prototype.htmlString = function() {
 		return "redbl";
 	};
 
 	var suitOrdering = {
-		"CLUBS" : 1,
-		"DIAMONDS" : 2,
-		"HEARTS" : 3,
-		"SPADES" : 4,
-		"NOTRUMP" : 5
+		"CLUBS": 1,
+		"DIAMONDS": 2,
+		"HEARTS": 3,
+		"SPADES": 4,
+		"NOTRUMP": 5
 	};
 
-	var BidInSuit = function (data) {
+	var BidInSuit = function(data) {
 		this.type = "SUIT";
-
 		this.level = data.level;
 		this.suit = data.suit;
-		if(this.level < 1 || 7 < this.level || typeof this.level !== 'number' || this.level % 1 !== 0){
+		if (typeof this.level !== 'number' || this.level % 1 !== 0 || this.level < 1 || 7 < this.level) {
 			throw "invalid bid level: " + this.level;
 		}
 		var regex = new RegExp("^(CLUBS|DIAMONDS|HEARTS|SPADES|NOTRUMP)$");
-		if(!regex.test(this.suit)){
-			throw "invalid suit: " + this.suit;			
+		if (!regex.test(this.suit)) {
+			throw "invalid suit: " + this.suit;
 		}
-		
-		this.ordering = 2 + suitOrdering[this.suit] + (this.level - 1)*5;
+		this.ordering = 2 + suitOrdering[this.suit] + (this.level - 1) * 5;
+	};
 
-	};	
+	BidInSuit.prototype = function() {
 
-	BidInSuit.prototype = function(){
-
-		var htmlString = function(){
+		var htmlString = function() {
 			switch (this.suit) {
 			case "CLUBS":
 				return this.level + "<span>&clubs;</span>";
@@ -104,39 +103,34 @@ define(function(require, exports, module) {
 			case "NOTRUMP":
 				return this.level + "<span>nt</span>";
 			default:
-				throw "invalid suit: " + this.suit;			
-				break;
+				throw "invalid suit: " + this.suit;
 			}
 		};
-		
-		var equals = Bid.equals;
 
-		var eq = function(bidInSuit){
+		var eq = function(bidInSuit) {
 			return this.level === bidInSuit.level && this.suit === bidInSuit.suit;
 		};
 
-		var gt = function(bidInSuit){
-			return this.level > bidInSuit.level ||
-			       (this.level === bidInSuit.level && suitOrdering[this.suit] > suitOrdering[bidInSuit.suit]);
+		var gt = function(bidInSuit) {
+			return this.level > bidInSuit.level || (this.level === bidInSuit.level && suitOrdering[this.suit] > suitOrdering[bidInSuit.suit]);
 		};
-		
-		var lt = function(bidInSuit){
+
+		var lt = function(bidInSuit) {
 			return !gt.call(this, bidInSuit) && !eq.call(this, bidInSuit);
 		};
-		
+
 		//public members		
 		return {
-			gt : gt,
-			lt : lt,
-			eq : eq,
-			equals : equals,
-			htmlString : htmlString
+			gt: gt,
+			lt: lt,
+			eq: eq,
+			htmlString: htmlString
 		};
-	}();	
-	
+	}();
+
 	//TODO: how to inherit from Bid?!
 	BidInSuit.prototype.succeeds = Bid.succeeds;
-	
+	BidInSuit.prototype.equals = Bid.equals;
+
 	return module.exports;
 });
-

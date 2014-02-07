@@ -1,25 +1,25 @@
 define(function(require, exports, module) {
-    var bidSystemModule = require("models/bid-system");
-    var bidPickerModule = require("models/bid-picker");
+    var bidsystemModule = require("models/bidsystem");
+    var bidpickerModule = require("models/bidpicker");
     var ko = require("knockout");
     require("viewmediators/event-bindings");
 	require("viewmediators/binding-handlers");
 
     var Application = module.exports.Application = function(data) {
-        this.bidsystem = new bidSystemModule.BidSystem(data.bidsystem || {});
+        this.bidsystem = new bidsystemModule.Bidsystem(data.bidsystem || {});
         this.selectedRoot = data.isDealer === false ? ko.observable(this.bidsystem.bidRootOpponent) : ko.observable(this.bidsystem.bidRoot);
         this.selectedConventions = typeof data.selectedConventions != 'undefined' ? ko.observableArray(data.selectedConventions) : ko.observableArray([]);
         this.clippedConventions = typeof data.clippedConventions != 'undefined' ? ko.observableArray(data.clippedConventions) : ko.observableArray([]);
         this.openedConventions = typeof data.openedConventions != 'undefined' ? ko.observableArray(data.openedConventions) : ko.observableArray([]);
         this.isCutAction = false;
-        this.bidpicker = new bidPickerModule.BidPicker();
+        this.bidpicker = new bidpickerModule.Bidpicker();
     };
 
     Application.prototype = function() {
 
         // methods that query the data structure for presentation (or other) purpose
         
-        var jstreeStyle = function(bidconvention) {
+        var cssTreeNode = function(bidconvention) {
 			var style = "";
 			if(bidconvention.children().length === 0){
 				style =  "jstree-leaf";
@@ -35,49 +35,51 @@ define(function(require, exports, module) {
 				style = style + " jstree-last";
 			}
 			return style;
-	    };		
+        };		
 
 
-        var bidConventionStyle = function(bidconvention) {
+        var cssBidconvention = function(bidconvention) {
             var cssStyle = "";
-            if (this.isOpponentBid.call(this, bidconvention)) {
+            if (isOpponentBid.call(this, bidconvention)) {
                 cssStyle += "opponent-bid ";
             }
-            if (this.isSelected.call(this, bidconvention)) {
+            if (isSelected.call(this, bidconvention)) {
                 cssStyle += "selected";
             }
-            if (this.isSuccessorOfSelected.call(this, bidconvention)) {
+            if (isSuccessorOfSelected.call(this, bidconvention)) {
                 cssStyle += "successor-of-selected";
             }
             return cssStyle;
         };
 
-        var isOpponentBid = function(bidconvention) {
-            var isOpponentRoot = bidconvention.getRoot() === this.bidRootOpponent;
-            return bidconvention.isOpponentBid(isOpponentRoot);
+         function isOpponentBid(bidconvention) {
+            var isEven = bidconvention.length() % 2 === 0;
+            var isOpponentRoot = bidconvention.getRoot() === this.bidsystem.bidRootOpponent;
+            return isEven != isOpponentRoot;
         };
 
-        var isSuccessorOfSelected = function(bidconvention) {
-            if (bidconvention.isRoot()) {
-                return false;
-            }
-            if (this.isSelected.call(this, bidconvention.parent)) {
-                return true;
-            }
-            return this.isSuccessorOfSelected.call(this, bidconvention.parent);
-        };
-
-        var isSelected = function(bidconvention) {
+        function isSelected(bidconvention) {
             return this.selectedConventions.indexOf(bidconvention) >= 0;
         };
 
-        var isOpen = function(bidconvention) {
+        function isSuccessorOfSelected(bidconvention) {
+            if (bidconvention.isRoot()) {
+                return false;
+            }
+            if (isSelected.call(this, bidconvention.parent)) {
+                return true;
+            }
+            return isSuccessorOfSelected.call(this, bidconvention.parent);
+        };
+
+        function isOpen(bidconvention) {
             return this.openedConventions.indexOf(bidconvention) >= 0;
         };
 
-        var isClipped = function(bidconvention) {
+        function isClipped(bidconvention) {
             return this.clippedConventions.indexOf(bidconvention) >= 0;
         };
+
 
         // methods that manipulate the collection of selected bids
 
@@ -92,12 +94,6 @@ define(function(require, exports, module) {
 
         var addToSelection = function(bidconvention) {
             addToCollection(bidconvention, this.selectedConventions);
-        };
-
-        var addToCollection = function(bidconvention, bcCollection) {
-            if (bcCollection.indexOf(bidconvention) === -1) {
-                bcCollection.push(bidconvention);
-            }
         };
 
         var removeFromSelection = function(bidconvention) {
@@ -126,36 +122,15 @@ define(function(require, exports, module) {
             this.isCutAction = false;
         };
 
+        // helper method
+        var addToCollection = function(bidconvention, bcCollection) {
+            if (bcCollection.indexOf(bidconvention) === -1) {
+                bcCollection.push(bidconvention);
+            }
+        };
+
 
         // methods that manipulate the tree structure
-
-        //TODO: test cases
-        var validatePaste = function() {
-            var that = this;
-            var invalidConventions = [];
-            ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
-                ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
-                    //TODO: clone
-                    clippedBC.parent = selectedBC;
-                    invalidConventions.push.apply(invalidConventions, clippedBC.collectInvalidBids());
-                });
-            });
-            //TODO: strip invalid conventions?
-            console.log(invalidConventions);
-        };
-
-        var paste = function() {
-            //TODO condition paste action is valid for all pairs clipped/selected 
-            var that = this;
-            ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
-                ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
-                    if (that.isCutAction) {
-                        clippedBC.parent.children.remove(clippedBC);
-                    }
-                    selectedBC.createChild(clippedBC.toJSON());
-                });
-            });
-        };
 
         var deleteSelection = function() {
             ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
@@ -164,7 +139,20 @@ define(function(require, exports, module) {
             clearSelection.call(this);
         };
 
-        var createNew = function(bid) {
+        var pasteClippedToSelection = function() {
+            //TODO condition paste action is valid for all pairs clipped/selected 
+            var that = this;
+            ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
+                ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
+                    if (that.isCutAction) {
+                        clippedBC.remove();
+                    }
+                    selectedBC.createChild(clippedBC.toJSON());
+                });
+            });
+        };
+
+        var addNewChildToSelection = function(bid) {
             //TODO: throw exception when bid is not valid
             var that = this;
             var createdBidConventions = [];
@@ -175,23 +163,9 @@ define(function(require, exports, module) {
             this.selectedConventions(createdBidConventions);
         };
 
+
         //methods that affect the view without affecting the data
-		var toggleOpenClose = function(bidconvention){
-            if (this.openedConventions.indexOf(bidconvention) === -1) {
-                this.openedConventions.push(bidconvention);
-            }
-            else {
-                this.openedConventions.remove(bidconvention);
-            }
-		};
-
-        var setSelectedRoot = function() {
-            //TODO condition: exactly 1 bc in selection
-            var bidconvention = this.selectedConventions()[0];
-            this.selectedConventions([]);
-            this.selectedRoot(bidconvention);
-        };
-
+        
         var toggleIsDealer = function() {
             if (this.selectedRoot().getRoot() === this.bidsystem.bidRoot) {
                 this.selectedRoot(this.bidsystem.bidRootOpponent);
@@ -201,7 +175,25 @@ define(function(require, exports, module) {
             }
         };
         
+		var toggleOpenClose = function(bidconvention){
+            if (this.openedConventions.indexOf(bidconvention) === -1) {
+                this.openedConventions.push(bidconvention);
+            }
+            else {
+                this.openedConventions.remove(bidconvention);
+            }
+		};
+
+        var setSelectedAsTop = function() {
+            //TODO condition: exactly 1 bc in selection
+            var bidconvention = this.selectedConventions()[0];
+            this.selectedConventions([]);
+            this.selectedRoot(bidconvention);
+        };
+
+        
         // save and load methods
+        
         var saveToLocalStorage = function() {
             this.bidsystem.saveToLocalStorage();
         }
@@ -214,26 +206,33 @@ define(function(require, exports, module) {
 
         //public members		
         return {
+            //css styles
+            cssTreeNode : cssTreeNode,
+            cssBidconvention: cssBidconvention,
+
+            //methods that affect the view
             toggleIsDealer: toggleIsDealer,
-            clearSelection: clearSelection,
+            toggleOpenClose : toggleOpenClose,
+            setSelectedAsTop: setSelectedAsTop,
+            
+            //methods that affect the collection of selected bids
             select: select,
+            clearSelection: clearSelection,
             addToSelection: addToSelection,
             removeFromSelection: removeFromSelection,
-            isSelected: isSelected,
-            setSelectedRoot: setSelectedRoot,
+            
+            //methods that affect the collection of clipped bids
             copySelection: copySelection,
             cutSelection: cutSelection,
-            paste: paste,
-            validatePaste: validatePaste,
-            createNew: createNew,
+    
+            //methods that modify the bidsystem data 
+            pasteClippedToSelection: pasteClippedToSelection,
             deleteSelection: deleteSelection,
-            isOpponentBid: isOpponentBid,
-            jstreeStyle : jstreeStyle,
-            bidConventionStyle: bidConventionStyle,
-            isSuccessorOfSelected: isSuccessorOfSelected,
+            addNewChildToSelection: addNewChildToSelection,
+            
+            //methods for loading and saving data
             saveToLocalStorage: saveToLocalStorage,
-            loadFromLocalStorage: loadFromLocalStorage,
-            toggleOpenClose : toggleOpenClose
+            loadFromLocalStorage: loadFromLocalStorage
         };
     }();
 

@@ -1,24 +1,21 @@
 define(function(require, exports, module) {
-	var ko = require("knockout");
-	require("viewmediators/binding-handlers");
+    var ko = require("knockout");
 
-	var Convention = module.exports.Convention = function (data) {
-	    //description
-	    //tags
-	    //...
-	    this.description = ko.observable(data.description || "");
-	};
-	
-	Convention.prototype = function(){
-	    var toJSON = function() {
-		    return {
-		    	description : this.description()
-		    };
-		};
-		
-		return {
-		    toJSON : toJSON    
-		};
+    var Convention = module.exports.Convention = function(data) {
+        var cdata = data || {};
+        this.description = ko.observable(cdata.description || "");
+    };
 
-	}();
+    Convention.prototype = function() {
+        var toJSON = function() {
+            return {
+                description: this.description()
+            };
+        };
+
+        return {
+            toJSON: toJSON
+        };
+
+    }();
 });

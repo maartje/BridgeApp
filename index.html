@@ -16,31 +16,31 @@
 		<!-- Renders bidsystem tree view  -->
 		<div class="jstree jstree-0 jstree-focused jstree-classic context">
 			<!-- ko with: selectedRoot -->
-				<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
+				<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
 		    <!-- /ko -->
 		</div>
 		
 		<!-- Template that recursively renders the bidconvention tree structure-->
-		<script id="bid-node-templ" type="text/html">
-			<li data-bind="css: $root.jstreeStyle($data)">
+		<script id="bidconvention-template" type="text/html">
+			<li data-bind="css: $root.cssTreeNode($data)">
 				<ins class="jstree-icon">&nbsp;</ins>
 				<a href="#">
-					<div class="bidconvention" data-bind="css : $root.bidConventionStyle($data)"> 
+					<div class="bidconvention" data-bind="css : $root.cssBidconvention($data)"> 
 						<span class="bid" data-bind="html : bid()? bid().htmlString() : ''"></span>
 						<!-- ko with: convention -->
 							<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
 					    <!-- /ko -->
 					</div>
 				</a>
-				<ul data-bind="template: { name: 'bid-node-templ', foreach: children }"></ul>
+				<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
 			</li>
 		</script>
 		
 		<!--  Context menu for bidconventions in the tree view-->
-		<ul id="menu" class="jeegoocontext cm_blue">
-			<li>Select <span class="cm-shortcut">(Ctrl + T)</span></li>
-			<li>New <span class="cm-shortcut">(Ctrl + N)</span></li>
-			<li class="cm-delete">Delete <span class="cm-shortcut">(Delete)</span></li>
+		<ul id="context-menu" class="jeegoocontext cm_blue">
+			<li>Select <span class="context-menu-shortcut">(Ctrl + T)</span></li>
+			<li>New <span class="context-menu-shortcut">(Ctrl + N)</span></li>
+			<li class="context-menu-delete">Delete <span class="context-menu-shortcut">(Delete)</span></li>
 		</ul>
 		
 		<!--  Dialog to confirm deleting bidconventions -->
@@ -55,10 +55,10 @@
 	<!-- ko with: bidpicker -->
 		<div class="bidpicker" data-bind="{if: visible, style: { left: left() + 'px', top: top() + 'px'}}" >
 			<div data-bind="foreach: suitBids">
-				<a class="bidbutton" data-bind="{html: htmlString(), css : $parent.cssStyle($data)}"></a>
+				<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 			</div>
 			<div data-bind="foreach: specialBids">
-				<a class="bidbutton" data-bind="{html: htmlString(), css : $parent.cssStyle($data)}"></a>
+				<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 			</div>
 		</div>
 	<!-- /ko -->

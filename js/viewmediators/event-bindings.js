@@ -8,11 +8,11 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         app.bidpicker.visible(false);
     });
 
-    $(document).on('click', '.bidbutton', function(event) {
+    $(document).on('click', '.bid-button', function(event) {
         var app = ko.contextFor(this).$root;
         var bid = ko.contextFor(this).$data;
         //app.createNew(bid);
-        app.bidpicker.setSelectedBid(bid);
+        app.bidpicker.replaceBid(bid);
         app.bidsystem.saveToLocalStorage();        
         app.bidpicker.visible(false);
     });
@@ -26,8 +26,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     $(document).on('click', '.bid', function(e) {
         var app = ko.contextFor(this).$root;
         var bc = ko.contextFor(this).$data;
-        app.bidpicker.preselectedBid(bc.bid());
-        app.bidpicker.bidConventions([bc]);
+        app.bidpicker.currentBid(bc.bid());
+        app.bidpicker.bidconventions([bc]);
         app.bidpicker.show(e.pageX, e.pageY);
         //TODO: show bidpicker at click location
         //app.bidpicker.show(x,y) => set x position, y position, isVisible
@@ -60,7 +60,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         }
     });
     
-    $(".cm-delete").click(function(){
+    $(".context-menu-delete").click(function(){
         event.stopPropagation();
         var app = ko.contextFor(this).$root;
         deleteBidConventions(app, this);

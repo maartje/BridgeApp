@@ -39,5 +39,5 @@ function(require, ko, appModule, defaultDataModule, $) {
     var application = new appModule.Application({bidsystem : {id : bidSystemId}});
     application.loadFromLocalStorage();
     ko.applyBindings(application);
-    $('.context').jeegoocontext('menu');
+    $('.context').jeegoocontext('context-menu');
 });
