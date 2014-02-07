@@ -1,22 +1,17 @@
-.opponent-bid {
+.bidconvention .opponent-bid {
     background-color : yellow;
 }
 
-.selected {
+.bidconvention.selected {
     background-color : orange;
 }
 
-.successor-of-selected{
+.bidconvention.successor-of-selected{
     background-color : blue;
 }
 
-.description {
+.bidconvention .description {
     min-width : 120px;
-    display : inline-block;
-}
-
-.bid {
-    width : 30px;
     display : inline-block;
 }
 
@@ -36,11 +31,4 @@ span[contenteditable=true]:hover, .bid:hover {
 .context-menu-shortcut {
     float:right;
     position : relative;
-}
-
-.bidpicker {
-    position: absolute; 
-    z-index: 1; 
-    display: block; 
-    background-color: white;
 }

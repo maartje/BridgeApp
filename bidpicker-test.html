@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <meta charset="UTF-8">
+    
+    <head>
+        <title>Bidpicker</title>
+        <link rel="stylesheet" type="text/css" media="all" href="css/bidpicker.css">
+    </head>
+    
+    <body>
+        <div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}"
+        style="left: 40px; top: 14px;">
+            <div class="suit-bids" data-bind="foreach: suitBids">
+                <a class="bid-button current-bid" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">1<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">1<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">1<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">1<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">1<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">2<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">2<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">2<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">2<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">2<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">3<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">3<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">3<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">3<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">3<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">4<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">4<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">4<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">4<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">4<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">5<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">5<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">5<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">5<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">5<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">6<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">6<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">6<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">6<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">6<span>nt</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">7<span>♣</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">7<span style="color:red">♦</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">7<span style="color:red">♥</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">7<span>♠</span></a>
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">7<span>nt</span></a>
+            </div>
+            <div class="special-bids" data-bind="foreach: specialBids">
+                <a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">pass</a>
+                <a class="bid-button invalid-bid" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">dbl</a>
+                <a class="bid-button invalid-bid" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}">redbl</a>
+            </div>
+        </div>
+    </body>
+
+</html>

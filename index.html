@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/main.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/bidpicker.css">
 <link type="text/css" rel="stylesheet" href="css/blitzer/jquery-ui-1.10.3.blitzer.css" />
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
@@ -53,14 +54,16 @@
 
 	<!-- bidpicker -->
 	<!-- ko with: bidpicker -->
-		<div class="bidpicker" data-bind="{if: visible, style: { left: left() + 'px', top: top() + 'px'}}" >
-			<div data-bind="foreach: suitBids">
+	<!-- ko if: visible -->
+		<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
+			<div class="suit-bids" data-bind="foreach: suitBids">
 				<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 			</div>
-			<div data-bind="foreach: specialBids">
+			<div class="special-bids" data-bind="foreach: specialBids">
 				<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 			</div>
 		</div>
+	<!-- /ko -->
 	<!-- /ko -->
 
 </body>
