@@ -3,18 +3,6 @@
  */
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(ko, $, moduleUI) {
 
-    $(".context-menu-new").click(function(e){
-        var app = ko.contextFor(this).$root;
-        var bidconventions = app.createNewDetachedChildConventions(); 
-        app.bidpicker.bidconventions(bidconventions);
-        app.bidpicker.show(e.pageX, e.pageY);
-        $(document).one('click', function() {
-            app.bidpicker.hide();
-        });
-        event.stopPropagation();
-    });
-
-
     $(document).on('keyup', 'body', function(event) {
         var keyCode = event.keyCode || event.which;
         if (keyCode === moduleUI.keycodes.DELETE && $(".selected:last").length > 0) {

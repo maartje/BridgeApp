@@ -3,25 +3,34 @@
  */
 define(["knockout", "jquery"], function(ko, $) {
 
-    $(document).on('blur', '.bidpicker .bid-button', function(event) {
-        console.log("blur bidpicker");
-        var bidpicker = ko.contextFor(this).$data;
-        bidpicker.visible(false);
+    $(".context-menu-new").click(function(e){
+        var app = ko.contextFor(this).$root;
+        app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
+        $(document).one('click', function() {
+            app.hideBidpicker();
+        });
+    });
+
+    $(document).on('click', '.bidconvention .bid', function(e) {
+        e.stopPropagation();
+        console.log("click bid");
+        var app = ko.contextFor(this).$root;
+        var bidconvention = ko.contextFor(this).$data;
+        app.showBidpickerForReplacingBids([bidconvention], e.pageX, e.pageY);
+        $(document).one('click', function() {
+            console.log("hide bidpicker");
+            app.hideBidpicker();
+        });
     });
 
     $(document).on('click', '.bidpicker .bid-button', function(event) {
         //TODO more sophisticated handling of invalidates-succeeding-bids
         if (!$(this).hasClass("invalid-bid") && !$(this).hasClass("invalidates-succeeding-bids") ){ 
-            var bidpicker = ko.contextFor(this).$parent;
-            var bid = ko.contextFor(this).$data;
             var app = ko.contextFor(this).$root;
-            //TODO handle create new bid?;
-            bidpicker.replaceBid(bid);
-            bidpicker.visible(false);
-    
-            //TODO: bidconvention should save itself to local storage (?!)
-            app.saveToLocalStorage();        
+            var bid = ko.contextFor(this).$data;
+            app.handleBidpicking(bid);
         }
+        event.stopPropagation();
     });
 
 });

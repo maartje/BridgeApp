@@ -99,7 +99,7 @@ define(function(require, exports, module) {
             this.visible(false);
         };
 
-        var replaceBid = function(bid) {
+        var setSelectedBid = function(bid) {
             var that = this;
             ko.utils.arrayForEach(that.bidconventions(), function(bc) {
                 bc.replaceBid(bid);
@@ -111,7 +111,7 @@ define(function(require, exports, module) {
             cssBidButton: cssBidButton,
             show: show,
             hide : hide,
-            replaceBid: replaceBid,
+            setSelectedBid: setSelectedBid,
             isCurrentBid : isCurrentBid
         };
     }();

@@ -36,7 +36,7 @@ the delete button. In both cases a dialog appears asking wether
 I am sure to delete the bid ... and all its subsequent biddings.
 * Delete is disabled for the root.
 
-[User Story 7]
+#[User Story 7]
 I can replace an existing bid using a bidpicker.
 #- bidpicker becomes visible at the mouse location when bid is clicked
 #- bidbutton click replaces the old bid in model, model is saved to ls, bidpicker disappears, replaced bid still selected
@@ -45,24 +45,18 @@ I can replace an existing bid using a bidpicker.
 # css style gives a reasonable picker view
 
 [User Story 8]
-I can add a new bid (child of selected) via the context menu, or via the shortcut Ctrl + N.
-A bid-picker appears, only the valid bids are enabled, the pass bid is pre-selected(?).
-In the bidpicker I can select the bid using a mouse click,
+# I can add a new bid (child of selected) via the context menu, 
+or via the shortcut Ctrl + N.
+#A bid-picker appears, only the valid bids are enabled.
+#In the bidpicker I can select the bid using a mouse click,
 //TODO: or by using the arrows followed by the enter button. 
 After selecting a bid, the new child bid is added to the tree (viewmodel + local storage).
 Furthermore, the parent of the new child bid is open,
 and the new child bid is selected.
 * In case no bid is valid (not even pass), the menu item 'New' is disabled.
 
-[User Story 9]
-I can select a bid using the context menu item 'Select' or using the shortcut
-Ctrl + T. The selected bid is set as the 'root' bid sequence.
-The root bidsequence view consist of a large bar (root) + 
-bid buttons ordered in squences of 4.
-I can select the root bid to set the root as the root bidsequence.
-
-[User Story 10]
-I can select bids from the root bid sequence.
+US[9]
+UI: add bidconventions to the 'root'
 
 [User Story 11]
 CSS

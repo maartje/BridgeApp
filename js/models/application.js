@@ -125,10 +125,17 @@ define(function(require, exports, module) {
             this.isCutAction = false;
         };
 
-        // helper method
+        // helper methods
+        
         var addToCollection = function(bidconvention, bcCollection) {
             if (bcCollection.indexOf(bidconvention) === -1) {
                 bcCollection.push(bidconvention);
+            }
+        };
+
+        var addAllToCollection = function(bidconventions, bcCollection) {
+            for (var i = 0; i < bidconventions.length; i++) {
+                addToCollection(bidconventions[i], bcCollection);
             }
         };
 
@@ -166,16 +173,45 @@ define(function(require, exports, module) {
             this.selectedConventions(createdBidConventions);
         };
 
-        var createNewDetachedChildConventions = function() {
+        var hideBidpicker = function(left, top) {
+            this.bidpicker.hide();
+        };
+        
+        var showBidpickerForAddingNewChildBids = function(left, top) {
             var that = this;
             var createdBidConventions = [];
             ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
                 var newChild = new bidconventionModule.Bidconvention({parent : bc});
                 createdBidConventions.push(newChild);
-                addToCollection(bc, that.openedConventions); //TODO: only after bid button is clicked
             });
-            this.selectedConventions(createdBidConventions); //TODO: only after bid button is clicked
-            return createdBidConventions;
+            this.bidpicker.bidconventions(createdBidConventions);
+            this.bidpicker.show(left, top);
+        };
+
+        var showBidpickerForReplacingBids = function(bidconventions, left, top) {
+            if (bidconventions.length > 0) {
+                var currentBid = bidconventions[bidconventions.length - 1].bid();
+                this.bidpicker.currentBid(currentBid);
+            }
+            this.bidpicker.bidconventions(bidconventions);
+            this.bidpicker.show(left, top);
+        };
+
+        var handleBidpicking = function(bid) {
+            var childconventions = this.bidpicker.bidconventions();
+            var parentConventions = [];
+            for (var i = 0; i < childconventions.length; i++) {
+                parentConventions.push(childconventions[i].parent);
+            }
+            
+            this.bidpicker.setSelectedBid(bid);
+            this.hideBidpicker();
+            this.bidpicker.bidconventions([]);
+            
+            addAllToCollection(parentConventions, this.openedConventions); 
+            this.selectedConventions(childconventions); 
+
+            this.saveToLocalStorage();
         };
 
 
@@ -244,7 +280,10 @@ define(function(require, exports, module) {
             pasteClippedToSelection: pasteClippedToSelection,
             deleteSelection: deleteSelection,
             addNewChildToSelection: addNewChildToSelection,
-            createNewDetachedChildConventions : createNewDetachedChildConventions,
+            showBidpickerForAddingNewChildBids : showBidpickerForAddingNewChildBids,
+            showBidpickerForReplacingBids : showBidpickerForReplacingBids,
+            hideBidpicker : hideBidpicker,
+            handleBidpicking : handleBidpicking,
             
             //methods for loading and saving data
             saveToLocalStorage: saveToLocalStorage,

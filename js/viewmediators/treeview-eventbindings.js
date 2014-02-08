@@ -9,17 +9,6 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         app.toggleOpenClose(bidconvention);
     });
 
-    $(document).on('click', '.bidconvention .bid', function(e) {
-        var app = ko.contextFor(this).$root;
-        var bidconvention = ko.contextFor(this).$data;
-        app.bidpicker.currentBid(bidconvention.bid());
-        app.bidpicker.bidconventions([bidconvention]);
-        app.bidpicker.show(e.pageX, e.pageY);
-        $(document).one('click', function() {
-            app.bidpicker.hide();
-        });
-        event.stopPropagation();
-    });
 
     //blur: save 'description' of bid conventions
     $(document).on('blur', '.bidconvention .description', function(event) {
