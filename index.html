@@ -2,22 +2,28 @@
 <html lang="en">
 <meta charset="UTF-8">
 <head>
+<!-- TODO: name of bid system should be configurable -->
 <title>Bied Systeem: Maartje en Wim</title>
+
+<!-- Style sheets from other projects-->
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/style.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
+<link type="text/css" rel="stylesheet" href="css/blitzer/jquery-ui-1.10.3.blitzer.css" />
+<link rel="stylesheet" type="text/css" media="all" href="css/jeegoocontext/context-menu.css">
+
+<!-- Style sheets for bridge application-->
 <link rel="stylesheet" type="text/css" media="all" href="css/main.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/tree-view.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/bidpicker.css">
-<link type="text/css" rel="stylesheet" href="css/blitzer/jquery-ui-1.10.3.blitzer.css" />
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
+	<!-- Renders bidsystem tree view  -->
 	<div id="tree-view">
-	
-		<!-- Renders bidsystem tree view  -->
 		<div class="jstree jstree-0 jstree-focused jstree-classic context">
 			<!-- ko with: selectedRoot -->
-				<div>ROOT</div>
+				<!-- TODO: bidsequence for convention set as tree top -->
 				<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
 		    <!-- /ko -->
 		</div>
@@ -40,12 +46,12 @@
 		
 		<!--  Context menu for bidconventions in the tree view-->
 		<ul id="context-menu" class="jeegoocontext cm_blue">
-			<li class="context-menu-new">New child bid<span class="context-menu-shortcut">(Alt + N)</span></li>
-			<li class="context-menu-new-sib">New sibling bid<span class="context-menu-shortcut">(Alt + S)</span></li>
-			<li>Select <span class="context-menu-shortcut">(Alt + T)</span></li>
-			<li class="context-menu-delete">Delete <span class="context-menu-shortcut">(Delete)</span></li>
-			<li class="context-menu-x">Edit bid(s) <span class="context-menu-shortcut">()</span></li>
-			<li class="context-menu-y">Edit description(s) <span class="context-menu-shortcut">()</span></li>
+			<li class="context-menu-new">New child bid<span class="shortcut">(Alt + N)</span></li>
+			<li class="context-menu-new-sib">New sibling bid<span class="shortcut">(Alt + S)</span></li>
+			<li>Select <span class="shortcut">(Alt + T)</span></li>
+			<li class="context-menu-delete">Delete <span class="shortcut">(Delete)</span></li>
+			<li class="context-menu-x">Edit bid(s) <span class="shortcut">()</span></li>
+			<li class="context-menu-y">Edit description(s) <span class="shortcut">()</span></li>
 		</ul>
 		
 		<!--  Dialog to confirm deleting bidconventions -->
@@ -54,21 +60,22 @@
 		    Are you sure to delete the selected bid convention and all it's child conventions?
 		  </p>
 		</div>
-	</div>
 
-	<!-- bidpicker -->
-	<!-- ko with: bidpicker -->
-	<!-- ko if: visible -->
-		<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
-			<div class="suit-bids" data-bind="foreach: suitBids">
-				<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
-			</div>
-			<div class="special-bids" data-bind="foreach: specialBids">
-				<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
-			</div>
-		</div>
-	<!-- /ko -->
-	<!-- /ko -->
+		<!-- Bidpicker to select the appropriate bid -->
+		<!-- ko with: bidpicker -->
+			<!-- ko if: visible -->
+				<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
+					<div class="suit-bids" data-bind="foreach: suitBids">
+						<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
+					</div>
+					<div class="special-bids" data-bind="foreach: specialBids">
+						<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
+					</div>
+				</div>
+			<!-- /ko -->
+		<!-- /ko -->
+
+	</div>
 
 </body>
 </html> 

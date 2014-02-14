@@ -1,0 +1,25 @@
+#tree-view .bidconvention .opponent-bid {
+    background-color : yellow;
+}
+
+#tree-view .bidconvention.selected {
+    background-color : orange;
+}
+
+#tree-view .bidconvention.successor-of-selected{
+    background-color : blue;
+}
+
+#tree-view .bidconvention .description {
+    min-width : 120px;
+    display : inline-block;
+}
+
+#tree-view .bidconvention .description:hover {
+    cursor: text;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+    background-color: #FFFFFF;
+    min-height: 1em;
+}

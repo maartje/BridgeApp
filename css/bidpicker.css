@@ -1,9 +1,5 @@
-body, html {
-    margin: 0;
-    padding: 0;
-}
 
-.bidpicker {
+#tree-view .bidpicker {
     position: absolute; 
 	display: inline-block;
 	width : 226px;
@@ -15,19 +11,19 @@ body, html {
 	z-index: 1000;
 }
 
-.bidpicker .special-bids {
+#tree-view .bidpicker .special-bids {
     display : inline-block;
     width : 46px;
     float : right;
 }
 
-.bidpicker .suit-bids {
+#tree-view .bidpicker .suit-bids {
     display : inline-block;
     width : 180px;
     float : left;
 }
 
-.bidpicker .bid-button {
+#tree-view .bidpicker .bid-button {
 	display: inline-block;
 	border: 1px solid #d8dcdf;
 	margin : 1px;
@@ -40,24 +36,24 @@ body, html {
 	background-color: #eeeeee;
 }
 
-.bidpicker .suit-bids .bid-button {
+#tree-view .bidpicker .suit-bids .bid-button {
 	width : 30px;
 	float : left;
 }
 
-.bidpicker .special-bids .bid-button {
+#tree-view .bidpicker .special-bids .bid-button {
 	width : 40px;
 }
 
 
-.bidpicker .bid-button.invalid-bid  {
+#tree-view .bidpicker .bid-button.invalid-bid  {
 	cursor: default;
 	background-color: white;
 	color: gray;
 	opacity: 0.5;
 }
 
-.bidpicker .bid-button.invalidates-succeeding-bids  {
+#tree-view .bidpicker .bid-button.invalidates-succeeding-bids  {
     /*TODO: more sophisticated handling of this situation*/
 	cursor: default;
 	background-color: white;
@@ -66,24 +62,14 @@ body, html {
 }
 
 
-.bidpicker .bid-button.current-bid {
+#tree-view .bidpicker .bid-button.current-bid {
 	background-color: #fbf8ee;
 	border-color: #fcd3a1;
 	color: #444444;
 }
 
-.bidpicker .bid-button:hover:not(.invalid-bid){
+#tree-view .bidpicker .bid-button:hover:not(.invalid-bid){
 	background-color: #f6f6f6;
 	border: 1px solid #cdd5da;
 	color: #111111;
-}
-
-.bidpicker .bid-button:focus {
-	outline: 0 none !important;
-}
-
-.bidpicker .bid-button:active {
-	background-color: #ffffff;
-	color: #cc0000;
-	border: 1px solid #eeeeee;
 }

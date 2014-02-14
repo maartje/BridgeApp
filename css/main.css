@@ -1,38 +1,8 @@
-.bidconvention .opponent-bid {
-    background-color : yellow;
-}
-
-.bidconvention.selected {
-    background-color : orange;
-}
-
-.bidconvention.successor-of-selected{
-    background-color : blue;
-}
-
-.bidconvention .description {
-    min-width : 120px;
-    display : inline-block;
+body, html {
+    margin: 0;
+    padding: 0;
 }
 
 body {
     background-color : gray;
-}
-
-span[contenteditable=true]:hover, .bid:hover {
-    cursor: text;
-	border-width: 1px;
-	border-style: solid;
-	border-color: gray;
-    background-color: #FFFFFF;
-    min-height: 1em;
-}
-
-.context-menu-shortcut {
-    float:right;
-    position : relative;
-}
-
-#context-menu .disabled {
-    color : red;
 }
