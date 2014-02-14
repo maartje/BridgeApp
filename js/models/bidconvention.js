@@ -37,11 +37,11 @@ define(function(require, exports, module) {
         };
 
 
-        // validationmethods
+        // validation methods
 
         var isValidSubsequentBid = function(bidData) {
             var bidSuffix = getSuffixBids.call(this, 4);
-            return verifySubsequentBid.call(this, bidSuffix, bidData);
+            return verifySubsequentBid(bidSuffix, bidData);
         };
 
         /**
@@ -126,7 +126,7 @@ define(function(require, exports, module) {
          * @param {Bid} nextBid
          * @return {Boolean}
          */
-        var verifySubsequentBid = function(bidSuffix, nextBid) {
+        function verifySubsequentBid(bidSuffix, nextBid) {
             
             // Returns true in case the array with bid types 'actualTypes' ends
             // with the given bid type array 'expectedSuffixTypes'
