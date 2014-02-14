@@ -188,6 +188,17 @@ define(function(require, exports, module) {
             this.bidpicker.show(left, top);
         };
 
+        var showBidpickerForAddingNewSiblingBids = function(left, top) {
+            var that = this;
+            var createdBidConventions = [];
+            ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
+                var newSibChild = new bidconventionModule.Bidconvention({parent : bc.parent});
+                createdBidConventions.push(newSibChild);
+            });
+            this.bidpicker.bidconventions(createdBidConventions);
+            this.bidpicker.show(left, top);
+        };
+
         var showBidpickerForReplacingBids = function(bidconventions, left, top) {
             if (bidconventions.length > 0) {
                 var currentBid = bidconventions[bidconventions.length - 1].bid();
@@ -282,6 +293,7 @@ define(function(require, exports, module) {
             addNewChildToSelection: addNewChildToSelection,
             showBidpickerForAddingNewChildBids : showBidpickerForAddingNewChildBids,
             showBidpickerForReplacingBids : showBidpickerForReplacingBids,
+            showBidpickerForAddingNewSiblingBids : showBidpickerForAddingNewSiblingBids,
             hideBidpicker : hideBidpicker,
             handleBidpicking : handleBidpicking,
             

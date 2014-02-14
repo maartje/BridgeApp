@@ -21,10 +21,32 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
         }
     });
 
+    $(document).bind('keydown', 'alt+s', function() {
+        var treeViewElem = $("#tree-view").get(0);
+        var app = ko.contextFor(treeViewElem).$root;
+        if (app.selectedConventions().length > 0) {
+            var elem = $(".bidconvention.selected:last");
+            var left = elem.offset().left + elem.width();
+            var top = elem.offset().top + elem.height();
+            app.showBidpickerForAddingNewSiblingBids(left, top); 
+            $(document).one('click', function() {
+                app.hideBidpicker();
+            });
+        }
+    });
+
 
     $(".context-menu-new").click(function(e){
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
+        $(document).one('click', function() {
+            app.hideBidpicker();
+        });
+    });
+
+    $(".context-menu-new-sib").click(function(e){
+        var app = ko.contextFor(this).$root;
+        app.showBidpickerForAddingNewSiblingBids(e.pageX, e.pageY); 
         $(document).one('click', function() {
             app.hideBidpicker();
         });
