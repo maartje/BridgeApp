@@ -154,7 +154,8 @@ define(function(require, exports, module) {
             show: show,
             hide : hide,
             setSelectedBid: setSelectedBid,
-            isCurrentBid : isCurrentBid
+            invalidatesSubsequentBidsequences : invalidatesSubsequentBidsequences,
+            invalidatesCurrentBidsequence : invalidatesCurrentBidsequence
             // validBids : validBids,
             // hasValidBids : hasValidBids
         };

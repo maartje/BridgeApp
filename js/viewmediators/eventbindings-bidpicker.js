@@ -16,12 +16,14 @@ define(["knockout", "jquery"], function(ko, $) {
     });
 
     $(document).on('click', '.bidpicker .bid-button', function(event) {
+        var app = ko.contextFor(this).$root;
+        var bidpicker = app.bidpicker;
+        var bid = ko.contextFor(this).$data;
         //TODO more sophisticated handling of invalidates-succeeding-bids
-        if (!$(this).hasClass("invalid-bid") && !$(this).hasClass("invalidates-succeeding-bids") ){ 
-            var app = ko.contextFor(this).$root;
-            var bid = ko.contextFor(this).$data;
+        if (!bidpicker.invalidatesCurrentBidsequence(bid) && !bidpicker.invalidatesSubsequentBidsequences(bid) ){ 
             app.handleBidpicking(bid);
         }
+        event.preventDefault();
         event.stopPropagation();
     });
 

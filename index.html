@@ -66,10 +66,10 @@
 			<!-- ko if: visible -->
 				<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
 					<div class="suit-bids" data-bind="foreach: suitBids">
-						<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
+						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 					</div>
 					<div class="special-bids" data-bind="foreach: specialBids">
-						<a class="bid-button" data-bind="{hasFocus: $parent.isCurrentBid($data), html: htmlString(), css : $parent.cssBidButton($data)}"></a>
+						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
 					</div>
 				</div>
 			<!-- /ko -->

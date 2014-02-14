@@ -41,5 +41,4 @@ function(require, ko, appModule, defaultDataModule, $) {
     ko.applyBindings(application);
     
     $('.context').jeegoocontext('context-menu');
-    
 });

@@ -1,13 +1,11 @@
 define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, moduleUI) {
 
     /**
-     * Binding handler to update model values that may contain html content.
+     * Binding handler to update model value strings that may contain html.
      * The model value is shown as html and edited as text. 
      */
     ko.bindingHandlers.htmlValue = {
         init: function(element, valueAccessor, allBindingsAccessor) {
-            //ko.utils.setHtml(element, valueAccessor());
-            //ko.utils.setTextContent(element, valueAccessor());
             var htmlString = ko.utils.unwrapObservable(valueAccessor());
             $(element).html(htmlString);
 
@@ -27,6 +25,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
                 var htmlString = ko.utils.unwrapObservable(valueAccessor());
                 $(element).text(htmlString);
                 moduleUI.setCursorToEndOfContenteditable(element);
+                //TODO: more sophisticated cursor handling (click in the middle should result in a cursor in the middle)
             });
 
         },
