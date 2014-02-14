@@ -75,6 +75,48 @@ define(function(require, exports, module) {
             }
             return false;
         };
+        
+        var validBids = function(){
+            var that = this;
+            var validBids = [];
+
+            for (var i = 0; i < that.specialBids.length; i++) {
+                var specialBid = that.specialBids[i];
+                if (!invalidatesSubsequentBidsequences.call(that, specialBid)){
+                    validBids.push(specialBid);
+                }
+            }
+            for (var i = 0; i < that.suitBids.length; i++) {
+                var suitBid = that.suitBids[i];
+                if (!invalidatesSubsequentBidsequences.call(that, suitBid)){
+                    validBids.push(suitBid);
+                }
+            }
+            return validBids;
+        };
+
+        //TODO: to disable the new item in the context menu 
+        //we need to know if there are valid 'child bids' for the
+        //selected bid conventions instead of valid 'replace bids'
+        var hasValidBids = function(){
+            var that = this;
+            for (var i = 0; i < that.specialBids.length; i++) {
+                var specialBid = that.specialBids[i];
+                if (!invalidatesSubsequentBidsequences.call(that, specialBid)){
+                    console.log("has-valid-bids", specialBid);
+                    return true;
+                }
+            }
+            for (var i = 0; i < that.suitBids.length; i++) {
+                var suitBid = that.suitBids[i];
+                if (!invalidatesSubsequentBidsequences.call(that, suitBid)){
+                    console.log("has-valid-bids", suitBid);
+                    return true;
+                }
+            }
+            console.log("NOT has-valid-bids");
+            return false;
+        };
 
         var invalidatesCurrentBidsequence = function(bid) {
             for (var i = 0; i < this.bidconventions().length; i++) {
@@ -112,7 +154,9 @@ define(function(require, exports, module) {
             show: show,
             hide : hide,
             setSelectedBid: setSelectedBid,
-            isCurrentBid : isCurrentBid
+            isCurrentBid : isCurrentBid,
+            validBids : validBids,
+            hasValidBids : hasValidBids
         };
     }();
 

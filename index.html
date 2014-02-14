@@ -39,8 +39,8 @@
 		
 		<!--  Context menu for bidconventions in the tree view-->
 		<ul id="context-menu" class="jeegoocontext cm_blue">
-			<li class="context-menu-new">New <span class="context-menu-shortcut">(Ctrl + N)</span></li>
-			<li>Select <span class="context-menu-shortcut">(Ctrl + T)</span></li>
+			<li class="context-menu-new" data-bind="css : $root.bidpicker.hasValidBids()? '' : 'disabled'">New <span class="context-menu-shortcut">(Alt + N)</span></li>
+			<li>Select <span class="context-menu-shortcut">(Alt + T)</span></li>
 			<li class="context-menu-delete">Delete <span class="context-menu-shortcut">(Delete)</span></li>
 			<li class="context-menu-x">Edit bid(s) <span class="context-menu-shortcut">()</span></li>
 			<li class="context-menu-y">Edit description(s) <span class="context-menu-shortcut">()</span></li>

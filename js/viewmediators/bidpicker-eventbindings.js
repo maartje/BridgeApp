@@ -3,14 +3,6 @@
  */
 define(["knockout", "jquery"], function(ko, $) {
 
-    $(".context-menu-new").click(function(e){
-        var app = ko.contextFor(this).$root;
-        app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
-        $(document).one('click', function() {
-            app.hideBidpicker();
-        });
-    });
-
     $(document).on('click', '.bidconvention .bid', function(e) {
         e.stopPropagation();
         console.log("click bid");

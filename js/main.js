@@ -40,4 +40,5 @@ function(require, ko, appModule, defaultDataModule, $) {
     application.loadFromLocalStorage();
     ko.applyBindings(application);
     $('.context').jeegoocontext('context-menu');
+    
 });
