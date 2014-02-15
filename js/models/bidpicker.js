@@ -1,3 +1,6 @@
+/**
+ * Represents the view state of the bidpicker that allows to pick a valid bid
+ */
 define(function(require, exports, module) {
     var bidModule = require("models/bid");
     var ko = require("knockout");
@@ -6,7 +9,7 @@ define(function(require, exports, module) {
         var bpdata = data || {};
         this.suitBids = createSuitBids();
         this.specialBids = createSpecialBids();
-        this.currentBid = ko.observable(bpdata.currentBid);
+        this.preselectedBid = ko.observable(bpdata.preselectedBid);
         this.bidconventions = ko.observable(bpdata.bidconventions || []);
 
         this.visible = ko.observable(bpdata.visible || false);
@@ -48,10 +51,17 @@ define(function(require, exports, module) {
 
     Bidpicker.prototype = function() {
 
+        /**
+         * Returns the css class that represents the style of a given bid button, 
+         * i.e. current-bid, invalid-bid, invalidates-succeeding-bids
+         * 
+         * @param {Bid} bid
+         * @return {String}
+         */
         var cssBidButton = function(bid) {
             var result = "";
-            if (isCurrentBid.call(this, bid)) {
-                result += "current-bid ";
+            if (isPreselectedBid.call(this, bid)) {
+                result += "preselected-bid ";
             }
             if (invalidatesCurrentBidsequence.call(this, bid)) {
                 result += "invalid-bid "
@@ -62,10 +72,24 @@ define(function(require, exports, module) {
             return result;
         };
         
-        var isCurrentBid = function(bid) {
-            return this.currentBid() && this.currentBid().equals(bid);
+        /**
+         * Says whether the given bid is shown as preselected 
+         * 
+         * @param {Bid} bid
+         * @return {Boolean}
+         */
+        var isPreselectedBid = function(bid) {
+            return this.preselectedBid() && this.preselectedBid().equals(bid);
         };
 
+        
+        /**
+         * Says whether the given bid is invalid or invalidates
+         * descendant bid conventions
+         * 
+         * @param {Bid} bid
+         * @return {Boolean}
+         */
         var invalidatesSubsequentBidsequences = function(bid) {
             for (var i = 0; i < this.bidconventions().length; i++) {
                 var bc = this.bidconventions()[i];
@@ -76,6 +100,12 @@ define(function(require, exports, module) {
             return false;
         };
 
+        /**
+         * Says whether the given bid is invalid for the current bidsequence
+         * 
+         * @param {Bid} bid
+         * @return {Boolean}
+         */
         var invalidatesCurrentBidsequence = function(bid) {
             for (var i = 0; i < this.bidconventions().length; i++) {
                 var bc = this.bidconventions()[i];
@@ -131,26 +161,43 @@ define(function(require, exports, module) {
         //     return false;
         // };
 
-        
+        /**
+         * Sets the visible property to true, and sets other relevant properties,
+         * namely: the left and top screen coordinates in pixels, the bidconventions
+         * for which a new bid is picked, the preselected bid.
+         * 
+         * @param {Number} left
+         * @param {Number} top
+         * @param {[Bidconvention]} bidconventions
+         * @param {Bid} bid
+         */
         var show = function(left, top, bidconventions, bid) {
             this.visible(true);
             this.left(left);
             this.top(top);
             this.bidconventions(bidconventions);
-            this.currentBid(bid);
+            this.preselectedBid(bid);
         };
-
+        
+        /**
+         * Sets the visible property to false
+         */
         var hide = function() {
             this.visible(false);
         };
 
+        /**
+         * Replaces the bid property of the bidconventions with the
+         * given bid, and sets the visible property to false.
+         * @param {Bid} bid
+         */
         var handleBidpicking = function(bid) {
             ko.utils.arrayForEach(this.bidconventions(), function(bc) {
                 bc.replaceBid(bid);
             });
             hide.call(this);
             this.bidconventions([]);
-            this.currentBid(null);
+            this.preselectedBid(null);
         };
 
 

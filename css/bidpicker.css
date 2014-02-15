@@ -63,7 +63,7 @@
 }
 
 
-#tree-view .bidpicker .bid-button.current-bid {
+#tree-view .bidpicker .bid-button.preselected-bid {
 	background-color: #fbf8ee;
 	border-color: #fcd3a1;
 	color: #444444;

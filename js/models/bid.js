@@ -1,3 +1,6 @@
+/**
+ * Represent bids, i.e. Pass, Doublet, Redoublet, and 1 clubs ... 7 notrump.
+ */
 define(function(require, exports, module) {
 
 	var createBid = module.exports.createBid = function(data) {

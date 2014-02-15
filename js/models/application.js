@@ -340,12 +340,12 @@ define(function(require, exports, module) {
         /**
          * Switches the tree node between open and closed
          */
-		var toggleOpenClose = function(bidconvention){
-		    if (!addToCollection(this.openedConventions, bidconvention)){
+        var toggleOpenClose = function(bidconvention) {
+            if (!addToCollection(this.openedConventions, bidconvention)) {
                 this.openedConventions.remove(bidconvention);
-		    }
-		};
-
+            }
+        };
+        
         /**
          * Sets the selected convention as the current convention
          * shown as tree top

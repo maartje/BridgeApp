@@ -1,3 +1,6 @@
+/**
+ * Represents the meaning of a given bidsequence
+ */
 define(function(require, exports, module) {
     var ko = require("knockout");
 

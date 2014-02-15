@@ -1,3 +1,6 @@
+/**
+ * Represents a bidsystem containing conventions for certain bidsequences
+ */
 define(function(require, exports, module) {
     var bidconventionModule = require("models/bidconvention");
     var localStorageModule = require("storage/local-storage");

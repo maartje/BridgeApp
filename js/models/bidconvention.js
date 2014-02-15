@@ -1,3 +1,6 @@
+/**
+ * Represents bidconventions in a bid system given as a tree structure
+ */
 define(function(require, exports, module) {
     var bidModule = require("models/bid");
     var conventionModule = require("models/convention");
@@ -18,10 +21,20 @@ define(function(require, exports, module) {
 
         // methods that expose information about the bidsequence
 
+        /**
+         * Says whether this bidconvention is the root convention, i.e. does not have a parent
+         * 
+         * @return {Boolean}
+         */
         var isRoot = function() {
             return !this.parent;
         };
 
+        /**
+         * Returns the root of the bid sequence
+         * 
+         * @return {Bidconvention}
+         */
         var getRoot = function() {
             if (isRoot.call(this)) {
                 return this;
@@ -29,6 +42,11 @@ define(function(require, exports, module) {
             return getRoot.call(this.parent);
         };
 
+        /**
+         * Returns the length of the bidsequence
+         * 
+         * @return {Number}
+         */
         var length = function() {
             if (isRoot.call(this)) {
                 return 0;
@@ -39,14 +57,22 @@ define(function(require, exports, module) {
 
         // validation methods
 
+        /**
+         * Returns true iff the given bid data represents a valid subsequent bid
+         * for the given bidsequence
+         * 
+         * @param {Bid} bidData
+         * @return {Boolean}
+         */
         var isValidSubsequentBid = function(bidData) {
             var bidSuffix = getSuffixBids.call(this, 4);
             return verifySubsequentBid(bidSuffix, bidData);
         };
 
         /**
-         * Returns all subsequent bidconventions that become invalid in case
-         * the bid at backward position 'backwardPosition' is replaced by the new bid 'newBid'. 
+         * Returns all subsequent bidconventions (including this bid convention) that become invalid in case
+         * the bid at backward position 'backwardPosition' is replaced by the new bid 'newBid'.
+         * Remark: only the shortest invalid prefixes are returned
          * 
          * @param {Bid} newBid
          * @param {Number} backwardPosition
@@ -202,6 +228,12 @@ define(function(require, exports, module) {
 
         //methods that modify the tree structure
 
+        /**
+         * Removes this bidsequence from the list of children of its parent
+         * and thus from the tree structure
+         * 
+         * @return {Bidconvention}
+         */
         var remove = function() {
             if (isRoot.call(this)) {
                 this.children.removeAll();
@@ -212,6 +244,14 @@ define(function(require, exports, module) {
             return this;
         };
 
+        /**
+         * Creates children from the given JSON data and adds them
+         * to the list of child conventions. 
+         * Returns itself.
+         * 
+         * @param {[JSON Bidconvention]}
+         * @return {Bidconvention}
+         */
         var createChildren = function(dataChildren) {
             for (var i = 0; i < dataChildren.length; i++) {
                 createChild.call(this, dataChildren[i]);
@@ -219,6 +259,14 @@ define(function(require, exports, module) {
             return this;
         };
 
+        /**
+         * Creates a child from the given JSON data and adds it
+         * to the list of child conventions. 
+         * Returns the created child.
+         * 
+         * @param {JSON Bidconvention}
+         * @return {Bidconvention}
+         */
         var createChild = function(dataChild) {
             dataChild.parent = this;
             var child = new Bidconvention(dataChild);
@@ -226,6 +274,7 @@ define(function(require, exports, module) {
             return child;
         };
         
+        //helper function to insert a child at the right position in the list
         var insertChild = function(child){
             var index = this.children().length;
             while (index > 0 && this.children()[index - 1].bid().succeeds(child.bid())) {
@@ -235,6 +284,14 @@ define(function(require, exports, module) {
             return this;
         };
 
+        /**
+         * Replaces the bid with the given bid and relocate
+         * the bidconvention in the list of children of the parent convention.
+         * Returns itself.
+         * 
+         * @param {Bid}
+         * @return {Bidconvention}
+         */
         var replaceBid = function(bid) {
             if (this.isRoot()){
                 throw "bid of root must be undefined";
@@ -248,6 +305,9 @@ define(function(require, exports, module) {
 
         //methods for converting data to JS object that can be serialized
 
+        /**
+         * Returns the relevant properties as JSON data
+         */
         var toJSON = function() {
             return {
                 id: this.id,
