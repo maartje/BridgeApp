@@ -122,7 +122,6 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
                 "Ok": function() {
                     $(this).dialog("close");
                     app.deleteSelection();
-                    app.bidsystem.saveToLocalStorage();
                 },
                 "Cancel": function() {
                     $(this).dialog("close");

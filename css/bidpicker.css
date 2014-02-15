@@ -45,6 +45,7 @@
 	width : 40px;
 }
 
+/*Styling conventions for the bidpicker element in the tree-view*/
 
 #tree-view .bidpicker .bid-button.invalid-bid  {
 	cursor: default;

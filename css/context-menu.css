@@ -1,3 +1,5 @@
+/*Styling conventions for the context-menu used in the tree-view*/
+
 #context-menu .shortcut {
     /*TODO: styling of shortcut instead of brackets*/
     float:right;

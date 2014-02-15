@@ -1,3 +1,5 @@
+/*Styling conventions for bidconvention nodes in the tree view*/
+
 #tree-view .bidconvention.opponent-bid {
     background-color : yellow;
 }

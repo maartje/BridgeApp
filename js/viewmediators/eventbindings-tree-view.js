@@ -23,7 +23,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     $(document).on('click', '.bidconvention .bid', function(event) {
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
-        app.showBidpickerForReplacingBids([bidconvention], event.pageX, event.pageY);
+        app.select(bidconvention);
+        app.showBidpickerForReplacingBids(event.pageX, event.pageY);
         $(document).one('click', function() {
             app.hideBidpicker();
         });

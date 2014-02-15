@@ -75,6 +75,19 @@ define(function(require, exports, module) {
             }
             return false;
         };
+
+        var invalidatesCurrentBidsequence = function(bid) {
+            for (var i = 0; i < this.bidconventions().length; i++) {
+                var bc = this.bidconventions()[i];
+                if (bc.isRoot()) {
+                    return true; //root does not have a bid
+                }
+                if (!bc.parent.isValidSubsequentBid(bid)){
+                    return true;
+                }
+            }
+            return false;
+        };
         
         // var validBids = function(){
         //     var that = this;
@@ -118,34 +131,26 @@ define(function(require, exports, module) {
         //     return false;
         // };
 
-        var invalidatesCurrentBidsequence = function(bid) {
-            for (var i = 0; i < this.bidconventions().length; i++) {
-                var bc = this.bidconventions()[i];
-                if (bc.isRoot()) {
-                    return true; //root does not have a bid
-                }
-                if (!bc.parent.isValidSubsequentBid(bid)){
-                    return true;
-                }
-            }
-            return false;
-        };
         
-        var show = function(left, top) {
+        var show = function(left, top, bidconventions, bid) {
+            this.visible(true);
             this.left(left);
             this.top(top);
-            this.visible(true);
+            this.bidconventions(bidconventions);
+            this.currentBid(bid);
         };
 
         var hide = function() {
             this.visible(false);
         };
 
-        var setSelectedBid = function(bid) {
-            var that = this;
-            ko.utils.arrayForEach(that.bidconventions(), function(bc) {
+        var handleBidpicking = function(bid) {
+            ko.utils.arrayForEach(this.bidconventions(), function(bc) {
                 bc.replaceBid(bid);
             });
+            hide.call(this);
+            this.bidconventions([]);
+            this.currentBid(null);
         };
 
 
@@ -153,7 +158,7 @@ define(function(require, exports, module) {
             cssBidButton: cssBidButton,
             show: show,
             hide: hide,
-            setSelectedBid: setSelectedBid,
+            handleBidpicking: handleBidpicking,
             invalidatesSubsequentBidsequences : invalidatesSubsequentBidsequences,
             invalidatesCurrentBidsequence : invalidatesCurrentBidsequence
             // validBids : validBids,
