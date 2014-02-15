@@ -1,12 +1,20 @@
 /**
  * Implements event handlers for the context menu and its shortcuts.
+ * Supported:
+ * - Deleting selected bid conventions
+ * - Adding new child conventions
+ * - Adding new sibling conventions
  */
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jquery.hotkeys"], function(ko, $, moduleUI) {
 
     $(document).bind('keydown', 'alt+t', function() {
-        console.log("hotkeys alt+t");
+        console.log("TODO: set as current bid, i.e. selected root");
     }); 
 
+    /**
+     * Alt + N opens a bidpicker allowing the user to add
+     * new child bids to the selected bids
+     */
     $(document).bind('keydown', 'alt+n', function() {
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
@@ -21,6 +29,10 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
         }
     });
 
+    /**
+     * Alt + S opens a bidpicker allowing the user to add
+     * new sibling bids to the selected bids
+     */
     $(document).bind('keydown', 'alt+s', function() {
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
@@ -36,6 +48,10 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
     });
 
 
+    /**
+     * '.context-menu-new' opens a bidpicker allowing the user to add
+     * new child bids to the selected bids
+     */
     $(".context-menu-new").click(function(e){
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
@@ -44,6 +60,10 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
         });
     });
 
+    /**
+     * '.context-menu-new-sib' opens a bidpicker allowing the user to add
+     * new sibling bids to the selected bids
+     */
     $(".context-menu-new-sib").click(function(e){
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewSiblingBids(e.pageX, e.pageY); 
@@ -52,19 +72,27 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
         });
     });
     
+    /**
+     * Pressing the delete key opens a confirmation dialog
+     * that allows the user to delete all selected bids
+     */
     $(document).on('keyup', 'body', function(event) {
         var keyCode = event.keyCode || event.which;
         var app = ko.contextFor(this).$root;
         if (app.selectedConventions().length > 0) {
-            event.stopPropagation();
-            event.preventDefault();
             if (keyCode === moduleUI.keycodes.DELETE) {
                 var elem = $(".bidconvention.selected:last").get(0);
                 deleteBidConventions(app, elem);
+                event.stopPropagation();
+                event.preventDefault();
             }
         }
     });
     
+    /**
+     * '.context-menu-delete' opens a confirmation dialog
+     * that allows the user to delete all selected bids
+     */
     $(".context-menu-delete").click(function(){
         event.stopPropagation();
         var app = ko.contextFor(this).$root;

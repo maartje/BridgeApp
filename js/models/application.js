@@ -6,7 +6,6 @@ define(function(require, exports, module) {
 	require("viewmediators/binding-handlers");
     require("viewmediators/eventbindings-tree-view");
     require("viewmediators/eventbindings-context-menu");
-    require("viewmediators/eventbindings-bidpicker");
 
     var Application = module.exports.Application = function(data) {
         this.bidsystem = new bidsystemModule.Bidsystem(data.bidsystem || {});
@@ -96,7 +95,7 @@ define(function(require, exports, module) {
         };
 
         var addToSelection = function(bidconvention) {
-            addToCollection(bidconvention, this.selectedConventions);
+            addToCollection(this.selectedConventions, bidconvention);
         };
 
         var removeFromSelection = function(bidconvention) {
@@ -127,15 +126,15 @@ define(function(require, exports, module) {
 
         // helper methods
         
-        var addToCollection = function(bidconvention, bcCollection) {
-            if (bcCollection.indexOf(bidconvention) === -1) {
-                bcCollection.push(bidconvention);
+        var addToCollection = function(collection, elem) {
+            if (collection.indexOf(elem) === -1) {
+                collection.push(elem);
             }
         };
 
-        var addAllToCollection = function(bidconventions, bcCollection) {
-            for (var i = 0; i < bidconventions.length; i++) {
-                addToCollection(bidconventions[i], bcCollection);
+        var addAllToCollection = function(collection, elems) {
+            for (var i = 0; i < elems.length; i++) {
+                addToCollection(collection, elems[i]);
             }
         };
 
@@ -168,7 +167,7 @@ define(function(require, exports, module) {
             var createdBidConventions = [];
             ko.utils.arrayForEach(this.selectedConventions(), function(bc) {
                 createdBidConventions.push(bc.createChild({bid : bid}));
-                addToCollection(bc, that.openedConventions);
+                addToCollection(that.openedConventions, bc);
             });
             this.selectedConventions(createdBidConventions);
         };
@@ -219,7 +218,7 @@ define(function(require, exports, module) {
             this.hideBidpicker();
             this.bidpicker.bidconventions([]);
             
-            addAllToCollection(parentConventions, this.openedConventions); 
+            addAllToCollection(this.openedConventions, parentConventions); 
             this.selectedConventions(childconventions); 
 
             this.saveToLocalStorage();

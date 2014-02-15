@@ -152,7 +152,7 @@ define(function(require, exports, module) {
         return {
             cssBidButton: cssBidButton,
             show: show,
-            hide : hide,
+            hide: hide,
             setSelectedBid: setSelectedBid,
             invalidatesSubsequentBidsequences : invalidatesSubsequentBidsequences,
             invalidatesCurrentBidsequence : invalidatesCurrentBidsequence
