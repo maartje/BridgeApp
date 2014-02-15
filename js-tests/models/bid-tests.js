@@ -200,7 +200,32 @@ define(function(require) {
 						assert.equal(_7nt.htmlString(), "7<span>nt</span>");
 					});
 		});
-		
+		suite('Equals methode', function() {
+			test('#equals(bid): says whether two bid objects represent the same bid', function() {
+				var _2h_1 = bidModule.createBid({type : "SUIT", level : 2, suit : "HEARTS"})
+				var _2h_2 = bidModule.createBid({type : "SUIT", level : 2, suit : "HEARTS"})
+				var _2s_1 = bidModule.createBid({type : "SUIT", level : 2, suit : "SPADES"})
+				var _2s_2 = bidModule.createBid({type : "SUIT", level : 2, suit : "SPADES"})
+				var redbl_1 = bidModule.createBid({type : "REDOUBLET"})
+				var dbl_1 = bidModule.createBid({type : "DOUBLET"})
+				var pass_1 = bidModule.createBid({type : "PASS"})
+				var redbl_2 = bidModule.createBid({type : "REDOUBLET"})
+				var dbl_2 = bidModule.createBid({type : "DOUBLET"})
+				var pass_2 = bidModule.createBid({type : "PASS"})
+				
+				assert.isTrue(_2h_1.equals(_2h_2));
+				assert.isTrue(pass_1.equals(pass_2));
+				assert.isTrue(dbl_1.equals(dbl_2));
+				assert.isTrue(redbl_1.equals(redbl_2));
+
+				assert.isFalse(_2h_1.equals(_2s_1));
+				assert.isFalse(_2h_1.equals(pass_1));
+				assert.isFalse(pass_1.equals(dbl_1));
+				assert.isFalse(dbl_1.equals(redbl_1));
+				assert.isFalse(redbl_1.equals(_2h_1));
+			    
+			})
+		});
 		suite('Ordering of Bid objects', function() {
 			test('#succeeds(bid): "Suit > Redoublet" > "Doublet" > "Pass".',
 					function() {
