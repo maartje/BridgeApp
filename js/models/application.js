@@ -70,10 +70,6 @@ define(function(require, exports, module) {
                 return isEven != isOpponentRoot;
             };
     
-            function isSelected(bidconvention) {
-                return this.selectedConventions.indexOf(bidconvention) >= 0;
-            };
-    
             function isSuccessorOfSelected(bidconvention) {
                 if (bidconvention.isRoot()) {
                     return false;
@@ -95,6 +91,15 @@ define(function(require, exports, module) {
             }
             return cssStyle;
         };
+
+        var isSelected = function(bidconvention) {
+            return this.selectedConventions.indexOf(bidconvention) >= 0;
+        };
+
+        var isSingleSelected = function(bidconvention) {
+            return isSelected.call(this, bidconvention) && this.selectedConventions().length === 1;
+        };
+
 
         // methods that manipulate the collection of selected bids
 
@@ -345,6 +350,15 @@ define(function(require, exports, module) {
                 this.openedConventions.remove(bidconvention);
             }
         };
+
+        /**
+         * Switches the description between read and write mode
+         */
+        var toggleEditMode = function(bidconvention) {
+            if (!addToCollection(this.editedConventions, bidconvention)) {
+                this.editedConventions.remove(bidconvention);
+            }
+        };
         
         /**
          * Sets the selected convention as the current convention
@@ -382,9 +396,14 @@ define(function(require, exports, module) {
             cssTreeNode : cssTreeNode,
             cssBidconvention: cssBidconvention,
 
+            //methods to access the state
+            isSelected : isSelected,
+            isSingleSelected : isSingleSelected,
+
             //methods that affect the view
             toggleIsDealer: toggleIsDealer,
             toggleOpenClose : toggleOpenClose,
+            toggleEditMode : toggleEditMode,
             setSelectedAsTop: setSelectedAsTop,
             
             //methods that affect the collection of selected bids

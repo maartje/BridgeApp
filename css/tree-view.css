@@ -17,7 +17,7 @@
     display : inline-block;
 }
 
-#tree-view .bidconvention .description:hover {
+#tree-view .bidconvention .description:focus {
     cursor: text;
 	border-width: 1px;
 	border-style: solid;

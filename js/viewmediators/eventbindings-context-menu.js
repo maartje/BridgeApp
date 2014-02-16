@@ -8,7 +8,8 @@
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jquery.hotkeys"], function(ko, $, moduleUI) {
 
     $(document).bind('keydown', 'alt+t', function() {
-        console.log("TODO: set as current bid, i.e. selected root");
+        //console.log("keydown", "document", "alt + t");
+        //console.log("TODO: set as current bid, i.e. selected root");
     }); 
 
     /**
@@ -16,6 +17,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new child bids to the selected bids
      */
     $(document).bind('keydown', 'alt+n', function() {
+        //console.log("keydown", "document", "alt + n");
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         if (app.selectedConventions().length > 0) {
@@ -34,6 +36,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new sibling bids to the selected bids
      */
     $(document).bind('keydown', 'alt+s', function() {
+        //console.log("keydown", "document", "alt + s");
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         if (app.selectedConventions().length > 0) {
@@ -53,6 +56,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new child bids to the selected bids
      */
     $(".context-menu-new").click(function(e){
+        //console.log("click", "cm-new");
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
         $(document).one('click', function() {
@@ -65,6 +69,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new sibling bids to the selected bids
      */
     $(".context-menu-new-sib").click(function(e){
+        //console.log("click", "cm-new-sib");
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewSiblingBids(e.pageX, e.pageY); 
         $(document).one('click', function() {
@@ -73,10 +78,22 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
     });
     
     /**
+     * '.context-menu-delete' opens a confirmation dialog
+     * that allows the user to delete all selected bids
+     */
+    $(".context-menu-delete").click(function(){
+        //console.log("click", "cm-delete");
+        // event.stopPropagation();
+        var app = ko.contextFor(this).$root;
+        deleteBidConventions(app, this);
+    });
+
+    /**
      * Pressing the delete key opens a confirmation dialog
      * that allows the user to delete all selected bids
      */
-    $(document).on('keyup', 'body', function(event) {
+    $(document).on('keydown', 'body', function(event) {
+        //console.log("keydown", "body");
         var keyCode = event.keyCode || event.which;
         var app = ko.contextFor(this).$root;
         if (app.selectedConventions().length > 0) {
@@ -87,16 +104,6 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
                 event.preventDefault();
             }
         }
-    });
-    
-    /**
-     * '.context-menu-delete' opens a confirmation dialog
-     * that allows the user to delete all selected bids
-     */
-    $(".context-menu-delete").click(function(){
-        event.stopPropagation();
-        var app = ko.contextFor(this).$root;
-        deleteBidConventions(app, this);
     });
     
     function deleteBidConventions(app, elem) {

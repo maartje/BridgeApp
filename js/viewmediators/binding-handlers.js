@@ -20,12 +20,12 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
                 var htmlString = ko.utils.unwrapObservable(valueAccessor());
                 $(element).html(htmlString);
             });
-
-            $(element).on("click", function() {
+            
+            //edit html as text
+            $(element).on("focus", function() {
+                console.log("focus", "htmlValue");
                 var htmlString = ko.utils.unwrapObservable(valueAccessor());
                 $(element).text(htmlString);
-                moduleUI.setCursorToEndOfContenteditable(element);
-                //TODO: more sophisticated cursor handling (click in the middle should result in a cursor in the middle)
             });
 
         },

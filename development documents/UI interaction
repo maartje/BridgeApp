@@ -1,0 +1,30 @@
+click:
+- document: "hide bidpicker"
+    - body
+        - bidconvention: "select"
+            - bid: "show bidpicker iff single selected convention"
+        - jstree icon: "open/close"
+        - bid-button
+        - cm-new
+        - cm-new-sibling
+        - cm-delete
+
+---------------------------------------------------------------
+contextmenu:
+
+---------------------------------------------------------------
+blur:
+- description
+--------------------------------------------------------------
+focus:
+- description
+--------------------------------------------------------------
+keydown (Alt + N, Alt + S, Delete, Enter)
+- description
+- body
+------------------------------------------------------------
+keyup, change:
+- description
+-------------------------------------------------------------
+Delete
+-------------------------------------------------------------

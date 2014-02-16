@@ -19,6 +19,7 @@
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
+	<span contenteditable="true">maartje</span>
 	<!-- Renders bidsystem tree view  -->
 	<div id="tree-view">
 		<div class="jstree jstree-0 jstree-focused jstree-classic context">
@@ -36,7 +37,7 @@
 					<div class="bidconvention" data-bind="css : $root.cssBidconvention($data)"> 
 						<span class="bid" data-bind="html : bid()? bid().htmlString() : ''"></span>
 						<!-- ko with: convention -->
-							<span class="description" contenteditable="true" data-bind="{htmlValue : description}"></span>
+							<span class="description" data-bind="{htmlValue : description, attr: { contenteditable: $root.isSingleSelected($parent)}}"></span>
 					    <!-- /ko -->
 					</div>
 				</a>
