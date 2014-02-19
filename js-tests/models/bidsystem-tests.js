@@ -8,7 +8,7 @@ define(function(require) {
         suite('Construction', function() {
             test('#Bidsystem(data) properties are set from the data object', function() {
                 // arrange
-                var jsonData = testDataModule.testBiddingSystem;
+                var jsonData = testDataModule.biddingSystemData;
 
                 // act
                 var bidsystem = new bidsystemModule.Bidsystem(jsonData);
@@ -38,21 +38,19 @@ define(function(require) {
         suite('Serialization and persistence', function() {
             test('#toJSON serializes bidRoot, bidRootOpponent, and id', function() {
                 // arrange
-                var jsonDataBefore = testDataModule.testBiddingSystem;
-                var bidsystem = new bidsystemModule.Bidsystem(jsonDataBefore);
+                var bidsystem = testDataModule.biddingSystem;
 
                 // act
-                var jsonDataAfter = bidsystem.toJSON();
+                var jsonData = bidsystem.toJSON();
 
                 // assert
-                assert.property(jsonDataAfter, 'id');
-                assert.property(jsonDataAfter, "bidRoot");
-                assert.property(jsonDataAfter, "bidRootOpponent");
+                assert.property(jsonData, 'id');
+                assert.property(jsonData, "bidRoot");
+                assert.property(jsonData, "bidRootOpponent");
             });
             test('#saveToLocalStorage calls the save method in the local storage module', function() {
                 // arrange
-                var jsonDataBefore = testDataModule.testBiddingSystem;
-                var bidsystem = new bidsystemModule.Bidsystem(jsonDataBefore);
+                var bidsystem = testDataModule.biddingSystem;
                 var ls = require('storage/local-storage');
                 var saveArgs = [];
                 ls.save = function(key, value) {
@@ -68,8 +66,7 @@ define(function(require) {
             });
             test('#loadFromLocalStorage calls the load method in the local storage module', function() {
                 // arrange
-                var jsonDataBefore = testDataModule.testBiddingSystem;
-                var bidsystem = new bidsystemModule.Bidsystem(jsonDataBefore);
+                var bidsystem = testDataModule.biddingSystem;
                 var ls = require('storage/local-storage');
                 var loadArgs = [];
                 ls.load = function(key) {

@@ -1,20 +1,20 @@
 /**
  * Represents the view state of the bidpicker that allows to pick a valid bid
+ * TODO: refactor to bidbutton model???
  */
 define(function(require, exports, module) {
     var bidModule = require("models/bid");
     var ko = require("knockout");
 
-    var Bidpicker = module.exports.Bidpicker = function(data) {
-        var bpdata = data || {};
+    var Bidpicker = module.exports.Bidpicker = function() {
         this.suitBids = createSuitBids();
         this.specialBids = createSpecialBids();
-        this.preselectedBid = ko.observable(bpdata.preselectedBid);
-        this.bidconventions = ko.observable(bpdata.bidconventions || []);
-
-        this.visible = ko.observable(bpdata.visible || false);
-        this.left = ko.observable(bpdata.left || 0);
-        this.top = ko.observable(bpdata.top || 0);
+        this.visible = ko.observable(false);
+        this.left = ko.observable(-1000);
+        this.top = ko.observable(-1000);
+        
+        this.preselectedBid = ko.observable(undefined);
+        this.bidconventions = ko.observable([]);
 
         function createSuitBids() {
             var suitBidArray = [];
