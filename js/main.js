@@ -28,15 +28,27 @@ require.config({
     }
 });
 
-require(['require', 'knockout', 'models/application', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"],
-function(require, ko, appModule, defaultDataModule, $) {
-    var bidSystemId = "maartje_wim";
-    //localStorage.clear();
-    if (localStorage.getItem(bidSystemId) === null) {
-        defaultDataModule.saveToLocalStorage(bidSystemId);
-    }
+// require(['require', 'knockout', 'models/application', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"],
+// function(require, ko, appModule, defaultDataModule, $) {
+//     var bidSystemId = "maartje_wim";
+//     //localStorage.clear();
+//     if (localStorage.getItem(bidSystemId) === null) {
+//         defaultDataModule.saveToLocalStorage(bidSystemId);
+//     }
 
-    var application = new appModule.Application({bidsystem : {id : bidSystemId}});
+//     var application = new appModule.Application({bidsystem : {id : bidSystemId}});
+//     application.loadFromLocalStorage();
+//     ko.applyBindings(application);
+    
+//     $('.context').jeegoocontext('context-menu');
+// });
+
+//Initialize application using test data 
+require(['require', 'knockout', 'models/application', '../js-tests/data/test-data', 'jquery', "libs/jquery.jeegoocontext"],
+function(require, ko, appModule, dataModule, $) {
+    localStorage.setItem(dataModule.testBiddingSystem.id, JSON.stringify(dataModule.testBiddingSystem));
+
+    var application = new appModule.Application({bidsystem : {id : dataModule.testBiddingSystem.id}});
     application.loadFromLocalStorage();
     ko.applyBindings(application);
     

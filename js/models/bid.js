@@ -41,6 +41,9 @@ define(function(require, exports, module) {
 		return "pass";
 	};
 
+	Pass.prototype.toJSON = function() {
+		return { type : this.type };
+	};
 
 	var Doublet = function() {
 		this.type = "DOUBLET";
@@ -55,6 +58,9 @@ define(function(require, exports, module) {
 		return "dbl";
 	};
 
+	Doublet.prototype.toJSON = function() {
+		return { type : this.type };
+	};
 
 	var Redoublet = function() {
 		this.type = "REDOUBLET";
@@ -68,6 +74,11 @@ define(function(require, exports, module) {
 	Redoublet.prototype.htmlString = function() {
 		return "redbl";
 	};
+	
+	Redoublet.prototype.toJSON = function() {
+		return { type : this.type };
+	};
+
 
 	var suitOrdering = {
 		"CLUBS": 1,
@@ -122,12 +133,21 @@ define(function(require, exports, module) {
 			return !gt.call(this, bidInSuit) && !eq.call(this, bidInSuit);
 		};
 
+		var toJSON = function() {
+			return {
+				type : this.type,
+				suit : this.suit,
+				level : this.level
+			};
+		};
+
 		//public members		
 		return {
 			gt: gt,
 			lt: lt,
 			eq: eq,
-			htmlString: htmlString
+			htmlString: htmlString,
+			toJSON : toJSON
 		};
 	}();
 

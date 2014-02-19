@@ -75,6 +75,29 @@ define(function(require) {
 						assert.throw(function(){bidModule.createBid({type : "SUIT", suit : "XX", level : 1});}, 'invalid suit: XX');
 					});
 		});
+		suite('Serialization of Bid objects', function() {
+		    test('#toJSON for special bids serializes the type', function() {
+				var pass = bidModule.createBid({type : "PASS"})
+				var dbl = bidModule.createBid({type : "DOUBLET"})
+				var redbl = bidModule.createBid({type : "REDOUBLET"})
+
+		        assert.deepEqual(pass.toJSON(), {type : pass.type});
+		        assert.deepEqual(dbl.toJSON(), {type : dbl.type});
+		        assert.deepEqual(redbl.toJSON(), {type : redbl.type});
+		    });
+		    test('#toJSON for suit bids serializes suit, level and type', function() {
+				var _2spades = bidModule.createBid({type : "SUIT", suit: "SPADES", level : 2})
+				var jsonActual = _2spades.toJSON()
+				var jsonExpected = {
+				    type : _2spades.type,
+				    suit : _2spades.suit,
+				    level : _2spades.level
+				}
+		        assert.deepEqual(jsonActual, jsonExpected);
+		    });
+		});
+
+		
 		suite('BidInSuit methods', function() {
 			test('#gt(bidInSuit): returns true if the current bid has a higher level than the bid passed as an argument',
 					function() {
