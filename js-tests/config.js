@@ -32,7 +32,7 @@ require(['require', 'mocha'], function(require){
  
   require([
       '../js-tests/models/bid-tests',
-      '../js-tests/models/bid-convention-tests'
+      '../js-tests/models/convention-tests'
       //'../js-tests/models/bid-system-tests'
     ], function(require) {
           mocha.run();
