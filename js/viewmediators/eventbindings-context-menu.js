@@ -17,7 +17,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new child bids to the selected bids
      */
     $(document).bind('keydown', 'alt+n', function() {
-        //console.log("keydown", "document", "alt + n");
+        console.log("keydown", "document", "alt + n");
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         if (app.selectedConventions().length > 0) {
@@ -36,7 +36,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new sibling bids to the selected bids
      */
     $(document).bind('keydown', 'alt+s', function() {
-        //console.log("keydown", "document", "alt + s");
+        console.log("keydown", "document", "alt + s");
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         if (app.selectedConventions().length > 0) {
@@ -56,7 +56,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new child bids to the selected bids
      */
     $(".context-menu-new").click(function(e){
-        //console.log("click", "cm-new");
+        console.log("click", "cm-new");
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewChildBids(e.pageX, e.pageY); 
         $(document).one('click', function() {
@@ -69,7 +69,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
      * new sibling bids to the selected bids
      */
     $(".context-menu-new-sib").click(function(e){
-        //console.log("click", "cm-new-sib");
+        console.log("click", "cm-new-sib");
         var app = ko.contextFor(this).$root;
         app.showBidpickerForAddingNewSiblingBids(e.pageX, e.pageY); 
         $(document).one('click', function() {

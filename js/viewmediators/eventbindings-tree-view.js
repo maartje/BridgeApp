@@ -15,22 +15,12 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     });
 
     /**
-     * Mousedown marks a bid convention as selected
-     */
-    $(document).on('click', '.bidconvention', function(event) {
-        //console.log("click", ".bidconvention");
-        var app = ko.contextFor(this).$root;
-        var bidconvention = ko.contextFor(this).$data;
-        app.select(bidconvention);
-    });
-
-    /**
      * Clicking on a bid element in a single(!) selected bidconvention, 
      * shows the bidpicker element that allows the user to replace the 
      * clicked bid with another valid bid.
      */
     $(document).on('click', '.bidconvention .bid', function(event) {
-        //console.log("click", ".bid");
+        console.log("click", ".bid");
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         if (app.isSingleSelected(bidconvention)) {
@@ -59,20 +49,28 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
     });
 
     /**
-     * Rightmouse click on a bid convention opens the context menu.
-     * The bid convention is marked as selected in case 0 or 1
-     * bidconventions are in the current selection.
-     * (mouse down is used since contextmenu event seems to be captured(?))
+     * Mouse down on a bid convention marks the convention as selected 
+     * in case 0 or 1 bidconventions are in the current selection.
+     * (right button prevents the description going to edit mode)
      */
     $(document).on('mousedown', '.bidconvention', function(event) {
-        console.log("contextmenu", ".bidconvention");
+        //console.log("mousedown", ".bidconvention");
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
-        if (app.selectedConventions().length <= 1) {
+        if (event.which === 1 || event.which === 2) { //left or middle mouse button
             app.select(bidconvention);
         }
-        //TODO prevent edit mode when context menu opens
-        //$(".description", this).blur();
+        if (event.which === 3) { //right mouse button
+            if (app.selectedConventions().length <= 1) {
+                app.select(bidconvention);
+            }
+            //HACK: prevent description element goint to edit mode when
+            //the context-menu is opened
+            //TODO: maybe introduce viewstate telling which descriptions are in edit mode?
+            var descriptionElement = $(".description", this);
+            descriptionElement.blur();
+            descriptionElement.one("focus", function(){descriptionElement.blur()});
+        }
     });
 
     /**

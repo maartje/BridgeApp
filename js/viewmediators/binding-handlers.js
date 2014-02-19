@@ -23,7 +23,7 @@ define(["knockout", "jquery", "viewmediators/ui-common"], function(ko, $, module
             
             //edit html as text
             $(element).on("focus", function() {
-                console.log("focus", "htmlValue");
+                //console.log("focus", "htmlValue");
                 var htmlString = ko.utils.unwrapObservable(valueAccessor());
                 $(element).text(htmlString);
             });
