@@ -18,9 +18,10 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
      * Clicking on a bid element in a single(!) selected bidconvention, 
      * shows the bidpicker element that allows the user to replace the 
      * clicked bid with another valid bid.
+     * Remark: mousedown is used because of its interaction with mousedown that selects.
      */
-    $(document).on('click', '.bidconvention .bid', function(event) {
-        console.log("click", ".bid");
+    $(document).on('mousedown', '.bidconvention .bid', function(event) {
+        console.log("mousedown", ".bid");
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         if (app.isSingleSelected(bidconvention)) {
