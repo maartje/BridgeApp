@@ -46,9 +46,9 @@ require.config({
 //Initialize application using test data 
 require(['require', 'knockout', 'models/application', '../js-tests/data/test-data', 'jquery', "libs/jquery.jeegoocontext"],
 function(require, ko, appModule, dataModule, $) {
-    localStorage.setItem(dataModule.testBiddingSystem.id, JSON.stringify(dataModule.testBiddingSystem));
+    localStorage.setItem(dataModule.biddingSystemData.id, JSON.stringify(dataModule.biddingSystemData));
 
-    var application = new appModule.Application({bidsystem : {id : dataModule.testBiddingSystem.id}});
+    var application = new appModule.Application({bidsystem : {id : dataModule.biddingSystemData.id}});
     application.loadFromLocalStorage();
     ko.applyBindings(application);
     
