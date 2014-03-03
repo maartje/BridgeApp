@@ -68,7 +68,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         if (event.which === 1 || event.which === 2) { //left or middle mouse button
             if (!app.isSelected(bidconvention)){
                 descriptionElement.blur();
-                descriptionElement.one("focus", function(){descriptionElement.blur()});
+                //descriptionElement.one("focus", function(){descriptionElement.blur()});
             }
             app.select(bidconvention);
         }
@@ -77,7 +77,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
                 app.select(bidconvention);
             }
             descriptionElement.blur();
-            descriptionElement.one("focus", function(){descriptionElement.blur()});
+            //descriptionElement.one("focus", function(){descriptionElement.blur()});
         }
         
     });
