@@ -20,8 +20,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
      * clicked bid with another valid bid.
      * Remark: mousedown is used because of its interaction with mousedown that selects.
      */
-    $(document).on('mousedown', '.bidconvention .bid', function(event) {
-        console.log("mousedown", ".bid");
+    $(document).on('click', '.bidconvention .bid', function(event) {
+        console.log("click", ".bid");
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         if (app.isSingleSelected(bidconvention)) {
@@ -54,8 +54,8 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
      * in case 0 or 1 bidconventions are in the current selection.
      * (right button prevents the description going to edit mode)
      */
-    $(document).on('mousedown', '.bidconvention', function(event) {
-        console.log("mousedown", ".bidconvention");
+    $(document).on('click', '.bidconvention', function(event) {
+        console.log("click", ".bidconvention");
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         
@@ -79,6 +79,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
             descriptionElement.blur();
             descriptionElement.one("focus", function(){descriptionElement.blur()});
         }
+        
     });
     
 
