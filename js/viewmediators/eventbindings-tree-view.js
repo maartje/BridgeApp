@@ -56,32 +56,46 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
      */
     $(document).on('click', '.bidconvention', function(event) {
         console.log("click", ".bidconvention");
+        console.log("e.wich", event.which);
         var app = ko.contextFor(this).$root;
         var bidconvention = ko.contextFor(this).$data;
         
-        
-        //HACK: prevents description element goint to edit mode when bidconvention
-        //is not yet selected.
-        //TODO: maybe introduce viewstate telling which descriptions are in edit mode?
-        var descriptionElement = $(".description", this);
-
-        if (event.which === 1 || event.which === 2) { //left or middle mouse button
-            if (!app.isSelected(bidconvention)){
-                descriptionElement.blur();
-                //descriptionElement.one("focus", function(){descriptionElement.blur()});
-            }
-            app.select(bidconvention);
+        if (event.ctrlKey || !app.isSingleSelected(bidconvention)){
+            //HACK: prevents description element goint to edit mode when bidconvention
+            //is not yet selected.
+            //TODO: maybe introduce viewstate telling which descriptions are in edit mode?
+            var descriptionElement = $(".description", this);
+            descriptionElement.blur();        	
+        }        
+        if (event.ctrlKey) {
+            app.toggleSelected(bidconvention);
+            event.stopPropagation();
+            event.preventDefault();
         }
-        if (event.which === 3) { //right mouse button, triggers context menu
-            descriptionElement.blur();
-            //descriptionElement.one("focus", function(){descriptionElement.blur()});
-            if (app.selectedConventions().length <= 1) {
-                app.select(bidconvention);
-            }
-        }
-        
+        else {
+        	app.select(bidconvention);
+        }        	
     });
     
+    //cm and click seem to be captured. Therefore mousedown and which===3 are used.
+    $(document).on('mousedown', '.bidconvention', function(event) {
+    	if (event.which === 3) {	
+	        var app = ko.contextFor(this).$root;
+	        var bidconvention = ko.contextFor(this).$data;
+	        if (event.ctrlKey) {
+	            app.addToSelection(bidconvention);            	
+	        }
+	        else if (!app.isSelected(bidconvention)){
+	        	app.select(bidconvention);
+	        }
+	        //HACK: prevents description element goint to edit mode when bidconvention
+	        //is not yet selected.
+	        //TODO: maybe introduce viewstate telling which descriptions are in edit mode?    	
+	        var descriptionElement = $(".description", this);
+	        descriptionElement.blur();
+	        descriptionElement.one('focus', function(){descriptionElement.blur();});
+	    }
+    });
 
     /**
      * Blur on '.description' makes the possible changed description persistent

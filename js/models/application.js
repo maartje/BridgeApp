@@ -376,7 +376,16 @@ define(function(require, exports, module) {
                 this.editedConventions.remove(bidconvention);
             }
         };
-        
+
+        /**
+         * Switches the bid node between selected and not selected
+         */
+        var toggleSelected = function(bidconvention) {
+            if (!addToCollection(this.selectedConventions, bidconvention)) {
+                this.selectedConventions.remove(bidconvention);
+            }
+        };
+
         /**
          * Sets the selected convention as the current convention
          * shown as tree top
@@ -421,6 +430,7 @@ define(function(require, exports, module) {
             toggleIsDealer: toggleIsDealer,
             toggleOpenClose : toggleOpenClose,
             toggleEditMode : toggleEditMode,
+            toggleSelected : toggleSelected,
             setSelectedAsTop: setSelectedAsTop,
             
             //methods that affect the collection of selected bids
