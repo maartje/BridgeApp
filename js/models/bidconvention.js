@@ -323,9 +323,11 @@ define(function(require, exports, module) {
         var toJSON = function() {
             return {
                 id: this.id,
-                bid: this.bid(),
-                convention: this.convention,
-                children: this.children()
+                bid: this.bid()? this.bid().toJSON() : null,
+                convention: this.convention? this.convention.toJSON() : null,
+                children: ko.utils.arrayMap(this.children(), function(bc){ 
+                	return bc.toJSON();
+                })
             };
         };
 

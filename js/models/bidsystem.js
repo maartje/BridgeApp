@@ -19,8 +19,8 @@ define(function(require, exports, module) {
         var toJSON = function() {
             return {
                 id: this.id,
-                bidRoot: this.bidRoot,
-                bidRootOpponent: this.bidRootOpponent
+                bidRoot: this.bidRoot? this.bidRoot.toJSON() : null,
+                bidRootOpponent: this.bidRootOpponent? this.bidRootOpponent.toJSON() : null
             };
         };
 

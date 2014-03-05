@@ -161,7 +161,7 @@ define(function(require, exports, module) {
         //helper function that marks the selected conventions as clipped
         var clipSelection = function(isCutAction) {
             this.clippedConventions.removeAll();
-            addAllToCollection(this.clippedConventions, this.selectedConventions);
+            addAllToCollection(this.clippedConventions, this.selectedConventions());
             this.isCutAction = isCutAction;
         };
 
@@ -213,16 +213,23 @@ define(function(require, exports, module) {
         var pasteClippedToSelection = function() {
             //TODO condition paste action is valid for all pairs clipped/selected 
             var that = this;
-            ko.utils.arrayForEach(that.clippedConventions(), function(clippedBC) {
-                ko.utils.arrayForEach(that.selectedConventions(), function(selectedBC) {
+            var clippedConventions = this.clippedConventions();
+            var selectedConventions = this.selectedConventions();
+            ko.utils.arrayForEach(clippedConventions, function(clippedBC) {
+                ko.utils.arrayForEach(selectedConventions, function(selectedBC) {
                     if (that.isCutAction) {
                         clippedBC.remove();
                     }
-                    selectedBC.createChild(clippedBC.toJSON());
+                    var jsonClippedBC = clippedBC.toJSON();
+                    selectedBC.createChild(jsonClippedBC);
                 });
             });
+            this.bidsystem.saveToLocalStorage();
+            this.isCutAction = false;
+            addAllToCollection.call(this, this.openedConventions, this.selectedConventions());            
         };
-
+        
+        
         /**
          * Adds new childbidconventions to the selected bidconventions.
          * The child bidconventions have the given bid as bid.

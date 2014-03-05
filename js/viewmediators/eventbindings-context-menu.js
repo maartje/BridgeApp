@@ -50,7 +50,6 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
         }
     });
 
-
     /**
      * '.context-menu-new' opens a bidpicker allowing the user to add
      * new child bids to the selected bids
@@ -136,4 +135,65 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
             }
         });
     };
+    
+    /**
+     * '.context-menu-copy' copies the selected bidconventions
+     * to the 'clipboard'. After paste, the original bidconventions
+     * remain in the bidsystem.
+     */
+    $(".context-menu-copy").click(function(){
+        //console.log("click", "cm-copy");
+        // event.stopPropagation();
+        var app = ko.contextFor(this).$root;
+        app.copySelection();
+    });
+
+    /**
+     */
+    $(document).bind('keydown', 'ctrl+c', function() {
+        var treeViewElem = $("#tree-view").get(0);
+        var app = ko.contextFor(treeViewElem).$root;
+        app.copySelection();    	
+    });
+
+    /**
+     * '.context-menu-cut' copies the selected bidconventions
+     * to the 'clipboard'. After paste, the original bidconventions
+     * are removed from the bidsystem.
+     */
+    $(".context-menu-cut").click(function(){
+        //console.log("click", "cm-cut");
+        // event.stopPropagation();
+        var app = ko.contextFor(this).$root;
+        app.cutSelection();
+    });
+    
+    /**
+     */
+    $(document).bind('keydown', 'ctrl+x', function() {
+        var treeViewElem = $("#tree-view").get(0);
+        var app = ko.contextFor(treeViewElem).$root;
+        app.cutSelection();    	
+    });
+
+
+    /**
+     * '.context-menu-paste' copies the 'clipped' bidconventions
+     * to the selected bidconventions. The original bidconventions
+     * are removed iff they where clipped with a cut action.
+     */
+    $(".context-menu-paste").click(function(){
+        //console.log("click", "cm-paste");
+        // event.stopPropagation();
+        var app = ko.contextFor(this).$root;
+        app.pasteClippedToSelection();
+    });
+    
+    /**
+     */
+    $(document).bind('keydown', 'ctrl+v', function() {
+        var treeViewElem = $("#tree-view").get(0);
+        var app = ko.contextFor(treeViewElem).$root;
+        app.pasteClippedToSelection();    	
+    });
 });

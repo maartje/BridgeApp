@@ -73,11 +73,11 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
             app.select(bidconvention);
         }
         if (event.which === 3) { //right mouse button, triggers context menu
+            descriptionElement.blur();
+            //descriptionElement.one("focus", function(){descriptionElement.blur()});
             if (app.selectedConventions().length <= 1) {
                 app.select(bidconvention);
             }
-            descriptionElement.blur();
-            //descriptionElement.one("focus", function(){descriptionElement.blur()});
         }
         
     });
