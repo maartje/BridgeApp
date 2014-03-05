@@ -58,6 +58,18 @@ define(function(require, exports, module) {
         // validation methods
 
         /**
+         * Returns true iff the represented bidsequence is valid
+         * 
+         * @return {Boolean}
+         */
+        var isValidBidsequence = function() {
+        	if (isRoot.call(this)){
+        		return true;
+        	}
+        	return isValidBidsequence.call(this.parent) && isValidSubsequentBid.call(this.parent, this.bid());
+        };
+
+        /**
          * Returns true iff the given bid data represents a valid subsequent bid
          * for the given bidsequence
          * 
@@ -327,7 +339,8 @@ define(function(require, exports, module) {
             remove: remove,
             
             //validation methods
-            isValidSubsequentBid: isValidSubsequentBid,
+            isValidBidsequence : isValidBidsequence,
+            isValidSubsequentBid : isValidSubsequentBid,
             repLacementInvalidatesSubsequentBidsequences : repLacementInvalidatesSubsequentBidsequences,
             collectSubsequentBidsequencesInvalidatedByReplacement : collectSubsequentBidsequencesInvalidatedByReplacement,
             

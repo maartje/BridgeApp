@@ -55,11 +55,8 @@
 }
 
 #tree-view .bidpicker .bid-button.invalidates-succeeding-bids  {
-    /*TODO: more sophisticated handling of this situation*/
-	cursor: default;
-	background-color: white;
-	color: gray;
-	opacity: 0.5;
+	border-style:solid;
+	border-color: red;
 }
 
 

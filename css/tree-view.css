@@ -4,6 +4,13 @@
     background-color : yellow;
 }
 
+#tree-view .bidconvention.invalid-bidsequence {
+	border-style:solid;
+	border-color: red;
+	border-width: 1px;
+}
+
+
 #tree-view .bidconvention.selected {
     background-color : orange;
 }

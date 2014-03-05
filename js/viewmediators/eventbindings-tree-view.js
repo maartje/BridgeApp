@@ -44,7 +44,7 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         var bidpicker = app.bidpicker;
         var bid = ko.contextFor(this).$data;
         //TODO more sophisticated handling of invalidates-succeeding-bids
-        if (!bidpicker.invalidatesCurrentBidsequence(bid) && !bidpicker.invalidatesSubsequentBidsequences(bid) ){ 
+        if (!bidpicker.invalidatesCurrentBidsequence(bid)){ 
             app.handleBidpicking(bid);
         }
     });

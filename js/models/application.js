@@ -80,6 +80,9 @@ define(function(require, exports, module) {
                 return isSuccessorOfSelected.call(this, bidconvention.parent);
             };
             var cssStyle = "";
+            if (!bidconvention.isValidBidsequence()){
+            	cssStyle += "invalid-bidsequence ";
+            }
             if (isOpponentBid.call(this, bidconvention)) {
                 cssStyle += "opponent-bid ";
             }
