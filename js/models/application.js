@@ -62,7 +62,11 @@ define(function(require, exports, module) {
         var cssBidconvention = function(bidconvention) {
             function isCut(bidconvention) {
                 //TODO: special styling for cut conventions (clipped and cut action)?
-                return this.isCutAction && this.clippedConventions.indexOf(bidconvention) >= 0;
+            	if (!this.isCutAction || bidconvention.isRoot()){
+            		return false;
+            	}
+                return this.clippedConventions.indexOf(bidconvention) >= 0 ||
+                	isCut.call(this, bidconvention.parent);
             };
             function isOpponentBid(bidconvention) {
                 var isEven = bidconvention.length() % 2 === 0;
@@ -85,6 +89,9 @@ define(function(require, exports, module) {
             }
             if (isOpponentBid.call(this, bidconvention)) {
                 cssStyle += "opponent-bid ";
+            }
+            if (isCut.call(this, bidconvention)) {
+                cssStyle += "cut ";
             }
             if (isSelected.call(this, bidconvention)) {
                 cssStyle += "selected";

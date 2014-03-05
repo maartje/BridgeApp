@@ -15,6 +15,10 @@
     background-color : orange;
 }
 
+#tree-view .bidconvention.cut {
+    color : grey;
+}
+
 #tree-view .bidconvention.successor-of-selected{
 /*     background-color : blue; */
 }
