@@ -150,7 +150,12 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
 
     /**
      */
-    $(document).bind('keydown', 'ctrl+c', function() {
+    $(document).bind('keydown', 'ctrl+c', function(e) {
+    	//TODO extract method handleEditAction
+    	if ($(e.target).hasClass("description")){
+    		e.stopPropagation();
+    		return;
+    	}
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         app.copySelection();    	
@@ -170,10 +175,14 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
     
     /**
      */
-    $(document).bind('keydown', 'ctrl+x', function() {
+    $(document).bind('keydown', 'ctrl+x', function(e) {
+    	if ($(e.target).hasClass("description")){
+    		e.stopPropagation();
+    		return;
+    	}
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
-        app.cutSelection();    	
+        app.cutSelection();
     });
 
 
@@ -191,9 +200,19 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui", "libs/jque
     
     /**
      */
-    $(document).bind('keydown', 'ctrl+v', function() {
+    $(document).bind('keydown', 'ctrl+v', function(e) {
+    	if ($(e.target).hasClass("description")){
+    		e.stopPropagation();
+    		return;
+    	}
         var treeViewElem = $("#tree-view").get(0);
         var app = ko.contextFor(treeViewElem).$root;
         app.pasteClippedToSelection();    	
+    });
+    
+    $(".context-menu-select").click(function(){
+    	//TODO: only enable when exactly one bid selected
+        var app = ko.contextFor(this).$root;
+        app.setSelectedAsTop();
     });
 });

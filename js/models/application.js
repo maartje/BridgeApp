@@ -35,7 +35,7 @@ define(function(require, exports, module) {
             function isOpen(bidconvention) {
                 return this.openedConventions.indexOf(bidconvention) >= 0;
             };
-			var style = "";
+			var style = " ";
 			if(bidconvention.children().length === 0){
 				style =  "jstree-leaf";
 			}
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 			if(!bcParent || bcParent.children()[bcParent.children().length - 1] === bidconvention){
 				style = style + " jstree-last";
 			}
-			return style;
+			return style + " ";
         };		
 
         /**
@@ -94,10 +94,10 @@ define(function(require, exports, module) {
                 cssStyle += "cut ";
             }
             if (isSelected.call(this, bidconvention)) {
-                cssStyle += "selected";
+                cssStyle += "selected ";
             }
             if (isSuccessorOfSelected.call(this, bidconvention)) {
-                cssStyle += "successor-of-selected";
+                cssStyle += "successor-of-selected ";
             }
             return cssStyle;
         };
@@ -392,12 +392,32 @@ define(function(require, exports, module) {
          */
         var setSelectedAsTop = function() {
             //TODO condition: exactly 1 bc in selection
+        	if (this.selectedConventions().length != 1){
+        		return;
+        	}
             var bidconvention = this.selectedConventions()[0];
             this.selectedConventions([]);
             this.selectedRoot(bidconvention);
         };
 
-        
+        var setBidsequenceAsTop = function(bidconvention) {
+            this.selectedRoot(bidconvention);
+            this.selectedConventions([]);
+            this.openedConventions([]);
+        };
+
+        var setRootAsTop = function() {
+            this.selectedRoot(this.bidsystem.bidRoot);
+            this.selectedConventions([]);
+            this.openedConventions([]);
+        };
+
+        var setOpponentRootAsTop = function() {
+            this.selectedRoot(this.bidsystem.bidRootOpponent);
+            this.selectedConventions([]);
+            this.openedConventions([]);
+        };
+
         // save and load methods
         
         /**
@@ -431,7 +451,10 @@ define(function(require, exports, module) {
             toggleOpenClose : toggleOpenClose,
             toggleEditMode : toggleEditMode,
             toggleSelected : toggleSelected,
-            setSelectedAsTop: setSelectedAsTop,
+            setSelectedAsTop : setSelectedAsTop,
+            setBidsequenceAsTop : setBidsequenceAsTop,
+            setOpponentRootAsTop : setOpponentRootAsTop,
+            setRootAsTop : setRootAsTop,
             
             //methods that affect the collection of selected bids
             select: select,

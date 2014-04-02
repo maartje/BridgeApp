@@ -3,6 +3,31 @@
  */
 define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(ko, $, moduleUI) {
     
+
+    $(document).on('click', '.selected-bidsequence .bid', function(event) {
+        console.log("click", ".bid");
+        var app = ko.contextFor(this).$root;
+        var bidconvention = ko.contextFor(this).$data;
+        app.setBidsequenceAsTop(bidconvention);
+
+    });
+
+    $(document).on('click', '.player.we', function(event) {
+        var app = ko.contextFor(this).$root;
+        app.setRootAsTop();
+    });
+
+    $(document).on('click', '.player.them', function(event) {
+        var app = ko.contextFor(this).$root;
+        app.setOpponentRootAsTop();
+    });
+    
+    $(document).on('dblclick', '.bidconvention-tree-node', function(e) {
+        var app = ko.contextFor(this).$root;
+        app.setSelectedAsTop();
+    });
+
+	
     /**
      * Clicking on the '.jstree-icon' toggles the open/close
      * rendering of the tree node view.
@@ -67,6 +92,11 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
             var descriptionElement = $(".description", this);
             descriptionElement.blur();        	
         }        
+        if (event.shiftKey) {
+        	//TODO: select range
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (event.ctrlKey) {
             app.toggleSelected(bidconvention);
             event.stopPropagation();
@@ -116,6 +146,9 @@ define(["knockout", "jquery", "viewmediators/ui-common", "jquery-ui"], function(
         if (keyCode === moduleUI.keycodes.ENTER) {
             event.preventDefault();
             $(event.target).blur();
+        }
+        if (keyCode === moduleUI.keycodes.DELETE) {
+            event.stopPropagation();
         }
     });
 

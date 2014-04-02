@@ -1,0 +1,67 @@
+.bridge-table .player.dealer{
+	text-decoration: overline;
+}
+
+.bridge-table .player.vulnerable{
+	background-color: white; 
+	color: red;
+}
+
+.bridge-table .player.not_vulnerable{
+	background-color: white; 
+	color: black;
+}
+
+.bridge-table .players, .bridge-table .selected-bidsequence
+{
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	min-width: 340px;
+	max-width: 340px;
+	width: 340px;
+	background-color: white;
+	overflow: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black; 
+}
+
+
+.bridge-table .players
+{	
+	height: 22px;
+	overflow: hidden;
+	border-bottom-width: 0px;
+}
+
+.bridge-table .selected-bidsequence {
+	height: 100px;
+	overflow: auto;
+}
+
+.players .player, .selected-bidsequence .bid
+{
+	display: inline;
+	float: left;
+ 	width: 25%;  
+	max-width : 25%;
+	min-width : 25%;
+	text-align : center;
+}
+
+/*for bid symbols 	font-size: 1.1em; */
+
+
+.players .player
+{
+	font-size: 1.1em;
+    cursor: pointer;
+}
+
+.selected-bidsequence .bid
+{
+/* 	font-size: 1.1em; */
+    cursor: pointer;
+}

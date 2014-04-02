@@ -28,29 +28,55 @@ require.config({
     }
 });
 
-// require(['require', 'knockout', 'models/application', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"],
-// function(require, ko, appModule, defaultDataModule, $) {
-//     var bidSystemId = "maartje_wim";
-//     //localStorage.clear();
-//     if (localStorage.getItem(bidSystemId) === null) {
-//         defaultDataModule.saveToLocalStorage(bidSystemId);
-//     }
+require(['require', 'knockout', 'models/application', 'storage/default-data', 'jquery', "libs/jquery.jeegoocontext"],
+   function(require, ko, appModule, defaultDataModule, $) {
+	   //TODO: move to util   
+	   function getURLParam(name)
+	    {
+	        // get query string part of url into its own variable
+	        var url = window.location.href;
+	        var query_string = url.split("?");
+	        
+	        // make array of all name/value pairs in query string
+	        var params = query_string[1].split("&");
+	        
+	        // loop through the parameters
+	        var i = 0;
+	        while (i < params.length) {
+	            // compare param name against arg passed in
+	            var param_item = params[i].split("=");
+	            if (param_item[0] == name) {
+	                // if they match, return the value
+	                return param_item[1];
+	            }
+	            i++;
+	        }
+	        return "";
+	    }
+   
+   
+     var bidSystemId = getURLParam("id");
+     //localStorage.clear();
+     if (localStorage.getItem(bidSystemId) === null) {
+         defaultDataModule.saveToLocalStorage(bidSystemId);
+     }
 
-//     var application = new appModule.Application({bidsystem : {id : bidSystemId}});
-//     application.loadFromLocalStorage();
-//     ko.applyBindings(application);
+     var application = new appModule.Application({bidsystem : {id : bidSystemId}});
+     application.loadFromLocalStorage();
+     ko.applyBindings(application);
     
-//     $('.context').jeegoocontext('context-menu');
-// });
+     $('.context').jeegoocontext('context-menu');
+   }
+);
 
 //Initialize application using test data 
-require(['require', 'knockout', 'models/application', '../js-tests/data/test-data', 'jquery', "libs/jquery.jeegoocontext"],
-function(require, ko, appModule, dataModule, $) {
+//require(['require', 'knockout', 'models/application', '../js-tests/data/test-data', 'jquery', "libs/jquery.jeegoocontext"],
+//function(require, ko, appModule, dataModule, $) {
 //    localStorage.setItem(dataModule.biddingSystemData.id, JSON.stringify(dataModule.biddingSystemData));
 
-    var application = new appModule.Application({bidsystem : {id : dataModule.biddingSystemData.id}});
-    application.loadFromLocalStorage();
-    ko.applyBindings(application);
+//    var application = new appModule.Application({bidsystem : {id : dataModule.biddingSystemData.id}});
+//    application.loadFromLocalStorage();
+//    ko.applyBindings(application);
     
-    $('.context').jeegoocontext('context-menu');
-});
+//    $('.context').jeegoocontext('context-menu');
+//});

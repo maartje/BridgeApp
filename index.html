@@ -14,28 +14,27 @@
 <!-- Style sheets for bridge application-->
 <link rel="stylesheet" type="text/css" media="all" href="css/main.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/tree-view.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/bidsequence.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/bidpicker.css">
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
-	<span contenteditable="true">maartje</span>
-	<!-- Renders bidsystem tree view  -->
+			
 	<div id="tree-view">
 		<div class="jstree jstree-0 jstree-focused jstree-classic context">
 			<!-- ko with: selectedRoot -->
-				<!-- TODO: bidsequence for convention set as tree top -->
-				<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
-		    <!-- /ko -->
+			<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
+			<!-- /ko -->
 		</div>
-		
+				
 		<!-- Template that recursively renders the bidconvention tree structure-->
 		<script id="bidconvention-template" type="text/html">
-			<li data-bind="css: $root.cssTreeNode($data)">
+			<li class="bidconvention-tree-node" data-bind="{css: $root.cssTreeNode($data), attr: { 'data-type': bid().type, 'data-suit': bid().suit, 'data-level': bid().level }}">
 				<ins class="jstree-icon">&nbsp;</ins>
 				<a href="#">
 					<div class="bidconvention" data-bind="css : $root.cssBidconvention($data)"> 
-						<span class="bid" data-bind="html : bid()? bid().htmlString() : ''"></span>
+						<span class="bid" data-bind="{html : bid()? bid().htmlString() : '', attr: { 'data-type': bid().type, 'data-suit': bid().suit, 'data-level': bid().level }}"></span>
 						<!-- ko with: convention -->
 							<span class="description" data-bind="{htmlValue : description, attr: { contenteditable: $root.isSingleSelected($parent)}}"></span>
 					    <!-- /ko -->
@@ -45,40 +44,6 @@
 			</li>
 		</script>
 		
-		<!--  Context menu for bidconventions in the tree view-->
-		<ul id="context-menu" class="jeegoocontext cm_blue">
-			<li class="context-menu-new">Create child bid<span class="shortcut">(Alt + N)</span></li>
-			<li class="context-menu-new-sib">Create sibling bid<span class="shortcut">(Alt + S)</span></li>
-<!-- 			<li>Select <span class="shortcut">(Alt + T)</span></li> -->
-			<li class="context-menu-delete">Delete <span class="shortcut">(Delete)</span></li>
-			<li class="context-menu-cut">Cut <span class="shortcut">(Ctrl + X)</span></li>
-			<li class="context-menu-copy">Copy <span class="shortcut">(Ctrl + C)</span></li>
-			<li class="context-menu-paste">Paste <span class="shortcut">(Ctrl + V)</span></li>
-<!-- 			<li class="context-menu-x">Edit bid(s) <span class="shortcut">()</span></li> -->
-<!-- 			<li class="context-menu-y">Edit description(s) <span class="shortcut">()</span></li> -->
-		</ul>
-		
-		<!--  Dialog to confirm deleting bidconventions -->
-		<div id="dialog-confirm-delete-bid-convention" title="Delete bid convention?" class="ui-helper-hidden">
-		  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-		    Are you sure to delete the selected bid convention and all it's child conventions?
-		  </p>
-		</div>
-
-		<!-- Bidpicker to select the appropriate bid -->
-		<!-- ko with: bidpicker -->
-			<!-- ko if: visible -->
-				<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
-					<div class="suit-bids" data-bind="foreach: suitBids">
-						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
-					</div>
-					<div class="special-bids" data-bind="foreach: specialBids">
-						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data)}"></a>
-					</div>
-				</div>
-			<!-- /ko -->
-		<!-- /ko -->
-
 	</div>
 
 </body>

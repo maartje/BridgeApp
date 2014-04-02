@@ -1,7 +1,7 @@
 /*Styling conventions for bidconvention nodes in the tree view*/
 
 #tree-view .bidconvention.opponent-bid {
-    background-color : yellow;
+    background-color : #F0F0F0;
 }
 
 #tree-view .bidconvention.invalid-bidsequence {
@@ -26,6 +26,7 @@
 #tree-view .bidconvention .description {
     min-width : 120px;
     display : inline-block;
+    font-style: italic;
 }
 
 #tree-view .bidconvention .description:focus {

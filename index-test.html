@@ -8,6 +8,39 @@
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
+
+
+<div id="bidpicker">
+	<div id="players">
+	<div class="player we not_vulnerable dealer">Dealer</div>
+	<div class="player them vulnerable">Zij</div>
+	<div class="player we not_vulnerable">Wij</div>
+	<div class="player them vulnerable">Zij</div>
+</div>
+	<div id="bidsequence">
+		<div class="bid">1<span class="playcolor black">♣</span></div>
+		<div class="bid">1<span class="playcolor red">♦</span></div>
+		<div class="bid">1<span class="playcolor red">♥</span></div>
+		<div class="bid">1<span class="playcolor black">♠</span></div>
+		<div class="bid">1<span class="playcolor black">Ø</span></div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<div class="jstree jstree-0 jstree-focused jstree-classic">
 		<!-- ko with: selectedRoot -->
 			<div data-bind="template: { name: 'bid-seq-templ'}">

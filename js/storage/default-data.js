@@ -20,12 +20,18 @@ define(function(require, exports, module) {
                     type: "SUIT",
                     suit: "CLUBS",
                     level: 1
+                },
+                convention: {
+                    description: "3+ kaart &clubs;, 12-19 punten"
                 }
             }, {
                 bid: {
                     type: "SUIT",
                     suit: "DIAMONDS",
                     level: 1
+                },
+                convention: {
+                    description: "4+ kaart <span style='color : red'>&diams;</span>, 12-19 punten"
                 }
             }, {
                 bid: {
@@ -34,13 +40,16 @@ define(function(require, exports, module) {
                     level: 1
                 },
                 convention: {
-                    description: "5 kaart <span style='color : red'>&hearts;</span>"
+                    description: "5+ kaart <span style='color : red'>&hearts;</span>, 12-19 punten"
                 }
             }, {
                 bid: {
                     type: "SUIT",
                     suit: "SPADES",
                     level: 1
+                },
+                convention: {
+                    description: "5+ kaart &spades;, 12-19 punten"
                 }
             }, {
                 bid: {
@@ -49,7 +58,7 @@ define(function(require, exports, module) {
                     level: 1
                 },
                 convention: {
-                    description: "15-17 punten, sans-atout verdeling"
+                    description: "sans-atout verdeling, 15-17 punten"
                 },
                 children: [{
                     bid: {
@@ -63,24 +72,6 @@ define(function(require, exports, module) {
                         },
                         convention: {
                             description: "stayman"
-                        }
-                    }, {
-                        bid: {
-                            type: "SUIT",
-                            suit: "DIAMONDS",
-                            level: 2
-                        },
-                        convention: {
-                            description: "5+ <span>&hearts;</span>"
-                        }
-                    }, {
-                        bid: {
-                            type: "SUIT",
-                            suit: "HEARTS",
-                            level: 2
-                        },
-                        convention: {
-                            description: "jacoby"
                         }
                     }]
                 }]
