@@ -20,7 +20,33 @@
 <script data-main="js/main" src="js/libs/require.js"></script>
 </head>
 <body>
-			
+	<!-- Renders bidsystem tree view  -->
+	<div class="bridge-table">
+		<!-- ko with: selectedRoot -->
+		<div class="players" data-bind="template: { name: 'players'}"></div>
+		<div class="selected-bidsequence" data-bind="template: { name: 'selected-bidsequence'}"></div>
+		<!-- /ko -->
+	</div>
+	
+	<!-- Template that renders the table positions -->
+	<!-- Template that renders the selected top bidsequence -->
+	<script id="players" type="text/html">
+			<div class="player we not_vulnerable dealer">Dealer</div>
+			<div class="player them vulnerable">Zij</div>
+			<div class="player we not_vulnerable">Wij</div>
+			<div class="player them vulnerable">Zij</div>
+	</script>
+
+	<!-- Template that renders the selected top bidsequence -->
+	<script id="selected-bidsequence" type="text/html">
+			<!-- ko template: { name: 'selected-bidsequence', if: parent, data: parent} -->
+    		<!-- /ko -->
+			<!-- ko if: parent -->
+				<div class="bid" data-bind="{html : bid()? bid().htmlString() : '', attr: { 'data-type': bid().type, 'data-suit': bid().suit, 'data-level': bid().level }}"></div>
+    		<!-- /ko -->
+	</script>
+		
+	
 	<div id="tree-view">
 		<div class="jstree jstree-0 jstree-focused jstree-classic context">
 			<!-- ko with: selectedRoot -->
@@ -44,6 +70,40 @@
 			</li>
 		</script>
 		
+		<!--  Context menu for bidconventions in the tree view-->
+		<ul id="context-menu" class="jeegoocontext cm_blue">
+			<li class="context-menu-select">Select <span class="shortcut"></span></li>
+			<li class="context-menu-new">Create child bid<span class="shortcut">(Alt + N)</span></li>
+			<li class="context-menu-new-sib">Create sibling bid<span class="shortcut">(Alt + S)</span></li>
+			<li class="context-menu-delete">Delete <span class="shortcut">(Delete)</span></li>
+			<li class="context-menu-cut">Cut <span class="shortcut">(Ctrl + X)</span></li>
+			<li class="context-menu-copy">Copy <span class="shortcut">(Ctrl + C)</span></li>
+			<li class="context-menu-paste">Paste <span class="shortcut">(Ctrl + V)</span></li>
+<!-- 			<li class="context-menu-x">Edit bid(s) <span class="shortcut">()</span></li> -->
+<!-- 			<li class="context-menu-y">Edit description(s) <span class="shortcut">()</span></li> -->
+		</ul>
+		
+		<!--  Dialog to confirm deleting bidconventions -->
+		<div id="dialog-confirm-delete-bid-convention" title="Delete bid convention?" class="ui-helper-hidden">
+		  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+		    Are you sure to delete the selected bid convention and all it's child conventions?
+		  </p>
+		</div>
+
+		<!-- Bidpicker to select the appropriate bid -->
+		<!-- ko with: bidpicker -->
+			<!-- ko if: visible -->
+				<div class="bidpicker" data-bind="{style: { left: left() + 'px', top: top() + 'px'}}" >
+					<div class="suit-bids" data-bind="foreach: suitBids">
+						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data), attr: { 'data-type': type, 'data-suit': suit, 'data-level': level }}"></a>
+					</div>
+					<div class="special-bids" data-bind="foreach: specialBids">
+						<a class="bid-button" data-bind="{html: htmlString(), css : $parent.cssBidButton($data), attr: { 'data-type': type}}"></a>
+					</div>
+				</div>
+			<!-- /ko -->
+		<!-- /ko -->
+
 	</div>
 
 </body>

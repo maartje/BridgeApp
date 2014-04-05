@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+<!-- TODO: name of bid system should be configurable -->
+<title>Bied Systeem: Maartje en Wim</title>
+
+<!-- Style sheets from other projects-->
+<link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/style.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/jstree-classic/jstree.css">
+<link type="text/css" rel="stylesheet" href="css/blitzer/jquery-ui-1.10.3.blitzer.css" />
+<link rel="stylesheet" type="text/css" media="all" href="css/jeegoocontext/context-menu.css">
+
+<!-- Style sheets for bridge application-->
+<link rel="stylesheet" type="text/css" media="all" href="css/main.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/tree-view.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/bidsequence.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/context-menu.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/bidpicker.css">
+<script data-main="js/main" src="js/libs/require.js"></script>
+</head>
+<body>
+			
+	<div id="tree-view">
+		<div class="jstree jstree-0 jstree-focused jstree-classic context">
+			<!-- ko with: selectedRoot -->
+			<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
+			<!-- /ko -->
+		</div>
+				
+		<!-- Template that recursively renders the bidconvention tree structure-->
+		<script id="bidconvention-template" type="text/html">
+			<li class="bidconvention-tree-node" data-bind="{css: $root.cssTreeNode($data), attr: { 'data-type': bid().type, 'data-suit': bid().suit, 'data-level': bid().level }}">
+				<ins class="jstree-icon">&nbsp;</ins>
+				<a href="#">
+					<div class="bidconvention" data-bind="css : $root.cssBidconvention($data)"> 
+						<span class="bid" data-bind="{html : bid()? bid().htmlString() : '', attr: { 'data-type': bid().type, 'data-suit': bid().suit, 'data-level': bid().level }}"></span>
+						<!-- ko with: convention -->
+							<span class="description" data-bind="{htmlValue : description, attr: { contenteditable: $root.isSingleSelected($parent)}}"></span>
+					    <!-- /ko -->
+					</div>
+				</a>
+				<ul data-bind="template: { name: 'bidconvention-template', foreach: children }"></ul>
+			</li>
+		</script>
+		
+	</div>
+
+</body>
+</html> 
