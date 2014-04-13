@@ -1,178 +1,90 @@
 /**
- * Implements select, cut, copy, paste functionality.
- * Supports selections consisting of multiple items. 
+ * Extends the functionality of a @SelectionManager with
+ * functionality to store items on a clipboard.
+ * Multiple items may be clipped at once.
  */
 define(function(require, exports, module) {
-    var ko = require("knockout");
+	var ko = require("knockout");
+	var mixinModule = require("util/mixin");
 
-    /**
-     * Implements select, cut, copy, paste functionality.
-     * Supports selections consisting of multiple items. 
-     */
-    var ClipboardManager = module.exports.ClipboardManager = function() {
-    	this.selectedItems = [];
-    	this.clippedItems = [];
-    	this.isCutAction = false;
-    };
+	/**
+	 * Extends the functionality of a @SelectionManager with
+	 * functionality to store items on a clipboard.
+	 * Multiple items may be clipped at once.
+	 */
+	var ClipboardManager = module.exports.ClipboardManager = function(selectionManager) {
+		this._clippedItems = [];
+		this._isCutAction = false;
+		mixinModule.MIXIN(selectionManager, this);
+	};
 
-    /**
-     * Implements select, cut, copy, paste functionality.
-     * Supports selections consisting of multiple items. 
-     */
-    ClipboardManager.prototype = function() {    	
+	/**
+	 * Implements select, cut, copy, paste functionality. 
+	 * Supports selections consisting of multiple items.
+	 */
+	ClipboardManager.prototype = function() {
+		
+		/**
+		 * Fills the clipboard with the collection of selected items, a subsequent
+		 * paste action will move the items to a new position
+		 */
+		var cut = function() {
+			_clip.call(this);
+			this._isCutAction = true;
+		};
 
-    	/**
-    	 * Sets the given item as the single selected item
-    	 * @param {Object}item
-    	 */
-    	var select = function(item) {
-    		clearSelection.call(this);
-    		this.selectedItems.push(item);
-        };
+		/**
+		 * Fills the clipboard with the collection of selected items, a subsequent
+		 * paste action will copy the items to a new position
+		 */
+		var copy = function() {
+			_clip.call(this);
+			this._isCutAction = false;
+		};
 
-    	/**
-    	 * Toggles the selection status of the given item
-    	 * @param {Object}item
-    	 */
-    	var toggleSelect = function(item) {
-    		if (isSelected.call(this, item)){
-    			var index = this.selectedItems.indexOf(item);
-    			this.selectedItems.splice(index, 1);
-    		}
-    		else {
-    			this.selectedItems.push(item);
-    		}
-        };
-
-    	/**
-    	 * Sets the given range as the collection of selected items
-    	 * @param {[Object]}item
-    	 */
-        var selectRange = function(itemsInRange) {
-        	clearSelection.call(this);
-        	for ( var i = 0; i < itemsInRange.length; i++) {
-				var item = itemsInRange[i];
- 				toggleSelect.call(this, item);				
+		// private
+		var _clip = function() {
+			this._clippedItems = [];
+			for ( var i = 0; i < this.getSelectedItems().length; i++) {
+				var selectedItem = this.getSelectedItems()[i];
+				this._clippedItems.push(selectedItem);
 			}
-        };
+		}
 
-    	/**
-    	 * Clears the collection of selected items
-    	 */
-        var clearSelection = function() {
-        	this.selectedItems = [];
-        };
-    	        
-    	/**
-    	 * Applies the @fnDeleteItem(item) function to all selected items
-    	 * The deleted items are also removed from the collection of selected items
-    	 * @param {Function(Object)} fnDeleteItem
-    	 */
-        var deleteSelection = function(fnDeleteItem){        	
-        	for ( var i = 0; i < this.selectedItems.length; i++) {
-				var item = this.selectedItems[i];
-				fnDeleteItem(item);
-			}
-        	clearSelection.call(this);
-        };
-        
-    	/**
-    	 * Adds the collection of selected items to the clipboard. 
-    	 * Applies the @fnDeleteItem(item) function to all selected items
-    	 * The deleted items are also removed from the collection of selected items
-    	 * @param {Function(Object)} fnDeleteItem (optional)
-    	 */
-        var cut = function(fnDeleteItem){
-        	clip.call(this);
-        	this.isCutAction = true;
-        	if (fnDeleteItem){
-				for ( var i = 0; i < this.selectedItems.length; i++) {
-					var selectedItem = this.selectedItems[i];
-    				fnDeleteItem(selectedItem);
-    			}
-				clearSelection.call(this);
-        	}
-        };
-        
-    	/**
-    	 * Adds the collection of selected items to the clipboard. 
-    	 */
-        var copy = function(){
-        	clip.call(this);
-        	this.isCutAction = false;
-        };
-        
-        //private
-        var clip = function(){
-			//this.clippedItems = [];
-        	for ( var i = 0; i < this.selectedItems.length; i++) {
-				var selectedItem = this.selectedItems[i];
-				this.clippedItems.push(selectedItem);
-			}        	
-        }
+		/**
+		 * Says whether the given item is cut
+		 * @param {Object} item
+		 * @return {boolean}
+		 */
+		var isCut = function(item) {
+			return this._isCutAction && this._clippedItems.indexOf(item) >= 0;
+		};
 
-    	/**
-    	 * Applies the function @fnPasteItem(selected, clipped) to all combinations consisting
-    	 * of a selected item and a clipped item. 
-    	 * Applies the @fnDeleteItem(clipped) function to all clipped items
-    	 * that were clipped with the @cut function.
-    	 * The deleted items are also removed from the collection of selected items
-    	 * @param {Function(Object, Object)} fnPasteItem
-    	 * @param {Function(Object)} fnDeleteItem (optional)
-    	 */
-        var paste = function(fnPasteItem, fnDeleteItem){   
-        	for ( var i = 0; i < this.selectedItems.length; i++) {
-            	for ( var j = 0; j < this.clippedItems.length; j++) {
-    				var selectedItem = this.selectedItems[i];
-    				var clippedItem = this.clippedItems[j];
-    				fnPasteItem(selectedItem, clippedItem);
-    			}
-			}
-			if (this.isCutAction && fnDeleteItem){
-				for ( var k = 0; k < this.clippedItems.length; k++) {
-    				var clippedItem = this.clippedItems[k];
-    				fnDeleteItem(clippedItem);
-    				if (isSelected.call(this, clippedItem)) {
-    					var indexInSelected = this.selectedItems.indexOf(clippedItem);
-    					this.selectedItems.splice(indexInSelected, 1);
-    				}
-    			}
-			}
-        };
+		/**
+		 * Returns the collection of clipped items
+		 * @return {[Object]}item
+		 */
+		var getClippedItems = function() {
+			return this._clippedItems;
+		};
+		
+		/**
+		 * Says whether the clipped items where obtained
+		 * via a cut action.
+		 * @return {boolean}
+		 */
+		var isCutAction = function() {
+			return this._isCutAction;
+		}
 
-    	/**
-    	 * Says wether the given item is selected
-    	 * @param {[Object]}item
-    	 */
-        var isSelected = function(item){
-        	return this.selectedItems.indexOf(item) >= 0;
-        };
+		return {
+			// apply actions to the collection of selected items
+			cut : cut, // Ctrl X
+			copy : copy, // Ctrl C
+			isCut : isCut,
+			isCutAction : isCutAction,
+			getClippedItems : getClippedItems,
+		};
 
-    	/**
-    	 * Says whether the given item is cut
-    	 * @param {[Object]}item
-    	 */
-        var isCut = function(item){   
-        	return this.isCutAction && this.clippedItems.indexOf(item) >= 0;
-        };
-
-        return {
-        	//manage the collection of selected items
-        	select : select, //click
-        	toggleSelect : toggleSelect, //Ctrl click
-        	selectRange : selectRange, //Shift click
-        	clearSelection : clearSelection, //'blur'
-        	
-        	//apply actions to the collection of selected items
-        	deleteSelection : deleteSelection, //delete
-        	cut : cut, //Ctrl X
-        	copy : copy, //Ctrl C
-        	paste : paste, //Ctrl V
-        	
-        	//query state
-        	isSelected : isSelected,
-        	isCut : isCut        	
-        };
-
-    }();
+	}();
 });

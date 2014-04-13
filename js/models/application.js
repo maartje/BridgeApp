@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                 cssStyle += "selected ";
             }
             if (isSuccessorOfSelected.call(this, bidconvention)) {
-                cssStyle += "successor-of-selected ";
+                cssStyle += "successor-of-selected ";                
             }
             return cssStyle;
         };
