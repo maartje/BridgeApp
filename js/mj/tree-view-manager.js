@@ -72,6 +72,13 @@ define(function(require, exports, module) {
             return this._openNodes.indexOf(node) >= 0;
         };
 
+		/**
+		 * Closes all open nodes.
+		 */
+		var reset = function() {
+			this._openNodes = [];
+		};
+
         return {
             // open and close functionality
             toggleOpenClose: toggleOpenClose,
@@ -79,6 +86,9 @@ define(function(require, exports, module) {
             openAll : openAll,
             close: close,
             closeAll : closeAll,
+            reset : reset,
+            
+            // access to open and close state
             isOpen: isOpen,
         };
     }();

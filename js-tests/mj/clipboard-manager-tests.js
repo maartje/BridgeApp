@@ -72,5 +72,29 @@ define(function(require) {
 			assert.isFalse(clipboardManager.isCutAction());
 		});
 
+		test('#reset() unclips all clipped items', function() {
+			// arrange
+			clipboardManager.toggleSelect(item1);
+			clipboardManager.toggleSelect(item2);
+			clipboardManager.cut();
+			
+			clipboardManager.reset();
+
+			assert.isFalse(clipboardManager.isCutAction());
+			assert.isFalse(clipboardManager.isCut(item1));
+			assert.lengthOf(clipboardManager.getClippedItems(), 0);
+		});
+		test('#reset() deselects all selected items', function() {
+			// arrange
+			clipboardManager.toggleSelect(item1);
+			clipboardManager.toggleSelect(item2);
+			clipboardManager.copy();
+			
+			clipboardManager.reset();
+
+			assert.isFalse(clipboardManager.isSelected(item1));
+			assert.lengthOf(clipboardManager.getSelectedItems(), 0);
+		});
+
 	});
 });

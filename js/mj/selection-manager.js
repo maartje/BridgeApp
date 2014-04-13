@@ -74,6 +74,14 @@ define(function(require, exports, module) {
 		var isSelected = function(item) {
 			return this._selectedItems.indexOf(item) >= 0;
 		};
+		
+		/**
+		 * Deselects all selected items.
+		 */
+		var reset = function() {
+			this._selectedItems = [];
+		};
+
 
 		return {
 			//modifies the collection of selected items
@@ -81,6 +89,7 @@ define(function(require, exports, module) {
 			toggleSelect : toggleSelect, 
 			selectAll : selectAll, 
 			clearSelection : clearSelection, 
+			reset : reset,
 
 			//accesses the collection of selected items
 			getSelectedItems : getSelectedItems,

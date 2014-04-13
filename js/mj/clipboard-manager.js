@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 	var ClipboardManager = module.exports.ClipboardManager = function(selectionManager) {
 		this._clippedItems = [];
 		this._isCutAction = false;
+		this._selectionManager = selectionManager;
 		mixinModule.MIXIN(selectionManager, this);
 	};
 
@@ -75,12 +76,25 @@ define(function(require, exports, module) {
 		 */
 		var isCutAction = function() {
 			return this._isCutAction;
-		}
+		};
+
+		/**
+		 * Deselects all selected items, and
+		 * unclips all clipped items.
+		 */
+		var reset = function() {
+			this._isCutAction = false;
+			this._clippedItems = [];
+			this._selectionManager.reset();
+		};
 
 		return {
-			// apply actions to the collection of selected items
+		    //modifies the state of the clipboard manager
 			cut : cut, // Ctrl X
 			copy : copy, // Ctrl C
+			reset : reset,
+
+		    //accesses the state of the clipboard manager
 			isCut : isCut,
 			isCutAction : isCutAction,
 			getClippedItems : getClippedItems,

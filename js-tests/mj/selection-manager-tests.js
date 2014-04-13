@@ -130,6 +130,16 @@ define(function(require) {
 			clipboardManager.selectAll(items);
 			assert.deepEqual(clipboardManager.getSelectedItems(), items);
 		});
+		test('#reset() deselects all selected items', function() {
+			// arrange
+			clipboardManager.select(item1);
+			clipboardManager.toggleSelect(item2);
+
+			clipboardManager.reset();
+
+			assert.isFalse(clipboardManager.isSelected(item1));
+			assert.lengthOf(clipboardManager.getSelectedItems(), 0);
+		});
 	});
 });
 
