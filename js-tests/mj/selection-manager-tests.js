@@ -100,6 +100,22 @@ define(function(require) {
 			assert.isTrue(clipboardManager.isSelected(item3));
 		});
 
+		test('#selectRange(start, end, fnGetRange) selects all items in a range', function() {
+			// arrange
+			clipboardManager.toggleSelect(item1);
+			var fnGetRange = function(a, b){
+			    return [a, item2, b]
+			} 
+
+			// act
+			clipboardManager.selectRange(item1, item3, fnGetRange);
+
+			// assert
+			assert.isTrue(clipboardManager.isSelected(item1));
+			assert.isTrue(clipboardManager.isSelected(item2));
+			assert.isTrue(clipboardManager.isSelected(item3));
+		});
+
 		test('#setFocus(items) selects all items in the given selection', function() {
 			// arrange
 			clipboardManager.toggleSelect(item1);

@@ -53,6 +53,19 @@ define(function(require, exports, module) {
         };
 
         /**
+         * Selects a range of items starting with @itemStart and ending 
+         * with @itemEnd. De function @fnGetItemsInRange calculates the 
+         * set of items that fall in the range.
+         * @param {Object} itemStart
+         * @param {Object} itemEnd
+         * @param {Function: (Object, Object) -> [Object]} fnGetItemsInRange
+         */
+        var selectRange = function(itemStart, itemEnd, fnGetItemsInRange) {
+            var itemsInRange = fnGetItemsInRange(itemStart, itemEnd);
+            selectAll.call(this, itemsInRange);
+        };
+
+        /**
          * Sets the given items as the collection of selected items
          * @param {[Object]} items
          */
@@ -97,6 +110,7 @@ define(function(require, exports, module) {
             select: select,
             toggleSelect: toggleSelect,
             selectAll: selectAll,
+            selectRange : selectRange,
             clearSelection: clearSelection,
             reset: reset,
             setFocus: setFocus,
