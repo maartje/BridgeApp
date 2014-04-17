@@ -57,27 +57,28 @@ define(function(require, exports, module) {
          */
         var toggleOpenClose = function(node) {
             if (isOpen.call(this, node)) {
-                close.call(this, node, true);
+                _close.call(this, node, true);
             }
             else {
-                open.call(this, node, false);
+                _open.call(this, node, false);
             }
         };
 
         /**
          * Opens the given node, @includeDescendantNodes 
          * specifies whether descendant nodes are also opened.
+         * @private
          * @param {TreeNode} node 
          * @param {boolean} includeDescendantNodes 
          */
-        var open = function(node, includeDescendantNodes) {
+        var _open = function(node, includeDescendantNodes) {
             if (!isOpen.call(this, node)) {
                 this._openNodes.push(node);
             }
             if (includeDescendantNodes) {
                 var children = node.getChildren();
                 for (var i = 0; i < children.length; i++) {
-                    open.call(this, children[i], true);
+                    _open.call(this, children[i], true);
                 }
             }
         };
@@ -85,10 +86,11 @@ define(function(require, exports, module) {
         /**
          * Closes the given node, @includeDescendantNodes 
          * specifies whether descendant nodes are also closed.
+         * @private
          * @param {TreeNode} node
          * @param {boolean} includeDescendantNodes 
          */
-        var close = function(node, includeDescendantNodes) {
+        var _close = function(node, includeDescendantNodes) {
             if (isOpen.call(this, node)) {
                 var index = this._openNodes.indexOf(node);
                 this._openNodes.splice(index, 1);
@@ -96,7 +98,7 @@ define(function(require, exports, module) {
             if (includeDescendantNodes) {
                 var children = node.getChildren();
                 for (var i = 0; i < children.length; i++) {
-                    close.call(this, children[i], true);
+                    _close.call(this, children[i], true);
                 }
             }
         };
@@ -109,7 +111,7 @@ define(function(require, exports, module) {
         var openSelected = function(includeDescendantNodes) {
             var selectedItems = this.getSelectedItems();
             for (var i = 0; i < selectedItems.length; i++) {
-                open.call(this, selectedItems[i], includeDescendantNodes);
+                _open.call(this, selectedItems[i], includeDescendantNodes);
             }
         };
 
@@ -125,7 +127,7 @@ define(function(require, exports, module) {
             }
             var selectedItems = this.getSelectedItems();
             for (var i = 0; i < selectedItems.length; i++) {
-                close.call(this, selectedItems[i], includeDescendantNodes);
+                _close.call(this, selectedItems[i], includeDescendantNodes);
             }
         };
 
@@ -152,12 +154,13 @@ define(function(require, exports, module) {
         /**
          * Ensures that the given node and all its ancestors
          * are open.
+         * @private
          * @param {[TreeNode]} nodes
          */ 
-        var openAncestorChain = function(node){
+        var _openAncestorChain = function(node){
             if (node && node !== getRoot.call(this)){
-                open.call(this, node, false);
-                openAncestorChain.call(this, node.getParent());
+                _open.call(this, node, false);
+                _openAncestorChain.call(this, node.getParent());
             }
         }
         
@@ -169,7 +172,7 @@ define(function(require, exports, module) {
             var commonAncestor = this._root.getRoot(); //TODO: find lowest common ancestor
             setRoot.call(this, commonAncestor);
             for (var i = 0; i < nodes.length; i++) {
-                openAncestorChain.call(this, nodes[i].getParent());
+                _openAncestorChain.call(this, nodes[i].getParent());
             }
             this._clipboardManager.setFocus(nodes);
         };
@@ -181,7 +184,7 @@ define(function(require, exports, module) {
             closeSelected: closeSelected,
             isOpen: isOpen,
 
-            // rootNode
+            // root node of the view
             setRoot: setRoot,
             getRoot: getRoot,
 
