@@ -31,7 +31,7 @@ require(['require', 'mocha'], function(require){
   mocha.setup('tdd');
  
   require([
-//       '../js-tests/mj/tree-view-tests',
+    //   '../js-tests/mj/bridge-app-tests',
       '../js-tests/mj/selection-manager-tests',
       '../js-tests/mj/tree-view-manager-tests',
       '../js-tests/mj/clipboard-manager-tests',

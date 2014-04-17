@@ -1,7 +1,7 @@
 define(function(require) {
 	var assert = require('chai').assert;
-	var clipboardManagerModule = require('mj/clipboard-manager');
 	var selectionManagerModule = require('mj/selection-manager');
+	var clipboardManagerModule = require('mj/clipboard-manager');
 	
 	//system under test
 	var clipboardManager; 
@@ -93,6 +93,19 @@ define(function(require) {
 
 			// act
 			clipboardManager.selectAll(items);
+
+			// assert
+			assert.isTrue(clipboardManager.isSelected(item1));
+			assert.isTrue(clipboardManager.isSelected(item2));
+			assert.isTrue(clipboardManager.isSelected(item3));
+		});
+
+		test('#setFocus(items) selects all items in the given selection', function() {
+			// arrange
+			clipboardManager.toggleSelect(item1);
+
+			// act
+			clipboardManager.setFocus(items);
 
 			// assert
 			assert.isTrue(clipboardManager.isSelected(item1));

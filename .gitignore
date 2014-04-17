@@ -1,3 +1,5 @@
 .project
 *.txt
 /.c9
+
+_*
