@@ -33,9 +33,11 @@ require(['require', 'mocha'], function(require){
   require([
     //   '../js-tests/mj/bridge-app-tests',
     //   '../js-tests/mj/selection-manager-tests',
-    //   '../js-tests/mj/tree-view-manager-tests',
+    //  '../js-tests/mj/tree-view-manager-tests',
     //   '../js-tests/mj/clipboard-manager-tests',
-      '../js-tests/mj/commands/copy-to-command-tests',
+      '../js-tests/mj/commands/base-command-tests',
+      '../js-tests/mj/commands/delete-command-tests',
+//      '../js-tests/mj/commands/copy-to-command-tests',
 //      '../js-tests/models/bid-tests',
 //      '../js-tests/models/convention-tests',
 //      '../js-tests/models/bidsystem-tests',

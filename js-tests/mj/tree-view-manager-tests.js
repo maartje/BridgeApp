@@ -3,44 +3,19 @@ define(function(require) {
     var selectionManagerModule = require('mj/selection-manager');
     var clipboardManagerModule = require('mj/clipboard-manager');
     var treeViewManagerModule = require('mj/tree-view-manager');
+    var fakeTreeNodeModule = require('../fake-objects/fake-tree-node');
 
     //system under test
     var treeViewManager;
 
     //data
-    var StubNode = function(id, children) {
-        this._id = id;
-        this._children = children;
-        this._parent = null;
+    var node_0100 = fakeTreeNodeModule.node_0100;
+    var node_0101 = fakeTreeNodeModule.node_0101;
+    var node_010 = fakeTreeNodeModule.node_010;
+    var node_00 = fakeTreeNodeModule.node_00;
+    var node_01 = fakeTreeNodeModule.node_01;
+    var node_0 = fakeTreeNodeModule.node_0;
 
-        this.getChildren = function() {
-            return this._children;
-        };
-
-        this.getParent = function() {
-            return this._parent;
-        };
-
-        this.getRoot = function() {
-            if (!this._parent) {
-                return this;
-            }
-            return this._parent.getRoot();
-        };
-
-    };
-
-    var node_0100 = new StubNode("node_0100", []);
-    var node_0101 = new StubNode("node_0101", []);
-    var node_010 = new StubNode("node_010", [node_0100, node_0101]);
-    var node_00 = new StubNode("node_00", []);
-    var node_01 = new StubNode("node_01", [node_010]);
-    var node_0 = new StubNode("node_0", [node_00, node_01]);
-    node_0100._parent = node_010;
-    node_0101._parent = node_010;
-    node_010._parent = node_01;
-    node_00._parent = node_0;
-    node_01._parent = node_0;
 
 
     setup(function() {
