@@ -24,11 +24,16 @@ define(function(require, exports, module) {
             this._viewState.openNodes = nodes;
         };
 
+        var closeAll = function(nodes){
+            this._viewState.closedNodes = nodes;
+        };
+
         return {
             getViewState : getViewState,
             setViewState : setViewState,
             setFocus : setFocus,
             openAll : openAll,
+            closeAll : closeAll,
         };
 
     }();

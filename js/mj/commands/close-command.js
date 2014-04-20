@@ -1,28 +1,28 @@
 /**
- * Represents the action to ensure that a given set of nodes is open. 
+ * Represents the action to ensure that a given set of nodes is closed. 
  * Provides the functionality to undo the operation.
  */
 define(function(require, exports, module) {
     var mixinModule = require("util/mixin");
 
     /**
-     * Constructor for the OpenCommand
+     * Constructor for the CloseCommand
      * @param baseCommand {BaseCommand}
      * @param treeNodeCollection {TreeNodeCollection}
      * @param includeDescendantNodes {boolean}
      */
-    var OpenCommand = module.exports.OpenCommand = function(baseCommand, treeNodeCollection, includeDescendantNodes) {
+    var CloseCommand = module.exports.CloseCommand = function(baseCommand, treeNodeCollection, includeDescendantNodes) {
         mixinModule.MIXIN(baseCommand, this);
         this._baseCommand = baseCommand;
         this._treeNodeCollection = treeNodeCollection;
         this._includeDescendantNodes = includeDescendantNodes;
     };
 
-    OpenCommand.prototype = function() {
+    CloseCommand.prototype = function() {
 
         /**
-         * Ensures that a given set of nodes is open, @includeDescendantNodes
-         * specifies whether their descendants should also be opened.
+         * Ensures that a given set of nodes is closed, @includeDescendantNodes
+         * specifies whether their descendants should also be closed.
          */
         var execute = function() {
             //stores the viewstate to enable rollback
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
             
             //modifies the view state
             var nodes = this._includeDescendantNodes? this._treeNodeCollection.getAllNodes() : this._treeNodeCollection.getNodes();
-            this.getViewStateManager().openAll(nodes);
+            this.getViewStateManager().closeAll(nodes);
         };
 
         /**
