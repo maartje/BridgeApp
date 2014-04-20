@@ -13,7 +13,6 @@ define(function(require) {
     var fakeViewstateManager;
 
     setup(function() {
-
         fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
         fakeNodeModule.reset();
         baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
@@ -40,11 +39,11 @@ define(function(require) {
             // arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_010, fakeNodeModule.node_01001];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
-            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
             var topNodes = [fakeNodeModule.node_00, fakeNodeModule.node_010];
             fakeTreeNodeCollection.getTopLevelNodes = function(){
                 return topNodes;
             };
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
             // act
             deleteCommand.execute();

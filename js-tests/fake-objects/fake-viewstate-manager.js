@@ -17,13 +17,18 @@ define(function(require, exports, module) {
         };
         
         var setFocus = function(nodes){
-            this._viewState.focusedNodes = nodes
+            this._viewState.focusedNodes = nodes;
+        };
+
+        var openAll = function(nodes){
+            this._viewState.openNodes = nodes;
         };
 
         return {
             getViewState : getViewState,
             setViewState : setViewState,
             setFocus : setFocus,
+            openAll : openAll,
         };
 
     }();

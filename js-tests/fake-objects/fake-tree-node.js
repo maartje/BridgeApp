@@ -9,6 +9,16 @@ define(function(require, exports, module) {
 
     FakeTreeNodeCollection.prototype = function() {
         
+        var getNodes = function(){
+            //simplified implementation
+            return this._nodes;
+        };
+
+        var getAllNodes = function(nodes){
+            //simplified implementation
+            return this._nodes;
+        };
+        
         //remove nodes that are descendants 
         //of other nodes in the collection
         //example: A-B, A-B-C-D, A-X-Y => A-B, A-X-Y
@@ -18,9 +28,11 @@ define(function(require, exports, module) {
             //simplified implementation
             return this._nodes;
         };
-        
+
         return {
-            getTopLevelNodes : getTopLevelNodes
+            getNodes : getNodes,
+            getAllNodes : getAllNodes,
+            getTopLevelNodes : getTopLevelNodes,
         };
     }();
 

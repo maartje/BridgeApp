@@ -9,12 +9,12 @@ define(function(require, exports, module) {
     /**
      * Constructor for the DeleteCommand
      * @param baseCommand {BaseCommand}
-     * @param nodes {[TreeNodeCollection]}
+     * @param nodes {TreeNodeCollection}
      */
     var DeleteCommand = module.exports.DeleteCommand = function(baseCommand, treeNodeCollection) {
         mixinModule.MIXIN(baseCommand, this);
         this._baseCommand = baseCommand;
-        this._treeNodeCollection = treeNodeCollection;
+        this._nodes = treeNodeCollection.getTopLevelNodes();
     };
 
     DeleteCommand.prototype = function() {
@@ -28,11 +28,9 @@ define(function(require, exports, module) {
             this._baseCommand.execute(); 
             
             //modifies the data structure
-            console.log(this._treeNodeCollection);
-            var nodes = this._treeNodeCollection.getTopLevelNodes();
             var nearbyNodes = [];
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+            for (var i = 0; i < this._nodes.length; i++) {
+                var node = this._nodes[i];
                 var nearbyNode = node.getNextSibling() || node.getPreviousSibling() || node.getParent();
                 node.detach();
                 if (nearbyNode){
@@ -51,9 +49,8 @@ define(function(require, exports, module) {
          */
         var undoExecute = function() {
             //resets the data structure
-            var nodes = this._treeNodeCollection.getTopLevelNodes();
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+            for (var i = 0; i < this._nodes.length; i++) {
+                var node = this._nodes[i];
                 node.attach();
             }
 
