@@ -14,7 +14,7 @@ define(function(require) {
 
     setup(function() {
         fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.reset();
+        fakeNodeModule.initializeTestData();
         baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
         var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
         deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
@@ -32,7 +32,8 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeNodeModule.detachedNodes, nodes);
+            assert.isFalse(fakeNodeModule.node_00.isAttached);
+            assert.isFalse(fakeNodeModule.node_0100.isAttached);
         });
         
         test('#execute() only detachs the top nodes in case ancestor relations exists between the given nodes', function() {
@@ -49,14 +50,15 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeNodeModule.detachedNodes, topNodes);
+            assert.isFalse(fakeNodeModule.node_00.isAttached);
+            assert.isFalse(fakeNodeModule.node_010.isAttached);
+            assert.isUndefined(fakeNodeModule.node_01001.isAttached);
         });
 
 
         test('#execute() sets the focus of the viewstate on A) next sibling nodes', function() {
             // arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];
-            var nextSiblings = [fakeNodeModule.node_01, fakeNodeModule.node_0101];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
@@ -64,13 +66,13 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().focusedNodes, nextSiblings);
+            assert.isTrue(fakeNodeModule.node_00.getNextSibling().hasFocus);
+            assert.isTrue(fakeNodeModule.node_0100.getNextSibling().hasFocus);
         });
 
         test('#execute() sets the focus of the viewstate on B) previous sibling nodes', function() {
             // arrange
             var nodes = [fakeNodeModule.node_01, fakeNodeModule.node_0101];
-            var previousSiblings = [fakeNodeModule.node_01.getPreviousSibling(), fakeNodeModule.node_0101.getPreviousSibling()];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
@@ -78,13 +80,13 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().focusedNodes, previousSiblings);
+            assert.isTrue(fakeNodeModule.node_01.getPreviousSibling().hasFocus);
+            assert.isTrue(fakeNodeModule.node_0101.getPreviousSibling().hasFocus);
         });
 
         test('#execute() sets the focus of the viewstate on C) parent nodes', function() {
             // arrange
             var nodes = [fakeNodeModule.node_010];
-            var parents = [fakeNodeModule.node_010.getParent()];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
@@ -92,13 +94,12 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().focusedNodes, parents);
+            assert.isTrue(fakeNodeModule.node_010.getParent().hasFocus);
         });
 
         test('#execute() sets the focus of the viewstate on nearby nodes (A, B, or C)', function() {
             // arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_01001];
-            var nearbyNodes = [fakeNodeModule.node_00.getNextSibling(), fakeNodeModule.node_01001.getParent()];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
@@ -106,7 +107,26 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().focusedNodes, nearbyNodes);
+            assert.isTrue(fakeNodeModule.node_00.getNextSibling().hasFocus);
+            assert.isTrue(fakeNodeModule.node_01001.getParent().hasFocus);
+        });
+        test('#execute() does NOT set focus on nodes in a detached subtree', function() {
+            // arrange
+            var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_010, fakeNodeModule.node_01001];
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
+            var topNodes = [fakeNodeModule.node_00, fakeNodeModule.node_010];
+            fakeTreeNodeCollection.getTopLevelNodes = function(){
+                return topNodes;
+            };
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
+
+
+            // act
+            deleteCommand.execute();
+
+            // assert
+            assert.isFalse(fakeNodeModule.node_010.isAttached);
+            assert.isUndefined(fakeNodeModule.node_01001.getParent().hasFocus);
         });
 
         test('#undoExecute() resets the viewstate', function() {
@@ -135,25 +155,29 @@ define(function(require) {
             deleteCommand.undoExecute();
 
             // assert
-            assert.deepEqual(fakeNodeModule.detachedNodes, fakeNodeModule.attachedNodes);
+            assert.isTrue(fakeNodeModule.node_00.isAttached);
+            assert.isTrue(fakeNodeModule.node_0100.isAttached);
+            
         });
 
-        test('#execute() restores the data structure, also in case ancestor relations exists between the given nodes', function() {
+        test('#undoExecute() restores the data structure, also in case ancestor relations exists between the given nodes', function() {
             // arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_010, fakeNodeModule.node_01001];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
-            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
             var topNodes = [fakeNodeModule.node_00, fakeNodeModule.node_010];
             fakeTreeNodeCollection.getTopLevelNodes = function(){
                 return topNodes;
             };
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
 
             // act
             deleteCommand.execute();
             deleteCommand.undoExecute();
 
             // assert
-            assert.deepEqual(fakeNodeModule.detachedNodes, fakeNodeModule.attachedNodes);
+            assert.isTrue(topNodes[0].isAttached);
+            assert.isTrue(topNodes[1].isAttached);
+            assert.isUndefined(fakeNodeModule.node_01001.isAttached);
         });
 
     });

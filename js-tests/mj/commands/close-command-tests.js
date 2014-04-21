@@ -14,7 +14,7 @@ define(function(require) {
 
     setup(function() {
         fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.reset();
+        fakeNodeModule.initializeTestData();
         baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
         var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
         closeCommand = new closeCommandModule.CloseCommand(baseCommand, fakeTreeNodeCollection, false);
@@ -27,12 +27,23 @@ define(function(require) {
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             closeCommand = new closeCommandModule.CloseCommand(baseCommand, fakeTreeNodeCollection, false);
+            var allNodes = [
+                    fakeNodeModule.node_00, 
+                    fakeNodeModule.node_0100,
+                    fakeNodeModule.node_01001
+                ];
+            fakeTreeNodeCollection.getAllNodes = function(nodes){
+                return allNodes;
+            };
+            fakeViewstateManager.openAll(allNodes);
 
             // act
             closeCommand.execute();
 
             // assert
-            assert.equal(fakeViewstateManager.getViewState().closedNodes, nodes);
+            assert.isFalse(fakeViewstateManager.isOpen(allNodes[0]));
+            assert.isFalse(fakeViewstateManager.isOpen(allNodes[1]));
+            assert.isTrue(fakeViewstateManager.isOpen(allNodes[2]));
         });
 
         test('#execute() closes all nodes including their descendants, given that @includeDescendantNodes is true', function() {
@@ -40,19 +51,23 @@ define(function(require) {
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             closeCommand = new closeCommandModule.CloseCommand(baseCommand, fakeTreeNodeCollection, true);
-            fakeTreeNodeCollection.getAllNodes = function(nodes){
-                return [
+            var allNodes = [
                     fakeNodeModule.node_00, 
                     fakeNodeModule.node_0100,
                     fakeNodeModule.node_01001
                 ];
+            fakeTreeNodeCollection.getAllNodes = function(nodes){
+                return allNodes;
             };
+            fakeViewstateManager.openAll(allNodes);
 
             // act
             closeCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().closedNodes, fakeTreeNodeCollection.getAllNodes());
+            assert.isFalse(fakeViewstateManager.isOpen(allNodes[0]));
+            assert.isFalse(fakeViewstateManager.isOpen(allNodes[1]));
+            assert.isFalse(fakeViewstateManager.isOpen(allNodes[2]));
         });
 
         test('#undoExecute() resets the viewstate', function() {

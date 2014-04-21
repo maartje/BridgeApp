@@ -14,7 +14,7 @@ define(function(require) {
 
     setup(function() {
         fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.reset();
+        fakeNodeModule.initializeTestData();
         baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
         var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
         openCommand = new openCommandModule.OpenCommand(baseCommand, fakeTreeNodeCollection, false);
@@ -32,7 +32,8 @@ define(function(require) {
             openCommand.execute();
 
             // assert
-            assert.equal(fakeViewstateManager.getViewState().openNodes, nodes);
+            assert.isTrue(fakeViewstateManager.isOpen(fakeNodeModule.node_00));
+            assert.isTrue(fakeViewstateManager.isOpen(fakeNodeModule.node_0100));
         });
 
         test('#execute() opens all nodes including their descendants, given that @includeDescendantNodes is true', function() {
@@ -40,19 +41,22 @@ define(function(require) {
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];
             var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
             openCommand = new openCommandModule.OpenCommand(baseCommand, fakeTreeNodeCollection, true);
-            fakeTreeNodeCollection.getAllNodes = function(nodes){
-                return [
+            var allNodes = [
                     fakeNodeModule.node_00, 
                     fakeNodeModule.node_0100,
                     fakeNodeModule.node_01001
                 ];
+            fakeTreeNodeCollection.getAllNodes = function(nodes){
+                return allNodes; 
             };
 
             // act
             openCommand.execute();
 
             // assert
-            assert.deepEqual(fakeViewstateManager.getViewState().openNodes, fakeTreeNodeCollection.getAllNodes());
+            assert.isTrue(fakeViewstateManager.isOpen(allNodes[0]));
+            assert.isTrue(fakeViewstateManager.isOpen(allNodes[1]));
+            assert.isTrue(fakeViewstateManager.isOpen(allNodes[2]));
         });
 
         test('#undoExecute() resets the viewstate', function() {

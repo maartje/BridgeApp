@@ -45,6 +45,10 @@ define(function(require, exports, module) {
 
     FakeTreeNode.prototype = function() {
 
+
+        var getAllNodes = function(){
+        };
+
         var getChildren = function() {
             return this._children;
         };
@@ -69,14 +73,15 @@ define(function(require, exports, module) {
         };
 
         var detach = function() {
-            module.exports.detachedNodes.push(this);
+            this.isAttached = false;
         };
 
         var attach = function() {
-            module.exports.attachedNodes.push(this);
+            this.isAttached = true;
         };
 
         return {
+            getAllNodes : getAllNodes,
             getChildren : getChildren,
             getParent : getParent,
             getRoot : getRoot,
@@ -87,34 +92,32 @@ define(function(require, exports, module) {
         };
     }();
     
-    var reset = module.exports.reset = function(){
-        module.exports.detachedNodes = [];
-        module.exports.attachedNodes = [];
-    };
-    module.exports.reset();
+    var initializeTestData = module.exports.initializeTestData = function(){
+        var node_01001 = module.exports.node_01001 = new FakeTreeNode("node_01001", []);
+        var node_0100 = module.exports.node_0100 = new FakeTreeNode("node_0100", [node_01001]);
+        var node_0101 = module.exports.node_0101 = new FakeTreeNode("node_0101", []);
+        var node_010 = module.exports.node_010 = new FakeTreeNode("node_010", [node_0100, node_0101]);
+        var node_00 = module.exports.node_00 = new FakeTreeNode("node_00", []);
+        var node_01 = module.exports.node_01 = new FakeTreeNode("node_01", [node_010]);
+        var node_0 = module.exports.node_0 = new FakeTreeNode("node_0", [node_00, node_01]);
 
-    var node_01001 = module.exports.node_01001 = new FakeTreeNode("node_01001", []);
-    var node_0100 = module.exports.node_0100 = new FakeTreeNode("node_0100", [node_01001]);
-    var node_0101 = module.exports.node_0101 = new FakeTreeNode("node_0101", []);
-    var node_010 = module.exports.node_010 = new FakeTreeNode("node_010", [node_0100, node_0101]);
-    var node_00 = module.exports.node_00 = new FakeTreeNode("node_00", []);
-    var node_01 = module.exports.node_01 = new FakeTreeNode("node_01", [node_010]);
-    var node_0 = module.exports.node_0 = new FakeTreeNode("node_0", [node_00, node_01]);
+        node_01001._parent = node_0100;
+        
+        node_0100._parent = node_010;
+        node_0100._nextSibling = node_0101;
+        
+        node_0101._parent = node_010;
+        node_0101._previousSibling = node_0100;
+        
+        node_010._parent = node_01;
+        
+        node_00._parent = node_0;
+        node_00._nextSibling = node_01;
+        
+        node_01._parent = node_0;
+        node_01._previousSibling = node_00;
+    };
     
-    node_01001._parent = node_0100;
-    
-    node_0100._parent = node_010;
-    node_0100._nextSibling = node_0101;
-    
-    node_0101._parent = node_010;
-    node_0101._previousSibling = node_0100;
-    
-    node_010._parent = node_01;
-    
-    node_00._parent = node_0;
-    node_00._nextSibling = node_01;
-    
-    node_01._parent = node_0;
-    node_01._previousSibling = node_00;
-    
+    module.exports.initializeTestData();
+ 
 });
