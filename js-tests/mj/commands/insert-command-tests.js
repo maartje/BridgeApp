@@ -24,6 +24,8 @@ define(function(require) {
 
         node_000 = new fakeNodeModule.FakeTreeNode("000", []);
         node_001 = new fakeNodeModule.FakeTreeNode("000", []);
+        node_000.parent = fakeNodeModule.node_00;
+        node_001.parent = fakeNodeModule.node_00;
         var treeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([node_000, node_001]);
         insertCommand.setTreeNodeCollection(treeNodeCollection);
 
@@ -73,5 +75,31 @@ define(function(require) {
             assert.isFalse(node_000.isAttached);
             assert.isFalse(node_001.isAttached);
         });
+        
+        test('#canExecute() returns true in case the insertion does not break the tree structure', function() {
+            assert.isTrue(insertCommand.canExecute());
+        });
+
+        test('#canExecute() returns false in case the inserted nodes are not associated to a parent node', function() {
+           var nodeWithoutParent = new fakeNodeModule.FakeTreeNode("no_parent", []);
+        var treeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([node_001, nodeWithoutParent]);
+            insertCommand.setTreeNodeCollection(treeNodeCollection);
+
+            assert.isFalse(insertCommand.canExecute());
+        });
+
+        test('#canExecute() returns false in case the insertion introduces cycles', function() {
+            fakeNodeModule.node_01.parent = fakeNodeModule.node_0100; //create cycle
+            fakeNodeModule.node_01.parent.isSubtermOf = function(n){
+                if (n === fakeNodeModule.node_01) {
+                    return true;
+                }
+                return false;
+            };
+            var treeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([fakeNodeModule.node_01, node_001]);
+            insertCommand.setTreeNodeCollection(treeNodeCollection);
+            assert.isFalse(insertCommand.canExecute());
+        });
+
     });
 });

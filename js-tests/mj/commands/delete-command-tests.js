@@ -181,6 +181,20 @@ define(function(require) {
             assert.isTrue(topNodes[1].isAttached);
             assert.isUndefined(fakeNodeModule.node_01001.isAttached);
         });
+        
+        test('#canExecute() returns true for non-root nodes', function() {
+            var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
+            assert.isTrue(deleteCommand.canExecute());
+        });
+
+        test('#canExecute() returns false for the root node', function() {
+            var nodes = [fakeNodeModule.node_0];
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection(nodes);
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
+            assert.isFalse(deleteCommand.canExecute());
+        });
 
     });
 });

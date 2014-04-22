@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     /**
      * Constructor for the DeleteCommand
      * @param baseCommand {BaseCommand}
-     * @param nodes {TreeNodeCollection}
+     * @param treeNodeCollection {TreeNodeCollection}
      */
     var DeleteCommand = module.exports.DeleteCommand = function(baseCommand, treeNodeCollection) {
         mixinModule.MIXIN(baseCommand, this);
@@ -18,6 +18,20 @@ define(function(require, exports, module) {
     };
 
     DeleteCommand.prototype = function() {
+        
+        /**
+         * Checks if the deletion is not applied to the root node
+         * @return {boolean}
+         */
+        var canExecute = function() {
+            for (var i = 0; i < this._nodes.length; i++) {
+                if (this._nodes[i].isRoot()){
+                    return false;
+                }
+            }
+            return this._baseCommand.canExecute();
+        };
+
 
         /**
          * Deletes a given set of nodes from the data structure.
@@ -59,6 +73,7 @@ define(function(require, exports, module) {
         };
 
         return {
+            canExecute : canExecute,
             execute : execute,
             undoExecute : undoExecute,
         };

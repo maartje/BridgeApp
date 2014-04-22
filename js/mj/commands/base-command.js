@@ -21,6 +21,15 @@ define(function(require, exports, module) {
     BaseCommand.prototype = function() {
 
         /**
+         * Checks if the insertion does not invalidate the 
+         * data by introducing cycles in the tree structure
+         * @return {boolean}
+         */
+        var canExecute = function() {
+            return true;
+        };
+
+        /**
          * Stores the current viewstate to enable the undo operation. 
          * To be implemented in the 'derived' class.
          */
@@ -44,7 +53,7 @@ define(function(require, exports, module) {
         };
 
         return {
-//            getViewStateManager : getViewStateManager,
+            canExecute : canExecute,
             execute : execute,
             undoExecute : undoExecute,
         };

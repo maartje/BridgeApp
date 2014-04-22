@@ -23,6 +23,21 @@ define(function(require, exports, module) {
     InsertCommand.prototype = function() {
 
         /**
+         * Checks if the parent of the inserted nodes is defined,
+         * and checks if the insert operation does not create
+         * cycles in the tree structure
+         * @return {boolean}
+         */
+        var canExecute = function() {
+            for (var i = 0; i < this._nodes.length; i++) {
+                if (!this._nodes[i].parent || this._nodes[i].parent.isSubtermOf(this._nodes[i])){
+                    return false;
+                }
+            }
+            return this._baseCommand.canExecute();
+        };
+
+        /**
          * Inserts a given set of nodes into the data structure;
          * the nodes are inserted based on their parent pointer.
          * Updates the viewstate so that the inserted nodes are focused.
@@ -65,6 +80,7 @@ define(function(require, exports, module) {
 
         return {
             setTreeNodeCollection : setTreeNodeCollection,
+            canExecute : canExecute,
             execute : execute,
             undoExecute : undoExecute,
         };

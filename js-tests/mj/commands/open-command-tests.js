@@ -75,6 +75,11 @@ define(function(require) {
             // assert
             assert.equal(fakeViewstateManager.getViewState(), expectedViewState);
         });
+        
+        test('#canExecute() returns true since the data structure is not modified', function() {
+            assert.isTrue(openCommand.canExecute());
+        });
+
 
     });
 });

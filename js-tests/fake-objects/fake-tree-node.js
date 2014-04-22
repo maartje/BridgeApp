@@ -71,6 +71,15 @@ define(function(require, exports, module) {
         var getPreviousSibling = function(){
             return this._previousSibling;
         };
+        
+        var isRoot = function(){
+            return getRoot.call(this) === this;
+        }
+
+        //current node or strict subterm        
+        var isSubtermOf = function(node){
+            return false;
+        };
 
         var detach = function() {
             this.isAttached = false;
@@ -87,8 +96,10 @@ define(function(require, exports, module) {
             getRoot : getRoot,
             getNextSibling : getNextSibling,
             getPreviousSibling : getPreviousSibling,
+            isRoot : isRoot,
             detach : detach,
             attach : attach,
+            isSubtermOf : isSubtermOf,
         };
     }();
     
