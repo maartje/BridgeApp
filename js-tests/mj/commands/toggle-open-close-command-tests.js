@@ -1,3 +1,5 @@
+/*global setup, test, suite*/
+
 define(function(require) {
     var assert = require('chai').assert;
     var baseCommandModule = require('mj/commands/base-command');

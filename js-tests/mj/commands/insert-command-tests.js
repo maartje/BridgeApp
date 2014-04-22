@@ -1,3 +1,5 @@
+/*global setup, test, suite*/
+
 define(function(require) {
     var assert = require('chai').assert;
     var baseCommandModule = require('mj/commands/base-command');
@@ -13,8 +15,6 @@ define(function(require) {
     var node_000;
     var node_001;
     
-    /*global setup, test, suite*/
-
     setup(function() {
         fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
         fakeNodeModule.initializeTestData();
