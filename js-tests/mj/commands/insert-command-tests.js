@@ -15,24 +15,24 @@ define(function(require) {
     var node_000;
     var node_001;
     
-    setup(function() {
-        fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.initializeTestData();
-        var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
-        var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
-        insertCommand = new insertCommandModule.InsertCommand(baseCommand, fakeTreeNodeCollection);
-
-        node_000 = new fakeNodeModule.FakeTreeNode("000", []);
-        node_001 = new fakeNodeModule.FakeTreeNode("000", []);
-        node_000.parent = fakeNodeModule.node_00;
-        node_001.parent = fakeNodeModule.node_00;
-        var treeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([node_000, node_001]);
-        insertCommand.setTreeNodeCollection(treeNodeCollection);
-
-    });
-
 
     suite('InsertCommand', function() {
+        setup(function() {
+            fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
+            fakeNodeModule.initializeTestData();
+            var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
+            insertCommand = new insertCommandModule.InsertCommand(baseCommand, fakeTreeNodeCollection);
+    
+            node_000 = new fakeNodeModule.FakeTreeNode("000", []);
+            node_001 = new fakeNodeModule.FakeTreeNode("000", []);
+            node_000.parent = fakeNodeModule.node_00;
+            node_001.parent = fakeNodeModule.node_00;
+            var treeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([node_000, node_001]);
+            insertCommand.setTreeNodeCollection(treeNodeCollection);
+    
+        });
+
         test('#execute() attachs the given set of nodes to the data structure', function() {
             // act
             insertCommand.execute();

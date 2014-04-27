@@ -11,14 +11,13 @@ define(function(require) {
     //mock and stub objects
     var fakeViewstateManager;
 
-    setup(function() {
-        fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeViewstateManager.setViewState(2);
-        baseCommand = new commandModule.BaseCommand(fakeViewstateManager);
-    });
-
-
     suite('BaseCommand', function() {
+        setup(function() {
+            fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
+            fakeViewstateManager.setViewState(2);
+            baseCommand = new commandModule.BaseCommand(fakeViewstateManager);
+        });
+
         test('#execute() does not modify the viewstate', function() {
             //arrange
             var oldViewState = fakeViewstateManager.getViewState();

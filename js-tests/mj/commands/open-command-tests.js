@@ -14,16 +14,16 @@ define(function(require) {
     //mock and stub objects
     var fakeViewstateManager;
 
-    setup(function() {
-        fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.initializeTestData();
-        baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
-        var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
-        openCommand = new openCommandModule.OpenCommand(baseCommand, fakeTreeNodeCollection, false);
-    });
 
 
     suite('OpenCommand', function() {
+        setup(function() {
+            fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
+            fakeNodeModule.initializeTestData();
+            baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
+            openCommand = new openCommandModule.OpenCommand(baseCommand, fakeTreeNodeCollection, false);
+        });
         test('#execute() opens only the nodes in the collection, given that @includeDescendantNodes is false', function() {
             //arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];

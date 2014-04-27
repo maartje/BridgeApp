@@ -14,16 +14,15 @@ define(function(require) {
     //mock and stub objects
     var fakeViewstateManager;
 
-    setup(function() {
-        fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.initializeTestData();
-        baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
-        var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
-        deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
-    });
-
-
     suite('DeleteCommand', function() {
+        setup(function() {
+            fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
+            fakeNodeModule.initializeTestData();
+            baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
+            var fakeTreeNodeCollection = new fakeNodeModule.FakeTreeNodeCollection([]);
+            deleteCommand = new deleteCommandModule.DeleteCommand(baseCommand, fakeTreeNodeCollection);
+        });
+
         test('#execute() detachs the given set of nodes from the data structure', function() {
             // arrange
             var nodes = [fakeNodeModule.node_00, fakeNodeModule.node_0100];

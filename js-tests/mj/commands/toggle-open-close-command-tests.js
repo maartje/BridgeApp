@@ -14,25 +14,24 @@ define(function(require) {
     var fakeViewstateManager;
     var fakeNode;
 
-    setup(function() {
-        fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
-        fakeNodeModule.initializeTestData();
-        var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
-        fakeNode = fakeNodeModule.node_01;
-        fakeNode.getAllNodes = function(){
-            return [
-                fakeNodeModule.node_01,
-                fakeNodeModule.node_010,
-                fakeNodeModule.node_0100,
-                fakeNodeModule.node_01001,
-                fakeNodeModule.node_0101,
-            ];
-        };
-        toggleOpenCloseCommand = new toggleOpenCloseCommandModule.ToggleOpenCloseCommand(baseCommand, fakeNode);
-    });
-
-
     suite('ToggleOpenCloseCommand', function() {
+        setup(function() {
+            fakeViewstateManager = new fakeViewStateManagerModule.FakeViewStateManager();
+            fakeNodeModule.initializeTestData();
+            var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
+            fakeNode = fakeNodeModule.node_01;
+            fakeNode.getAllNodes = function(){
+                return [
+                    fakeNodeModule.node_01,
+                    fakeNodeModule.node_010,
+                    fakeNodeModule.node_0100,
+                    fakeNodeModule.node_01001,
+                    fakeNodeModule.node_0101,
+                ];
+            };
+            toggleOpenCloseCommand = new toggleOpenCloseCommandModule.ToggleOpenCloseCommand(baseCommand, fakeNode);
+        });
+
         test('#execute() opens a closed node', function() {
             // act
             toggleOpenCloseCommand.execute();
@@ -51,8 +50,12 @@ define(function(require) {
         });
 
         test('#execute() closes an open node', function() {
+            debugger
+            fakeViewstateManager.open(fakeNode);
+            var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
+            toggleOpenCloseCommand = new toggleOpenCloseCommandModule.ToggleOpenCloseCommand(baseCommand, fakeNode);
+            
             // act
-            toggleOpenCloseCommand.execute();
             toggleOpenCloseCommand.execute();
 
             // assert
@@ -63,7 +66,7 @@ define(function(require) {
             // act
             fakeViewstateManager.open(fakeNode);
             fakeViewstateManager.open(fakeNode.getChildren()[0]);
-
+ 
             toggleOpenCloseCommand.execute();
 
             // assert
