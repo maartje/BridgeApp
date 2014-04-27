@@ -6,6 +6,9 @@ define(function(require, exports, module) {
 
     var FakeViewStateManager = module.exports.FakeViewStateManager = function() {
         this._viewState = 0;
+        this._selectedItems = [];
+        this._openItems = [];
+        this._focusedItems = [];
     };
 
     FakeViewStateManager.prototype = function() {
@@ -18,31 +21,74 @@ define(function(require, exports, module) {
         };
         
         var setFocus = function(nodes){
-            setViewStateProperty.call(this, nodes, "hasFocus", true);
+            addViewStateProperties.call(this, this._focusedItems, nodes);
         };
         
-        var setViewStateProperty = function(nodes, prop, value){
+        var addViewStateProperties = function(viewStateCollection, nodes){
             for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                node[prop] = value;
+                if (!hasViewStateProperty.call(this, viewStateCollection, nodes[i])) {
+                    viewStateCollection.push(nodes[i]);
+                    this._viewState += 1;
+                }
             }
-            this._viewState += 1;
-        }
+        };
+
+        var removeViewStateProperties = function(viewStateCollection, nodes){
+            for (var i = 0; i < nodes.length; i++) {
+                if (hasViewStateProperty.call(this, viewStateCollection, nodes[i])) {
+                    var index = viewStateCollection.indexOf(nodes[i]);
+                    viewStateCollection.splice(index, 1);
+                    this._viewState += 1;
+                }
+            }
+        };
+        
+        var hasViewStateProperty = function(viewStateCollection, node){
+            return viewStateCollection.indexOf(node) > -1;
+        };
 
         var openAll = function(nodes){
-            setViewStateProperty.call(this, nodes, "isOpen", true);
+            addViewStateProperties.call(this, this._openItems, nodes);
         };
 
         var open = function(node){
-            setViewStateProperty.call(this, [node], "isOpen", true);
+            openAll.call(this, [node]);
+        };
+
+        var close = function(node){
+            closeAll.call(this, [node]);
         };
 
         var closeAll = function(nodes){
-            setViewStateProperty.call(this, nodes, "isOpen", false);
+            removeViewStateProperties.call(this, this._openItems, nodes);
         };
         
         var isOpen = function(node){
-            return node.isOpen? true : false;
+            return hasViewStateProperty.call(this, this._openItems, node);
+        };
+        
+        var getSelectedItems = function(){
+            return [];
+        };
+
+        var getOpenItems = function(){
+            return [];
+        };
+
+        var getCurrentNode = function(){
+            return this.currentNode;
+        };
+
+        var setCurrentNode = function(node){
+            this.currentNode = node;
+        };
+
+        var select = function (node) {
+            
+        };
+        
+        var deselect = function (node) {
+            
         };
 
         return {
@@ -51,8 +97,15 @@ define(function(require, exports, module) {
             setFocus : setFocus,
             open : open,
             openAll : openAll,
+            close : close,
             closeAll : closeAll,
             isOpen : isOpen,
+            select : select,
+            deselect : deselect,
+            getSelectedItems : getSelectedItems,
+            getOpenItems : getOpenItems,
+            getCurrentNode : getCurrentNode,
+            setCurrentNode : setCurrentNode,
         };
     }();
 });

@@ -47,8 +47,7 @@ define(function(require) {
             insertCommand.execute();
 
             // assert
-            assert.isTrue(node_000.hasFocus);
-            assert.isTrue(node_001.hasFocus);
+            assert.deepEqual(fakeViewstateManager._focusedItems, [node_000, node_001]);
         });
 
 

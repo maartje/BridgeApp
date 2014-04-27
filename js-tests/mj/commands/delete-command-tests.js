@@ -67,8 +67,7 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.isTrue(fakeNodeModule.node_00.getNextSibling().hasFocus);
-            assert.isTrue(fakeNodeModule.node_0100.getNextSibling().hasFocus);
+            assert.deepEqual(fakeViewstateManager._focusedItems, [fakeNodeModule.node_00.getNextSibling(), fakeNodeModule.node_0100.getNextSibling()]);
         });
 
         test('#execute() sets the focus of the viewstate on B) previous sibling nodes', function() {
@@ -81,8 +80,7 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.isTrue(fakeNodeModule.node_01.getPreviousSibling().hasFocus);
-            assert.isTrue(fakeNodeModule.node_0101.getPreviousSibling().hasFocus);
+            assert.deepEqual(fakeViewstateManager._focusedItems, [fakeNodeModule.node_01.getPreviousSibling(), fakeNodeModule.node_0101.getPreviousSibling()]);
         });
 
         test('#execute() sets the focus of the viewstate on C) parent nodes', function() {
@@ -95,7 +93,7 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.isTrue(fakeNodeModule.node_010.getParent().hasFocus);
+            assert.deepEqual(fakeViewstateManager._focusedItems, [fakeNodeModule.node_010.getParent()]);
         });
 
         test('#execute() sets the focus of the viewstate on nearby nodes (A, B, or C)', function() {
@@ -108,8 +106,7 @@ define(function(require) {
             deleteCommand.execute();
 
             // assert
-            assert.isTrue(fakeNodeModule.node_00.getNextSibling().hasFocus);
-            assert.isTrue(fakeNodeModule.node_01001.getParent().hasFocus);
+            assert.deepEqual(fakeViewstateManager._focusedItems, [fakeNodeModule.node_00.getNextSibling(), fakeNodeModule.node_01001.getParent()]);
         });
         test('#execute() does NOT set focus on nodes in a detached subtree', function() {
             // arrange
