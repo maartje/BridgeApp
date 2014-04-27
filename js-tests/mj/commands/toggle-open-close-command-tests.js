@@ -50,7 +50,6 @@ define(function(require) {
         });
 
         test('#execute() closes an open node', function() {
-            debugger
             fakeViewstateManager.open(fakeNode);
             var baseCommand = new baseCommandModule.BaseCommand(fakeViewstateManager);
             toggleOpenCloseCommand = new toggleOpenCloseCommandModule.ToggleOpenCloseCommand(baseCommand, fakeNode);

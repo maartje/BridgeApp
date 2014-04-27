@@ -23,7 +23,7 @@ define(function(require, exports, module) {
         var setFocus = function(nodes){
             addViewStateProperties.call(this, this._focusedItems, nodes);
         };
-        
+
         var addViewStateProperties = function(viewStateCollection, nodes){
             for (var i = 0; i < nodes.length; i++) {
                 if (!hasViewStateProperty.call(this, viewStateCollection, nodes[i])) {
@@ -68,11 +68,11 @@ define(function(require, exports, module) {
         };
         
         var getSelectedItems = function(){
-            return [];
+            return this._selectedItems;
         };
 
         var getOpenItems = function(){
-            return [];
+            return this._openItems;
         };
 
         var getCurrentNode = function(){
@@ -84,11 +84,15 @@ define(function(require, exports, module) {
         };
 
         var select = function (node) {
-            
+            addViewStateProperties.call(this, this._openItems, [node]);
         };
         
         var deselect = function (node) {
-            
+            removeViewStateProperties.call(this, this._selectedItems, [node]);
+        };
+
+        var isSelected = function (node) {
+            return hasViewStateProperty.call(this, this._selectedItems, node);
         };
 
         return {
@@ -102,6 +106,7 @@ define(function(require, exports, module) {
             isOpen : isOpen,
             select : select,
             deselect : deselect,
+            isSelected : isSelected,
             getSelectedItems : getSelectedItems,
             getOpenItems : getOpenItems,
             getCurrentNode : getCurrentNode,

@@ -78,7 +78,13 @@ define(function(require, exports, module) {
 
         //current node or strict subterm        
         var isSubtermOf = function(node){
-            return false;
+            if (this === node) {
+                return true;
+            }
+            if (!this._parent) {
+                return false;
+            }
+            return isSubtermOf.call(this._parent, node);
         };
 
         var detach = function() {
