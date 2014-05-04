@@ -124,6 +124,13 @@ define(function(require, exports, module) {
             return isSubtermOf.call(this._parent, node);
         };
 
+        var length = function() {
+            if (isRoot.call(this)) {
+                return 0;
+            }
+            return 1 + length.call(getParent.call(this));
+        };
+
         var detach = function() {
             if (isRoot.call(this)) {
                 throw "The root node can not be deleted"
@@ -161,6 +168,7 @@ define(function(require, exports, module) {
             isSubtermOf : isSubtermOf,
             detach : detach,
             attach : attach,
+            length : length,
         };
     }();
 });

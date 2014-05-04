@@ -142,6 +142,10 @@ define(function(require) {
                 
                 assert.equal(node, node_01);
             });
+            test('#length() returns the length of the path to the root', function() {
+                assert.equal(node_0.length(), 0);
+                assert.equal(node_010.length(), 2);
+            });
             test('#detach throws an exeption when called on the root', function() {
                 assert.throw (node_0.detach, 'The root node can not be deleted');
             });
