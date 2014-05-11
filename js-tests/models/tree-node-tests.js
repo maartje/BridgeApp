@@ -2,6 +2,7 @@
 
 define(function(require) {
     var assert = require('chai').assert;
+    var treeTestDataModule = require('../test-data/tree-data');
     var treeNodeModule = require('models/tree-node');
 
     //system under test
@@ -15,56 +16,14 @@ define(function(require) {
 
     suite('TreeNode', function() {
         setup(function() {
-            var testData = {
-                id : "n0",
-                content : "n0_content",
-                children : [
-                    {
-                        id : "n00",
-                        content : "n00_content",
-                        children : []
-                        
-                    },
-                    {
-                        id : "n01",
-                        content : "n01_content",
-                        children : [
-                            {
-                                id : "n010",
-                                content : "n010_content",
-                                children : [
-                                    {
-                                        id : "n0100",
-                                        content : "n0100_content",
-                                        children : [
-                                            {
-                                                id : "n01001",
-                                                content : "n01001_content",
-                                                children : []
-                                            },
-                                        ]
-                                        
-                                    },
-                                    {
-                                        id : "n0101",
-                                        content : "n0101_content",
-                                        children : []
-                                    },
-                                ]
-                                
-                            },
-                        ]
-                        
-                    },
-                ]
-            };
-            node_0 = new treeNodeModule.TreeNode(testData);
-            node_00 = node_0.getChildren()[0];
-            node_01 = node_0.getChildren()[1];
-            node_010 = node_01.getChildren()[0];
-            node_0100 = node_010.getChildren()[0];
-            node_01000 = node_0100.getChildren()[0];
-            node_0101 = node_010.getChildren()[1];
+            treeTestDataModule.initializeTestData();
+            node_0 = treeTestDataModule.node_0;
+            node_00 = treeTestDataModule.node_00;
+            node_01 = treeTestDataModule.node_01;
+            node_010 = treeTestDataModule.node_010;
+            node_0100 = treeTestDataModule.node_0100;
+            node_01000 = treeTestDataModule.node_01000;
+            node_0101 = treeTestDataModule.node_0101;
         });
 
         suite('Constructor', function() {
