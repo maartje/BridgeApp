@@ -31,12 +31,13 @@ require(['require', 'mocha'], function(require){
   mocha.setup('tdd');
  
   require([
-      '../js-tests/viewmodels/selection-manager-tests',
-      '../js-tests/viewmodels/clipboard-manager-tests',
-      '../js-tests/viewmodels/tree-view-manager-tests',
-      '../js-tests/viewmodels/view-state-manager-tests',
-    //   '../js-tests/xyz/tree-node-tests',
-    //   '../js-tests/xyz/tree-node-collection-tests',
+    //   '../js-tests/viewmodels/selection-manager-tests',
+    //   '../js-tests/viewmodels/clipboard-manager-tests',
+    //   '../js-tests/viewmodels/tree-view-manager-tests',
+    //   '../js-tests/viewmodels/view-state-manager-tests',
+      
+      '../js-tests/models/tree-node-tests',
+    //   '../js-tests/collections/tree-node-collection-tests',
 
 
     //   '../js-tests/mj/bridge-app-tests',
