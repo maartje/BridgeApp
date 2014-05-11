@@ -6,6 +6,15 @@
 define(function(require, exports, module) {
     var mixinModule = require("util/mixin");
 
+    /**
+     * Manages the viewstate of the application.
+     * Extends the functionality of a @SelectionManager, 
+     * @ClipboardManager and @TreeViewManager.
+     * @param {SelectionManager} selectionManager
+     * @param {ClipboardManager} clipboardManager
+     * @param {TreeViewManager} treeViewManager
+     * @param {Object} currentNode
+     */
     var ViewStateManager = module.exports.ViewStateManager = function(selectionManager, clipboardManager, treeViewManager, currentNode) {
         this._currentNode = currentNode;
         this._selectionManager = selectionManager;
@@ -16,16 +25,33 @@ define(function(require, exports, module) {
         mixinModule.MIXIN(this._treeViewManager, this);
     };
 
+    /**
+     * Functionality to manage the viewstate of the application.
+     */
     ViewStateManager.prototype = function() {
 
+        /**
+         * Returns the current node.
+         * @return {Object}
+         */
         function getCurrentNode() {
             return this._currentNode;
         }
 
+        /**
+         * Sets the current node.
+         * @param {Object} node
+         */
         function setCurrentNode(node) {
             this._currentNode = node;
         }
 
+        /**
+         * Returns a data object that stores the relevant viewstate values.
+         * Used together with @setViewState to implement undo functionality
+         * by restoring from a previous viewstate.
+         * @return {Object}
+         */
         function getViewState() {
             return {
                 currentNode : this.getCurrentNode(),
@@ -36,6 +62,12 @@ define(function(require, exports, module) {
             };
         }
 
+        /**
+         * Sets the relevant viewstate values read from the @viewstate data object.
+         * Used together with @getViewState to implement undo functionality
+         * by restoring from a previous viewstate.
+         * @param {Object}
+         */
         function setViewState(viewState) {
             this.setCurrentNode(viewState.currentNode);
             this.setSelectedItems(viewState.selectedItems);
@@ -49,6 +81,9 @@ define(function(require, exports, module) {
             this.copyAll(this.getClippedItems());
         }
 
+        /**
+         * Clears all viewstate
+         */
         function clearViewState() {
             this.setCurrentNode(null);
             this._selectionManager.clear();

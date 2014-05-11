@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     /**
      * Implements the functionality to store items on a clipboard.
      * Multiple items may be clipped at once.
+     * @param {ViewStateProperty} clippedViewState
      */
     var ClipboardManager = module.exports.ClipboardManager = function(clippedViewState) {
         var clippedState = clippedViewState;

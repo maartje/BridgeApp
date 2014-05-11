@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     /**
      * Manages the open/close state of nodes in a tree view.
-     * @param {ViewStateProperty} opened
+     * @param {ViewStateProperty} openNodeState
      */
     var TreeViewManager = module.exports.TreeViewManager = function(openNodeState) {
         var openState = openNodeState;

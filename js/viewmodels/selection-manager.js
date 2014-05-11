@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     /**
      * Manages the selection state of items in a view.
-     * @param {ViewStateProperty} selected
+     * @param {ViewStateProperty} selectionViewState
      */
     var SelectionManager = module.exports.SelectionManager = function(selectionViewState) {
         var selectionState = selectionViewState;
